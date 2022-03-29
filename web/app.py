@@ -64,25 +64,25 @@ def inscription():
         password = request.form.get("password")
         email = request.form.get("email")
         #Connexion base de données
-        con = sqlite3.connect('data.sql')
+        con = sqlite3.connect('wordle.db')
         cur = con.cursor()
         #Vérification de l'unicité de l'utilisateur
-        req = cur.execute("SELECT COUNT(username) FROM utilisateur WHERE username = (?)", ([username]))
+        req = cur.execute("SELECT COUNT(Nom_utilisateur) FROM Utilisateur WHERE Nom_utilisateur = (?)", ([username]))
         count = req.fetchone()[0]
         if count != 0:
             flash("Ce nom d'utilisateur est déjà utilisé. Choisissez en un autre.")
         else:
             #Vérification de l'unicité de l'adresse email
-            req = cur.execute("SELECT COUNT(email) FROM utilisateur WHERE email = (?)", ([email]))
+            req = cur.execute("SELECT COUNT(Email) FROM utilisateur WHERE Email = (?)", ([email]))
             count = req.fetchone()[0]
             if count != 0:
                 flash("Cet email est déjà utilisé. Choisissez en un autre.")
             else:
                 #Comptage du nombre d'utilisateurs
-                req = cur.execute("SELECT COUNT(username) FROM utilisateur")
+                req = cur.execute("SELECT COUNT(Nom_utilisateur) FROM utilisateur")
                 num = req.fetchone()[0] + 1
                 #Insertion de l'utilisateur dans la BD
-                cur.execute("INSERT INTO utilisateur(id, username, password, email) VALUES (?,?,?,?)", (num, username, password, email))
+                cur.execute("INSERT INTO utilisateur(Id, Nom_utilisateur, Mot_de_passe, Email) VALUES (?,?,?,?)", (num, username, password, email))
                 con.commit()
                 #Création du compte et connexion
                 session['username'] = username
@@ -101,21 +101,21 @@ def connexion():
         username = request.form.get("username")
         password = request.form.get("password")
         #Connexion base de données
-        con = sqlite3.connect('data.sql')
+        con = sqlite3.connect('wordle.db')
         cur = con.cursor()
         #Vérification de la validité username + pwd
-        req = cur.execute("SELECT COUNT(username) FROM utilisateur WHERE username = (?)", ([username]))
+        req = cur.execute("SELECT COUNT(Nom_utilisateur) FROM Utilisateur WHERE Nom_utilisateur = (?)", ([username]))
         count = req.fetchone()[0]
         if count == 0:
             flash("Ce nom d'utilisateur n'existe pas. Veuillez réessayer.")
         else:
-            req = cur.execute("SELECT password FROM utilisateur WHERE username = (?)", ([username]))
+            req = cur.execute("SELECT Mot_de_passe FROM Utilisateur WHERE Nom_utilisateur = (?)", ([username]))
             pwd = req.fetchone()[0]
             if password != pwd:
                 flash("Mauvais mot de passe. Veuillez réessayer.")
             else:
                 #Récupération de l'identifiant associé à l'utilisateur
-                req = cur.execute("SELECT id FROM utilisateur WHERE username = (?)", ([username]))
+                req = cur.execute("SELECT Id FROM Utilisateur WHERE Nom_utilisateur = (?)", ([username]))
                 num = req.fetchone()[0]
                 #Connexion de l'utilisateur
                 session['username'] = username
