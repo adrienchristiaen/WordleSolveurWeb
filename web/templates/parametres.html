@@ -1,22 +1,12 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-    <meta charset="utf-8">
-    <title>Paramètres</title>
+{% extends "index.html" %}
+{% block head %}
     <link rel="stylesheet" href="../static/parametres.css"/>
-</head>
+{% endblock %}
 
-<body>
-    <header>
-        <div class="titre">
-            <h1>Paramètres du wordle</h1>
-        </div>
-    </header>
 
+{% block body %}
     <div class="corps">
         <div class="barre_gauche">
-            <a href="accueil"><i class="fa fa-home"></i>Menu</a>
             <table class = "deco_barres">
                 <tr><td><img src="../static/W_d_g.png"></td></tr>
                 <tr><td><img src="../static/O_d_g.png"></td></tr>
@@ -81,7 +71,6 @@
             </div>
         </div>
         <div class="barre_droite">
-            <a href="accueil"><i class="fa fa-home"></i>Menu</a>
             <table class = "deco_barres">
                 <tr><td><img src="../static/W_d_d.png"></td></tr>
                 <tr><td><img src="../static/O_d_d.png"></td></tr>
@@ -98,7 +87,4 @@
             <h4>&copy Groupe E28</h4>
         </div>
     </footer>
-
-</body>
-  
-</html>
+{% endblock %}

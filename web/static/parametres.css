@@ -10,7 +10,7 @@ body
 /*========================Bandeau_sup======================*/
 header  
 {
-    background-color:#111;
+    background-color:midnightblue;
     margin-left: -8px;
     margin-right: -8px;
     margin-top: -12px;
@@ -54,7 +54,7 @@ header
 {
     height:700px;
     width: 8%;
-    background-color: #111;
+    background-color: midnightblue;
     overflow-x: hidden;
     text-align: center;
 }
@@ -80,7 +80,7 @@ header
     width: 8%;
     padding: right;
     margin-right:-8px;
-    background-color: #111;
+    background-color: midnightblue;
     overflow-x: hidden;
     text-align: center;
 }
@@ -235,7 +235,7 @@ select {
 
 footer
 {
-    background-color:#111;
+    background-color:midnightblue;
     margin-left: -8px;
     margin-right: -8px;
     margin-bottom: -12px;
