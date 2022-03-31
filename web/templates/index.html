@@ -2,19 +2,28 @@
 <html>
 <head>
     <link href='../static/index.css' rel="stylesheet" type="text/css">
+    {% block head %}
+    {% endblock %}
     <title></title>
 </head>
 
 <body>
-    <div>
+    <div class="box-title-nav">
+        <div class="box-title">
+            <h1>
+                <div class="title">
+                    WORDLE DELUXE™
+                </div>
+            </h1>
+        </div>
         <nav>
             <ul>
                 <li><a href="accueil">Accueil</a></li>
                 <li><a href="statistiques">Statistiques</a></li>
                 <li><a href="parametres">Paramètres</a></li>
                 {% if not current_user.is_authenticated %}
-                    <li><a href="inscription">Inscription</a></li>
-                    <li><a href="connexion">Connexion</a></li>
+                <li><a href="connexion">Connexion</a></li>
+                <li><a href="inscription">Inscription</a></li>
                 {% else %}
                     <li><a href="deconnexion">Déconnexion</a></li>
                 {% endif %}
@@ -22,21 +31,10 @@
         </nav>
     </div>
 
-    <div>
-        {% block body %}
-        {% endblock %}
-    </div>
 
-    <div>
-        <!-- Flash -->
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                {% for msg in messages %}
-                    <p>{{ msg }}</p>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
-    </div>
+    {% block body %}
+    {% endblock %}
+
 </body>
 
 </html>
