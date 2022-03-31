@@ -50,6 +50,10 @@ def accueil():
     return render_template("accueil.html")
 
 #Statistiques
+@app.route('/statistiques')
+def stat():
+    liste=["25","20","80%","10","7","70%"]
+    return render_template("statistiques.html", liste=liste)
 
 #Mode de jeu/Paramètres
 
