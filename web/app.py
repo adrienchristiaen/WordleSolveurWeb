@@ -56,6 +56,10 @@ def stat():
     return render_template("statistiques.html", liste=liste)
 
 #Mode de jeu/Paramètres
+#Statistiques
+@app.route('/parametres')
+def parametres():
+    return render_template("parametres.html")
 
 #Inscription/Connexion/Déconnexion ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

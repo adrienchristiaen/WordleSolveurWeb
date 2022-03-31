@@ -1,0 +1,62 @@
+html{
+    background-color: lightblue;
+}
+
+body {
+    margin: 0;
+}
+
+.box-title-nav{
+    margin-top: 0;
+    background-color: midnightblue;  
+}
+
+.box-title{
+    background-color: midnightblue;
+    margin-top: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.title{
+    padding: 0;
+    color: gold;
+}
+
+h1{
+    font-weight: bolder;
+    margin-bottom: 0px;
+    margin-top: 20px;
+}
+
+nav{
+    background-color: midnightblue;
+    margin: 0;
+    padding-top: 0px;
+    padding-bottom: 1px;
+}
+
+ul{
+    display: flex;
+    list-style: none;
+    padding-left: 0px;
+}
+
+li{
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+a{
+    color: gold;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+
+a:focus, a:hover {
+    color: white;
+}
