@@ -46,8 +46,8 @@ if __name__ == "__main__":
 #Accueil
 @app.route('/')
 @app.route('/accueil')
-def accueil():
-    return render_template("accueil.html")
+def accueil(nb_lettres="6",nb_essais="6",mode_de_jeu="classique"):
+    return render_template("accueil.html",nb_lettres="6",nb_essais="6",mode_de_jeu="classique")
 
 #Statistiques
 @app.route('/statistiques')
@@ -55,10 +55,24 @@ def stat():
     liste=["25","20","80%","10","7","70%"]
     return render_template("statistiques.html", liste=liste)
 
+
 #Mode de jeu/Paramètres
-#Statistiques
-@app.route('/parametres')
+@app.route('/parametres',methods=['GET','POST'])
 def parametres():
+    if request.method == "POST":
+        #Informations du formulaire
+        select_lettres=request.form.get("select_lettres")
+        select_essais=request.form.get("select_essais")
+        select_mode_de_jeu=request.form.get("select_mode_de_jeu")
+        solo = request.form.get("solo")
+        multi = request.form.get("multi")
+        #Connexion base de données
+        con=sqlite3.connect('wordle.db')
+        cur = con.cursor()
+        if not multi == None:
+            return render_template("construction.html")
+        if not solo == None:
+            return render_template("accueil.html",nb_lettres=select_lettres,nb_essais=select_essais,mode_de_jeu=select_mode_de_jeu)
     return render_template("parametres.html")
 
 #Inscription/Connexion/Déconnexion ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -97,7 +111,7 @@ def inscription():
                 user = User(id = num)
                 login_user(user)
                 flash("Votre nouveau compte a été créé avec succès !")
-                return redirect("accueil")
+                return redirect("accueil",nb_lettres="6",nb_essais="6",mode_de_jeu="classique")
 
     return render_template('inscription.html')
 
@@ -130,7 +144,7 @@ def connexion():
                 user = User(id = num)
                 login_user(user)
                 flash("Vous vous êtes connecté avec succès !")
-                return redirect("accueil")
+                return redirect("accueil",nb_lettres="6",nb_essais="6",mode_de_jeu="classique")
 
     return render_template('connexion.html')
 
@@ -141,6 +155,6 @@ def deconnexion():
     session.pop('username', None)
     logout_user()
     flash("Vous vous êtes déconnecté avec succès. A la prochaine !")
-    return redirect("accueil")
+    return redirect("accueil",nb_lettres="6",nb_essais="6",mode_de_jeu="classique")
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
