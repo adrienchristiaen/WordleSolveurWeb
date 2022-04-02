@@ -3,8 +3,8 @@
     <link rel="stylesheet" href="../static/parametres.css"/>
 {% endblock %}
 
-
 {% block body %}
+<body>
     <div class="corps">
         <div class="barre_gauche">
             <table class = "deco_barres">
@@ -17,22 +17,6 @@
             </table>
         </div>
         <div class = "corps_sans_barres">
-            <div class ="nombre_joueur">
-                <div class ="solo">
-                    <table>
-                        <tr><td><h3>Singleplayer</h3></td></tr>
-                        <tr><td><img src="../static/solo.png"></td></tr>
-                        <tr><td><button class ="boutton_solo">Sélectionner</button></td></tr>
-                    </table>
-                </div>
-                <div class ="multi">
-                    <table>
-                        <tr><td><h3>Multiplayer</h3></td></tr>
-                        <tr><td><img src="../static/multi.png"></td></tr>
-                        <tr><td><button class ="boutton_multi">Sélectionner</button></td></tr>
-                    </table>
-                </div>
-            </div>
             <div class ="choix">
                 <div class = "choix_nblettres">
                     <h3>Choix du nombre de lettres  :</h3>
@@ -67,6 +51,22 @@
                             <option value="survie" >Survie</option>
                         </select>
                     </div>
+                </div>
+            </div>
+            <div class ="nombre_joueur">
+                <div class ="solo">
+                    <table>
+                        <tr><td><h3>Singleplayer</h3></td></tr>
+                        <tr><td><img src="../static/solo.png"></td></tr>
+                        <tr><td><button class ="boutton_solo">Jouer</button></td></tr>
+                    </table>
+                </div>
+                <div class ="multi">
+                    <table>
+                        <tr><td><h3>Multiplayer</h3></td></tr>
+                        <tr><td><img src="../static/multi.png"></td></tr>
+                        <tr><td><button class ="boutton_multi">Jouer</button></td></tr>
+                    </table>
                 </div>
             </div>
         </div>
