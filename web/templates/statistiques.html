@@ -1,24 +1,29 @@
 <!DOCTYPE html>
+{% extends "index.html" %}
+
 <html>
+
+{% block head %}
     <head>
         <meta charset="utf-8" />
         <title>Statistiques</title>
     </head>
+{% endblock %}
 
+{% block body %}
     <body>
+    
     <h1> Statistiques </h1>
     
     <h2> Parties classiques </h2>
 	<p>Parties jouées : {{liste[0]}}</p>
 	<p>Parties gagnées : {{liste[1]}}</p>
 	<p>Taux de victoire : {{liste[2]}}</p>
-	
-    <h2> Parties contre la montre </h2>
-	<p>Parties jouées : {{liste[3]}}</p>
-	<p>Parties gagnées : {{liste[4]}}</p>
-	<p>Taux de victoire : {{liste[5]}}</p>
-    
+	<p>Expérience : {{liste[3]}}</p>  
+	  
     </body>
+{% endblock %}
+
 </html>
 
 

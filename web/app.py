@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, request, url_for, flash, session
+from flask import Flask, render_template, redirect, request, url_for, flash, session, g
 from flask_login import LoginManager, UserMixin, login_required, logout_user, current_user, login_user
 import sqlite3
 
@@ -52,8 +52,25 @@ def accueil(nb_lettres="6",nb_essais="6",mode_de_jeu="classique"):
 #Statistiques
 @app.route('/statistiques')
 def stat():
-    liste=["25","20","80%","10","7","70%"]
-    return render_template("statistiques.html", liste=liste)
+    id=0
+    data=[]
+    #Connection a la bdd
+    con=sqlite3.connect('wordle.db')
+    cur = con.cursor()
+    for i in cur.execute("SELECT * FROM Utilisateur"):
+        data.append(i)
+    con.commit()
+    con.close()
+    #Selection des stats d'un joueur en particulier
+    for u in data:
+        if u[0]==id:
+            info=u
+    nb_vict=info[4]
+    nb_parties=info[4]+info[5]
+    taux_vict=str((nb_vict/nb_parties)*100)+"%"
+    xp=info[6]
+
+    return render_template("statistiques.html", liste=[nb_vict,nb_parties,taux_vict,xp])
 
 
 #Mode de jeu/Paramètres
