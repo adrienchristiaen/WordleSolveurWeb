@@ -329,7 +329,7 @@ def inscription():
                 user = User(id = num)
                 login_user(user)
                 flash("Votre nouveau compte a été créé avec succès !")
-                return render_template("accueil",nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, liste_mot_propose=[],liste_etat_lettres=[])
+                return redirect("accueil")
 
     return render_template('inscription.html')
 
@@ -362,7 +362,7 @@ def connexion():
                 user = User(id = num)
                 login_user(user)
                 flash("Vous vous êtes connecté avec succès !")
-                return render_template("accueil",nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, liste_mot_propose=[],liste_etat_lettres=[])
+                return redirect("accueil")
 
     return render_template('connexion.html')
 
@@ -373,6 +373,6 @@ def deconnexion():
     session.pop('username', None)
     logout_user()
     flash("Vous vous êtes déconnecté avec succès. A la prochaine !")
-    return render_template("accueil",nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, liste_mot_propose=[],liste_etat_lettres=[])
+    return redirect("accueil")
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
