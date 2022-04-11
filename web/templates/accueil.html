@@ -1,6 +1,9 @@
 {% extends "index.html" %}
+{% block head %}
+    <link rel="stylesheet" href="../static/accueil.css"/>
+{% endblock %}
 {% block body %}
-<div>
+<div class = "corps">
     <!-- Flash -->
     {% with messages = get_flashed_messages() %}
         {% if messages %}
@@ -9,5 +12,28 @@
             {% endfor %}
         {% endif %}
     {% endwith %}
+    <table>
+        {% for i in range(nb_lettres) %}
+            <tr>
+                {% for j in range(nb_lettres) %}
+                    {% if liste_etat_lettres[i][j] == '2' %}
+                        <td style="background-color: green;">{{liste_mot_propose[i][j]}}</td>
+                    {% elif liste_etat_lettres[i][j] == '1' %}
+                        <td style="background-color: red;">{{liste_mot_propose[i][j]}}</td>
+                    {% else %}
+                        <td>{{liste_mot_propose[i][j]}}</td>
+                    {% endif %}
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
+    <div class="proposition">
+        <form method="POST" action="/accueil">
+            <input class="input" type="mot_propose" name="mot_propose" placeholder="Votre Proposition" autofocus="">
+            <button class="bouton">Valider</button>
+        </form>
+        {% block accueil %}
+        {% endblock %}
+    </div>
 </div>
 {% endblock %}
