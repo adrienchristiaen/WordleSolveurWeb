@@ -76,7 +76,7 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
     #print(nb_lettres)
 
     mot_cherche=cur.execute("SELECT mot_cherche FROM Modes ")
-    mot_cherche=mot_cherche.fetchall()
+    mot_cherche=mot_cherche.fetchall()[0]
     #print(mot_cherche)
 
     mots_proposes=cur.execute("SELECT mots_proposes FROM Modes ")
@@ -94,30 +94,31 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
     #______________________________________________________________________#
 
     #__________________Mise des tuples sous forme de liste_________________#
-    mot_cherche=mot_cherche[0][0]
-    for i in range(len(nb_essais)):
-        nb_essais[i]=nb_essais[i][0]
-    nb_essais.reverse()
-    #print("nb_essais :",nb_essais)
-    nb_lettres=nb_lettres[0]
+    mot_cherche=mot_cherche[0]                                             #On prend le premier élément de la liste mot_cherche (tous les éléments sont identiques)
+    nb_lettres=nb_lettres[0]                                               #Idem mot_cherche
 
-    liste_mot_propose=[]
-    for i in range(len(mots_proposes)):
-        liste_mot_propose.append(mots_proposes[i][0])
+    for i in range(len(nb_essais)):
+        nb_essais[i]=nb_essais[i][0]                                       #On passe d'une liste de la forme [(5,)(6,)] à [5,6]
+    nb_essais.reverse()                                                    #Car je souhaite une liste décroissant : [5,6] => [6,5]
+    #print("nb_essais :",nb_essais)
+
+    liste_mot_propose=[]                                                   #Liste contenant tous les mots proposés par le joueur
+    for i in range(len(mots_proposes)):                                    #Exemple : ['Bondir','Rouges','......','......']
+        liste_mot_propose.append(mots_proposes[i][0])                      #On ajoute les mots déja proposés qui se trouvent dans la BD
     #print('avant test',liste_mot_propose)
-    if liste_mot_propose[0]=='':
-        remplissage = nb_lettres-len(liste_mot_propose)
-        for j in range(remplissage):
+    if liste_mot_propose[0]=='':                                           #On regarde si aucun mot n'a encore été proposé
+        remplissage = nb_essais[0]-len(liste_mot_propose)                  #Jusqu'au else, le code permet de générer liste_mot_propose de la forme suivante :
+        for j in range(remplissage):                                       #liste_mot_propose = [('.'*nb_lettres)*nb_essais]
             liste_mot_propose.append('')
         for k in range (len(liste_mot_propose)):
             if liste_mot_propose[k]=='':
                 liste_mot_propose[k]=point*nb_lettres
     else:
-        #print('else',liste_mot_propose)
-        liste_mot_propose.reverse()
-        liste_mot_propose.pop(0)
+        #print('else',liste_mot_propose)                                   #Si la liste contient déja un mot
+        liste_mot_propose.reverse()                                        #On l'inverse ['Bonjour','']  => ['','Bonjour']
+        liste_mot_propose.pop(0)                                           #On spprime l'élément 0 => ['Bonjour']
         #print(liste_mot_propose)
-        remplissage = nb_lettres-len(liste_mot_propose)
+        remplissage = nb_essais[0]-len(liste_mot_propose)                  #On remplit selon la même méthode au-dessus
         for i in range(remplissage):
             liste_mot_propose.append('')
         for k in range (len(liste_mot_propose)):
@@ -126,23 +127,23 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
     print(liste_mot_propose)
 
 
-    liste_etat_lettres=[]
-    for i in range(len(etat_lettres)):
-        liste_etat_lettres.append(etat_lettres[i][0])
+    liste_etat_lettres=[]                                                  #Liste contenant l'état des lettres de tous les mots proposés
+    for i in range(len(etat_lettres)):                                     #Exemple : ['221001','201102','000000','000000']
+        liste_etat_lettres.append(etat_lettres[i][0])                      #On ajoute les etats de lettre déja proposés qui se trouvent dans la BD
     #print('avant test',liste_etat_lettres)
     if liste_etat_lettres[0]=='':
-        remplissage = nb_lettres-len(liste_etat_lettres)
+        remplissage = nb_essais[0]-len(liste_etat_lettres)                 #Même méthode que pour liste_mots_proposes
         for j in range(remplissage):
             liste_etat_lettres.append('')
-        for k in range (len(liste_etat_lettres)):
+        for k in range (len(liste_etat_lettres)):               
             if liste_etat_lettres[k]=='':
-                liste_etat_lettres[k]=zero*nb_lettres
+                liste_etat_lettres[k]=zero*nb_lettres                      #liste_etat_lettres = [('0'*nb_lettres)*nb_essais]
         #print('if',liste_etat_lettres)
     else:
         liste_etat_lettres.reverse()
         liste_etat_lettres.pop(0)
         #print(liste_mot_propose)
-        remplissage = nb_lettres-len(liste_etat_lettres)
+        remplissage = nb_essais[0]-len(liste_etat_lettres)
         for i in range(remplissage):
             liste_etat_lettres.append('')
         for k in range (len(liste_etat_lettres)):
@@ -157,7 +158,7 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
     if mot_cherche=='':
         mot_propose = ''
         etat_lettres = ''
-        print("etat_lettres",etat_lettres)
+        #print("etat_lettres",etat_lettres)
         mot_cherche=choisir_mot(nb_lettres)
         cur.execute("DELETE FROM Modes WHERE mot_cherche=('') ")
         cur.execute("INSERT INTO Modes (Nb_essais,Nb_caracteres,mot_cherche,mots_proposes,etat_lettres,Mode_de_jeu) VALUES (?,?,?,?,?,?) ",(nb_essais[-1],nb_lettres,mot_cherche,mot_propose,etat_lettres,mode_de_jeu)) 
@@ -167,23 +168,23 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
     if request.method == "POST":
         #_______________________Place la première lettre_______________________#
         test=True
-        print(test,liste_mot_propose)
+        #print(test,liste_mot_propose)
         for i in range(len(liste_mot_propose)):
-            if liste_mot_propose[i] == point*nb_lettres and test:
-                liste_mot_propose[i]=mot_cherche[0]+point*(nb_lettres-1)
-                test=False
-                print('ca passe')
-        print(liste_mot_propose)
+            if liste_mot_propose[i] == point*nb_lettres and test:                   #Place la première lettre uniquement pour le prochain mot :
+                liste_mot_propose[i]=mot_cherche[0]+point*(nb_lettres-1)            #mot_cherche = 'PYTHON'
+                test=False                                                          #liste_mot_propose = ['ROULER','P.....','......']                                          
+                #print('ca passe')  
+        #print(liste_mot_propose)
         #______________________________________________________________________#
         if nb_essais[-1]>0:
             print("Le mot à trouver est : ",mot_cherche)
             mot_propose=request.form.get("mot_propose")
-            if verif_mot(mot_propose,mot_cherche):
+            if verif_mot(mot_propose,mot_cherche):                                  #Voir fonction verif_mot
                 mot_propose = mot_propose.upper()
                 #print(nb_essais[0],nb_essais[-1], nb_essais[0]-nb_essais[-1])
-                liste_mot_propose[nb_essais[0]-nb_essais[-1]] = mot_propose
+                liste_mot_propose[nb_essais[0]-nb_essais[-1]] = mot_propose         #Ajoute le mot proposé dans la liste liste_mot_propose
                 #print(nb_essais)
-                print(liste_mot_propose)
+                #print(liste_mot_propose)
 
                 print("Le mot proposé est : ",mot_propose)
 
@@ -208,33 +209,33 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
                     etat_lettres+=str(liste_de_test[i][1])
                 #print(etat_lettres)
                 
-                liste_etat_lettres[nb_essais[0]-nb_essais[-1]] = etat_lettres
+                liste_etat_lettres[nb_essais[0]-nb_essais[-1]] = etat_lettres       #On ajoute l'état des lettres du mot dans la liste liste_etat_lettres
     
-                nb_essais.append(nb_essais[-1]-1)
+                nb_essais.append(nb_essais[-1]-1)                                   #On décrémente le nombre d'essai restant
                 #_____________________Mise à jour de la BD_______________________#
                 cur.execute("INSERT INTO Modes (Nb_essais,Nb_caracteres,mot_cherche,mots_proposes,etat_lettres,Mode_de_jeu) VALUES (?,?,?,?,?,?) ",(nb_essais[-1],nb_lettres,mot_cherche,mot_propose,etat_lettres,mode_de_jeu)) 
                 con.commit()
                 #________________________________________________________________#
-                if etat_lettres == '2'*nb_lettres:
-                    return render_template("accueil_win.html",nb_lettres=nb_lettres, nb_essais=nb_essais[-1],mode_de_jeu=mode_de_jeu,mot_cherche=mot_cherche, liste_mot_propose=liste_mot_propose,liste_etat_lettres=liste_etat_lettres)
+                if etat_lettres == '2'*nb_lettres:                                  #Si le dernier etat_lettres = '2222222222' par exemple c'est que le mot est trouvé
+                    return render_template("accueil_win.html",nb_lettres=nb_lettres, nb_essais=nb_essais,mode_de_jeu=mode_de_jeu,mot_cherche=mot_cherche, liste_mot_propose=liste_mot_propose,liste_etat_lettres=liste_etat_lettres)
                 else:
                     #_______________________Place la première lettre_______________________#
                     test=True
                     #print(test,liste_mot_propose)
                     for i in range(len(liste_mot_propose)):
-                        if liste_mot_propose[i] == point*nb_lettres and test:
+                        if liste_mot_propose[i] == point*nb_lettres and test:                   #Code déja expliqué
                             liste_mot_propose[i]=mot_cherche[0]+point*(nb_lettres-1)
                             test=False
                             #print('ca passe')
                     #print(liste_mot_propose)
                     #______________________________________________________________________#
-                    return render_template("accueil.html",nb_lettres=nb_lettres, nb_essais=nb_essais[-1],mode_de_jeu=mode_de_jeu,mot_cherche=mot_cherche, liste_mot_propose=liste_mot_propose,liste_etat_lettres=liste_etat_lettres)
+                    return render_template("accueil.html",nb_lettres=nb_lettres, nb_essais=nb_essais,mode_de_jeu=mode_de_jeu,mot_cherche=mot_cherche, liste_mot_propose=liste_mot_propose,liste_etat_lettres=liste_etat_lettres)
             else:
-                print("mot non valide")
-                return render_template("accueil_fail.html",nb_lettres=nb_lettres, nb_essais=nb_essais[-1],mode_de_jeu=mode_de_jeu,mot_cherche=mot_cherche, liste_mot_propose=liste_mot_propose,liste_etat_lettres=liste_etat_lettres)
+                #print("mot non valide")
+                return render_template("accueil_fail.html",nb_lettres=nb_lettres, nb_essais=nb_essais,mode_de_jeu=mode_de_jeu,mot_cherche=mot_cherche, liste_mot_propose=liste_mot_propose,liste_etat_lettres=liste_etat_lettres)
         else:
-                print("plus d'essais")
-                return render_template("accueil_lose.html",nb_lettres=nb_lettres, nb_essais=nb_essais[-1],mode_de_jeu=mode_de_jeu,mot_cherche=mot_cherche, liste_mot_propose=liste_mot_propose,liste_etat_lettres=liste_etat_lettres)
+                #print("plus d'essais")
+                return render_template("accueil_lose.html",nb_lettres=nb_lettres, nb_essais=nb_essais,mode_de_jeu=mode_de_jeu,mot_cherche=mot_cherche, liste_mot_propose=liste_mot_propose,liste_etat_lettres=liste_etat_lettres)
     else:
         print("Le mot à trouver est : ",mot_cherche)
         #_______________________Place la première lettre_______________________#
@@ -247,7 +248,33 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
                 #print('ca passe')
         #print(liste_mot_propose)
         #______________________________________________________________________#
-        return render_template("accueil.html",nb_lettres=nb_lettres, nb_essais=nb_essais[-1],mode_de_jeu=mode_de_jeu,mot_cherche=mot_cherche, liste_mot_propose=liste_mot_propose,liste_etat_lettres=liste_etat_lettres)
+        return render_template("accueil.html",nb_lettres=nb_lettres, nb_essais=nb_essais,mode_de_jeu=mode_de_jeu,mot_cherche=mot_cherche, liste_mot_propose=liste_mot_propose,liste_etat_lettres=liste_etat_lettres)
+
+
+#Rejouer
+@app.route('/rejouer',methods=['GET','POST'])
+def rejouer():
+    # connection = sqlite3.connect('wordle.sql')
+    # cur = connection.cursor()
+
+    # nb_essais=cur.execute("SELECT Nb_essais FROM Modes ")
+    # nb_essais=nb_essais.fetchall()[0][-1]
+    # #print("nb_essais :",nb_essais)
+
+    # nb_lettres=cur.execute("SELECT Nb_caracteres FROM Modes ")
+    # nb_lettres=nb_lettres.fetchall()[0][0]
+    # #print(nb_lettres)
+
+    # mode_de_jeu=cur.execute("SELECT Mode_de_jeu FROM Modes ")                         #Code déja expliqué
+    # mode_de_jeu=mode_de_jeu.fetchall()[0][0]
+    # #print(mode_de_jeu)
+
+    # cur.execute('''DELETE FROM Modes;''')
+    # print(nb_essais,nb_lettres,mode_de_jeu)
+    # cur.execute("INSERT INTO Modes VALUES(?,?,'','','',?)",(nb_essais,nb_lettres,mode_de_jeu))
+    # connection.commit()
+    return render_template("accueil.html",nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, liste_mot_propose=[],liste_etat_lettres=[])
+
 
 
 #Statistiques
