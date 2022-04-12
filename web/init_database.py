@@ -19,7 +19,7 @@ cursor.execute("""create table Utilisateur(
     Email varchar, 
     Nb_victoires integer, 
     Nb_défaites integer, 
-    Experience varchar, 
+    Experience integer, 
     PRIMARY KEY(Id))""")
 
 
@@ -46,10 +46,11 @@ cursor.execute("""create table Quetes(
 
 #Table Quetes_rea
 cursor.execute("""create table Quetes_rea(
-    Id_quete integer, 
+    Id_quete_rea integer,
+    Id_quete integer,
     Identifiant varchar, 
     Etat boolean, 
-    PRIMARY KEY(Id_quete))""")
+    PRIMARY KEY(Id_quete_rea))""")
 
 
 #Table Modes
@@ -70,9 +71,13 @@ cursor.execute("INSERT INTO Utilisateur VALUES(0,'Adrien',?,'christiaen.adrien@g
 
 cursor.execute("INSERT INTO Historique VALUES(0,'Adrien','Vrai',10,'10/03/2022','Survival%')")
 
-cursor.execute("INSERT INTO Quetes VALUES(0,'Wordle episode 1','4 Essais max',10)")
+cursor.execute("INSERT INTO Quetes VALUES(0,'Stratège','Trouver le mot cherché en 4 coups ou moins',1000)")
+cursor.execute("INSERT INTO Quetes VALUES(1,'Mentaliste','Trouver le mot cherché en 3 coups ou moins',5000)")
+cursor.execute("INSERT INTO Quetes VALUES(2,'Bingo','Trouver le mot cherché en 2 coups ou moins',10000)")
 
-cursor.execute("INSERT INTO Quetes_rea VALUES(0,'Adrien','Vrai')")
+cursor.execute("INSERT INTO Quetes_rea VALUES(0, 0, 'Adrien',TRUE)")
+cursor.execute("INSERT INTO Quetes_rea VALUES(1, 1, 'Adrien',FALSE)")
+cursor.execute("INSERT INTO Quetes_rea VALUES(2, 2, 'Adrien',FALSE)")
 
 cursor.execute("INSERT INTO Modes VALUES(6,6,'','','','Classique')")
 

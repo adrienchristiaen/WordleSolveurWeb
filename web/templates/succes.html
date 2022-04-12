@@ -1,0 +1,17 @@
+{% extends "index.html" %}
+{% block head %}
+    <link rel="stylesheet" href="../static/succes.css"/>
+{% endblock %}
+{% block body %}
+    <ul>
+        {% for k in range(length) %}
+            {% if quetes_rea[k][3] == 1 %}
+                <li>{{quetes[k][1]}}</li>
+                <p>Statut: Réalisé</p>
+            {% else %}
+                <li>{{quetes[k][1]}}</li>
+                <p>Statut: Non Réalisé</p>
+            {% endif %}
+        {% endfor %}
+    </ul>
+{% endblock %}

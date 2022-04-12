@@ -171,7 +171,6 @@ def rejouer():
     return redirect("accueil")
 
 
-
 #Statistiques
 @app.route('/statistiques')
 def stat():
@@ -194,6 +193,21 @@ def stat():
     xp=info[6]
 
     return render_template("statistiques.html", liste=[nb_vict,nb_parties,taux_vict,xp])
+
+#Succès
+@app.route('/succes')
+@login_required
+def succes():
+    con=sqlite3.connect('wordle.sql')
+    cur = con.cursor()
+    req = cur.execute("SELECT * FROM Quetes")
+    quetes = req.fetchall()
+    print(quetes)
+    req = cur.execute("SELECT * FROM Quetes_rea WHERE Identifiant = (?)", ([session['username']]))
+    quetes_rea = req.fetchall()
+    print(quetes_rea)
+    length = len(quetes)
+    return render_template("succes.html", length=length, quetes=quetes, quetes_rea=quetes_rea)
 
 
 #Mode de jeu/Paramètres
@@ -257,11 +271,23 @@ def inscription():
                 user = User(id = num)
                 login_user(user)
                 flash("Votre nouveau compte a été créé avec succès !")
+                #Initialisation des quêtes dans la base de données
+                req = cur.execute("SELECT COUNT(Id_quete_rea) FROM Quetes_rea")
+                nb_quetes_rea = req.fetchone()[0] + 1
+                req = cur.execute("SELECT COUNT(Id_quete) FROM Quetes")
+                nb_quetes = req.fetchone()[0]
+                for k in range(nb_quetes):
+                    cur.execute("INSERT INTO Quetes_rea VALUES(?, ?, ?,FALSE)", ([nb_quetes_rea+k, k, session['username']]))
+                con.commit()
                 return redirect("accueil")
 
     return render_template('inscription.html')
 
 #Connexion
+@app.route('/login')
+def login():
+    return redirect("connexion")
+
 @app.route('/connexion', methods=['GET', 'POST'])
 def connexion():
     if request.method == "POST":
