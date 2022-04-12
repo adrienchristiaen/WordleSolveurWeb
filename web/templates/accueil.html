@@ -13,7 +13,7 @@
         {% endif %}
     {% endwith %}
     <table>
-        {% for i in range(nb_lettres) %}
+        {% for i in range(nb_essais[0]) %}
             <tr>
                 {% for j in range(nb_lettres) %}
                     {% if liste_etat_lettres[i][j] == '2' %}
@@ -28,10 +28,28 @@
         {% endfor %}
     </table>
     <div class="proposition">
-        <form method="POST" action="/accueil">
-            <input class="input" type="mot_propose" name="mot_propose" placeholder="Votre Proposition" autofocus="">
-            <button class="bouton">Valider</button>
-        </form>
+        {% set win = '2'*nb_lettres | int %}
+        {% if liste_etat_lettres[nb_essais[0]-nb_essais[-1]-1] == win %}
+            <form method="POST" action="/rejouer">
+                <input class="input" type="mot_propose" name="mot_propose" placeholder="Votre Proposition" autofocus="" disabled>
+                <button class="bouton">Rejouer</button>  
+            </form>
+            <p style="color: green;">Vous avez gagné</p>
+        {% else %}
+            {% if nb_essais[-1]==0 %}
+                <form method="POST" action="/rejouer">
+                    <input class="input" type="mot_propose" name="mot_propose" placeholder="Votre Proposition" autofocus="" disabled>
+                    <button class="bouton">Rejouer</button>  
+                </form>
+                <p style="color: red;">Vous avez perdu</p>
+            
+            {% else %}
+                <form method="POST" action="/accueil">
+                    <input class="input" type="mot_propose" name="mot_propose" placeholder="Votre Proposition" autofocus="">
+                    <button class="bouton">Valider</button>  
+                </form>
+            {% endif %}
+        {% endif %}
         {% block accueil %}
         {% endblock %}
     </div>
