@@ -1,6 +1,6 @@
 from flask import Flask, render_template, redirect, request, url_for, flash, session, g
 from flask_login import LoginManager, UserMixin, login_required, logout_user, current_user, login_user
-import sqlite3
+import sqlite3, hashlib
 from fonctions_wordle_flask import *
 app = Flask(__name__)
 
@@ -229,6 +229,8 @@ def inscription():
         username = request.form.get("username")
         password = request.form.get("password")
         email = request.form.get("email")
+        #Encodage du mot de passe
+        password = hashlib.sha224(bytes(password,encoding='utf-8')).hexdigest()
         #Connexion base de données
         con = sqlite3.connect('wordle.sql')
         cur = con.cursor()
@@ -266,6 +268,8 @@ def connexion():
         #Informations du formulaire
         username = request.form.get("username")
         password = request.form.get("password")
+        #Encodage du mot de passe
+        password = hashlib.sha224(bytes(password,encoding='utf-8')).hexdigest()
         #Connexion base de données
         con = sqlite3.connect('wordle.sql')
         cur = con.cursor()

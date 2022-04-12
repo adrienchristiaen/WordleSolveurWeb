@@ -63,8 +63,10 @@ cursor.execute("""create table Modes(
     PRIMARY KEY(Nb_essais))""")
 
 
+#Encodage du mot de passe
+password = hashlib.sha224(bytes('test12',encoding='utf-8')).hexdigest()
 
-cursor.execute("INSERT INTO Utilisateur VALUES(0,'Adrien','test12','christiaen.adrien@gmail.com',10,10,'10%')")
+cursor.execute("INSERT INTO Utilisateur VALUES(0,'Adrien',?,'christiaen.adrien@gmail.com',10,10,'10%')", ([password]))
 
 cursor.execute("INSERT INTO Historique VALUES(0,'Adrien','Vrai',10,'10/03/2022','Survival%')")
 
