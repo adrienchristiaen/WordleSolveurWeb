@@ -201,18 +201,22 @@ def stat():
 def parametres():
     if request.method == "POST":
         #Informations du formulaire
-        select_lettres=request.form.get("select_lettres")
         select_essais=request.form.get("select_essais")
+        select_lettres=request.form.get("select_lettres")
         select_mode_de_jeu=request.form.get("select_mode_de_jeu")
         solo = request.form.get("solo")
         multi = request.form.get("multi")
         #Connexion base de données
-        con=sqlite3.connect('wordle.db')
+        con=sqlite3.connect('wordle.sql')
         cur = con.cursor()
+        cur.execute('''DELETE FROM Modes;''')
+        #print(nb_essais,nb_lettres,mode_de_jeu)
+        cur.execute("INSERT INTO Modes VALUES(?,?,?,?,?,?)",(select_essais,select_lettres,'','','',select_mode_de_jeu))
+        con.commit()
         if not multi == None:
             return render_template("construction.html")
         if not solo == None:
-            return render_template("accueil.html",nb_lettres=select_lettres,nb_essais=select_essais,mode_de_jeu=select_mode_de_jeu)
+            return redirect("accueil")
     return render_template("parametres.html")
 
 #Inscription/Connexion/Déconnexion ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
