@@ -121,7 +121,7 @@ while continuer_partie != "non":
             passe = True
             for j in range(len(mot_cherche)):                     #On va regarder si parmis les lettres proposés, certaines sont au mauvais endroit
                 #print("retour")
-                if mot[i]==mot_cherche[j] and etat_lettres[j][1]!=2 and passe:
+                if mot[i]==mot_cherche[j] and etat_lettres[i][1]!=2 and passe:
                     for lettre in occurences:
                         #print("mot[i],lettre :",mot[i],lettre)
                         if mot[i] == lettre[0] and lettre[2] < lettre[1]:

@@ -162,7 +162,7 @@ def calcul_etat_lettres(mot_cherche, mot_propose):
         passe = True
         for j in range(len(mot_cherche)):                     #On va regarder si parmis les lettres proposés, certaines sont au mauvais endroit
             #print("retour")
-            if mot_propose[i]==mot_cherche[j] and liste_de_test[j][1]!=2 and passe:
+            if mot_propose[i]==mot_cherche[j] and liste_de_test[i][1]!=2 and passe:
                 for lettre in occurences:
                     #print("mot_propose[i],lettre :",mot_propose[i],lettre)
                     if mot_propose[i] == lettre[0] and lettre[2] < lettre[1]:
