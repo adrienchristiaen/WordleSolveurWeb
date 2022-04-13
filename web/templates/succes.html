@@ -3,15 +3,31 @@
     <link rel="stylesheet" href="../static/succes.css"/>
 {% endblock %}
 {% block body %}
-    <ul>
+    <div class="all-quest-box">
         {% for k in range(length) %}
             {% if quetes_rea[k][3] == 1 %}
-                <li>{{quetes[k][1]}}</li>
-                <p>Statut: Réalisé</p>
+                <li>
+                    <div class="quest-box">
+                        <div class="quest-head">
+                            <div id="realised">Réussi</div>
+                            <div class="quest-xp">{{quetes[k][3]}} XP</div>
+                        </div>
+                        <div class="title-quest">{{quetes[k][1]}}</div>
+                        <div class="the-quest">{{quetes[k][2]}}</div>
+                    </div>
+                </li>
             {% else %}
-                <li>{{quetes[k][1]}}</li>
-                <p>Statut: Non Réalisé</p>
+                <li>
+                    <div class="quest-box">
+                        <div class="quest-head">
+                            <div id="unrealised">Non Réussi</div>
+                            <div class="quest-xp">{{quetes[k][3]}} XP</div>
+                        </div>
+                        <div class="title-quest">{{quetes[k][1]}}</div>
+                        <div class="the-quest">{{quetes[k][2]}}<div>
+                    </div>
+                </li>
             {% endif %}
         {% endfor %}
-    </ul>
+    </div>
 {% endblock %}
