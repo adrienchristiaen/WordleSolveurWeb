@@ -19,7 +19,7 @@ for i in range (len(liste_brute)):
 
 
 def choisir_mot():
-    return choice(liste_mots)
+    return 'stoppa'
 
 
 
@@ -71,18 +71,68 @@ while continuer_partie != "non":
     while mot_cherche != mot_trouve and nb_propositions > 0:
         print("Le mot a trouver est {0} et il vous reste {1} proposition(s)".format(mot_trouve, nb_propositions))
         mot = recup_mot(mot_cherche)
+        occurences = []
+        k=0
+        #print(len(occurences))
+        for i in range(len(mot_cherche)):
+            #print("i =",i)
+            if len(occurences)==0:
+                occurences.append([mot_cherche[i],0,0])
+                occurences[k][1]=mot_cherche.count(mot_cherche[k])
+                k+=1
+            else:
+                oui=True
+                for element in occurences:
+                    #print(mot_cherche[i],element[0])
+                    if mot_cherche[i]==element[0]:
+                        oui=False
+                #print(oui)
+                if oui:
+                    #print('ca passe',mot_cherche[i])
+                    z=0
+                    for j in range(len(occurences)):
+                        #print("j = ",j)
+                        #print("mot_cherche[i] = ",mot_cherche[i])
+                        #print("occurences[j][0] = ",occurences[j][0])
+                        if mot_cherche[i]==occurences[j][0]:
+                            z=1
+                    #print(z)
+                    if z==0:
+                        occurences.append([mot_cherche[i],0,0])
+                        #print(len(occurences),i)
+                        #print(mot_cherche[k],mot_cherche.count(mot_cherche[k]))
+                        occurences[-1][1]=mot_cherche.count(mot_cherche[i])
+                        k+=1
+        #print("occurences :",occurences)
 
+             
         for i in range(len(mot)):
-            if etat_lettres[i][1]==1:           #On initialise l'état des lettres à 1 pour le mettre à 0 sinon certaine les - vont rester même s'il n'y a pas de lettre mal placée
+            if etat_lettres[i][1]==1:                           #On initialise l'état des lettres à 1 pour le mettre à 0 sinon certaine les - vont rester même s'il n'y a pas de lettre mal placée
                 etat_lettres[i][1]=0
 
-            if mot[i]==mot_cherche[i]:          #Si la lettre proposé dans le mot est au bon emplacement son état passe à 2
-                etat_lettres[i][1]=2
+        for i in range(len(mot)):
+            if mot[i]==mot_cherche[i]:
+                etat_lettres[i][1]=2                             #Si la lettre proposé dans le mot est au bon emplacement son état passe à 2
+                for lettre in occurences:
+                    if mot[i]==lettre[0]:
+                        lettre[2]+=1                             #On incrément le nombre d'apparition de la lettre
 
-            else:
-                for j in range(len(mot_cherche)):                           #On va regarder si parmis les lettres proposés, certaines sont au mauvais endroit
-                    if mot[i]==mot_cherche[j] and etat_lettres[j][1]!=2:    
-                        etat_lettres[i][1]=1
+        for i in range(len(mot)):
+            passe = True
+            for j in range(len(mot_cherche)):                     #On va regarder si parmis les lettres proposés, certaines sont au mauvais endroit
+                #print("retour")
+                if mot[i]==mot_cherche[j] and etat_lettres[j][1]!=2 and passe:
+                    for lettre in occurences:
+                        #print("mot[i],lettre :",mot[i],lettre)
+                        if mot[i] == lettre[0] and lettre[2] < lettre[1]:
+                            #print("i",i)
+                            etat_lettres[i][1]=1
+                            passe=False
+                            #print('oui')
+                            lettre[2]+=1
+                            #print(etat_lettres)
+                                
+        #print("occurences :",occurences)
                         
         #print(etat_lettres)
         nb_propositions -= 1
