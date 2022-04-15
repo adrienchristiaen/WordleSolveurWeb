@@ -22,10 +22,10 @@ cursor.execute("""create table Utilisateur(
     Experience integer, 
     PRIMARY KEY(Id))""")
 
-Utilisateur_list = [
-    (0, "Adrien", "test12", "christiaen.adrien@gmail.com", 10, 10, "10%")
-]
-cursor.executemany("insert into Utilisateur values(?,?,?,?,?,?,?)", Utilisateur_list)
+# Utilisateur_list = [
+#     (0, "Adrien", "test12", "christiaen.adrien@gmail.com", 10, 10, "10%")
+# ]
+# cursor.executemany("insert into Utilisateur values(?,?,?,?,?,?,?)", Utilisateur_list)
 
 #Table Historique
 cursor.execute("""create table Historique(
@@ -70,7 +70,7 @@ cursor.execute("""create table Modes(
 #Encodage du mot de passe
 password = hashlib.sha224(bytes('test12',encoding='utf-8')).hexdigest()
 
-cursor.execute("INSERT INTO Utilisateur VALUES(0,'Adrien',?,'christiaen.adrien@gmail.com',10,10,'10%')", ([password]))
+cursor.execute("INSERT INTO Utilisateur VALUES(0,'Adrien',?,'christiaen.adrien@gmail.com',0,0,0)", ([password]))
 
 cursor.execute("INSERT INTO Historique VALUES(0,'Adrien','Vrai',10,'10/03/2022','Survival%')")
 
