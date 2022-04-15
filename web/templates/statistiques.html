@@ -6,6 +6,7 @@
 {% block head %}
     <head>
         <meta charset="utf-8" />
+        <link rel="stylesheet" href="../static/stat.css" />
         <title>Statistiques</title>
     </head>
 {% endblock %}
@@ -13,19 +14,14 @@
 {% block body %}
     <body>
     
-    <h1> Statistiques </h1>
-    
-    <h2> Parties classiques </h2>
-	<p>Parties jouées : {{liste[0]}}</p>
-	<p>Parties gagnées : {{liste[1]}}</p>
-	<p>Taux de victoire : {{liste[2]}}</p>
-	<p>Expérience : {{liste[3]}}</p>  
-
-	<img src="static/image.png">
-	
-    <h2>Succès :</h2>
-    <p><a href="succes">Succès</a></p>
-    </body>
+    <h1 class="titre"> Parties classiques </h1>
+      
+    	<p class="graph"><img src="static/image.png" class="graph" width="750" height="450" alt="image" title="Graph"></p> 
+	<p><br>Parties jouées : {{liste[0]}} 
+	<br><br>Parties gagnées : {{liste[1]}}
+	<br><br>Taux de victoire : {{liste[2]}}
+	<br><br>Expérience : {{liste[3]}}</p>  
+		
 {% endblock %}
 
 </html>

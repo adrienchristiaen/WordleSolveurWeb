@@ -178,8 +178,8 @@ def rejouer():
 def stat():
     user=session["username"]
     data=[]
+
     #Connection a la bdd
-    
     con=sqlite3.connect('wordle.sql')
     cur = con.cursor()
     for i in cur.execute("SELECT * FROM Utilisateur"):
@@ -197,6 +197,13 @@ def stat():
     xp=info[6]
 
     #Tracer courbe
+    histo=[]
+    con=sqlite3.connect('wordle.sql')
+    cur = con.cursor()
+    for i in cur.execute("SELECT * FROM Historique"):
+        histo.append(i)
+    con.commit()
+    con.close()
     x = [1, 2, 3, 4, 5, 6]
     y = [0, 0, 4, 7, 6, 2]
     plt.plot(x, y)
