@@ -249,7 +249,7 @@ def stat():
     plt.ylabel("Nombres de parties", size = 16)
     plt.savefig('static/image.png')
 
-    return render_template("statistiques.html", liste=[nb_vict,nb_parties,taux_vict,xp])
+    return render_template("statistiques.html", liste=[nb_parties,nb_vict,taux_vict,xp])
 
 #Succès
 @app.route('/succes')

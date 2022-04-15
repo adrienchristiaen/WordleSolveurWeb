@@ -18,7 +18,7 @@ cursor.execute("""create table Utilisateur(
     Mot_de_passe varchar, 
     Email varchar, 
     Nb_victoires integer, 
-    Nb_défaites integer, 
+    Nb_defaites integer, 
     Experience integer, 
     PRIMARY KEY(Id))""")
 
