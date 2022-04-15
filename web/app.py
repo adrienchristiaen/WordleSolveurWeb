@@ -204,8 +204,14 @@ def stat():
         histo.append(i)
     con.commit()
     con.close()
-    x = [1, 2, 3, 4, 5, 6]
-    y = [0, 0, 4, 7, 6, 2]
+
+    y=[0 for i in range(15)]
+    x=[i for i in range (15)]
+
+    for u in histo:
+        if u[1]==user:
+            y[int(u[3])]+=1
+
     plt.plot(x, y)
     plt.title("Nombres de parties gagnées en X coups")
     plt.xlabel("Nombre de coups", size = 16,)
