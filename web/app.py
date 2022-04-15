@@ -2,6 +2,7 @@ from flask import Flask, render_template, redirect, request, url_for, flash, ses
 from flask_login import LoginManager, UserMixin, login_required, logout_user, current_user, login_user
 import sqlite3, hashlib
 from fonctions_wordle_flask import *
+import matplotlib.pyplot as plt
 app = Flask(__name__)
 
 #Configuration
@@ -173,24 +174,36 @@ def rejouer():
 
 #Statistiques
 @app.route('/statistiques')
+@login_required
 def stat():
-    id=0
+    user=session["username"]
     data=[]
     #Connection a la bdd
+    
     con=sqlite3.connect('wordle.sql')
     cur = con.cursor()
     for i in cur.execute("SELECT * FROM Utilisateur"):
         data.append(i)
     con.commit()
     con.close()
+
     #Selection des stats d'un joueur en particulier
     for u in data:
-        if u[0]==id:
+        if u[1]==user:
             info=u
     nb_vict=info[4]
     nb_parties=info[4]+info[5]
     taux_vict=str((nb_vict/nb_parties)*100)+"%"
     xp=info[6]
+
+    #Tracer courbe
+    x = [1, 2, 3, 4, 5, 6]
+    y = [0, 0, 4, 7, 6, 2]
+    plt.plot(x, y)
+    plt.title("Nombres de parties gagnées en X coups")
+    plt.xlabel("Nombre de coups", size = 16,)
+    plt.ylabel("Nombres de parties", size = 16)
+    plt.savefig('static/image.png')
 
     return render_template("statistiques.html", liste=[nb_vict,nb_parties,taux_vict,xp])
 

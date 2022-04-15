@@ -22,7 +22,10 @@ cursor.execute("""create table Utilisateur(
     Experience integer, 
     PRIMARY KEY(Id))""")
 
-
+Utilisateur_list = [
+    (0, "Adrien", "test12", "christiaen.adrien@gmail.com", 10, 10, "10%")
+]
+cursor.executemany("insert into Utilisateur values(?,?,?,?,?,?,?)", Utilisateur_list)
 
 #Table Historique
 cursor.execute("""create table Historique(
