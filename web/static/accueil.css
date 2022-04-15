@@ -4,6 +4,12 @@
     height:100%;
 }
 
+.erreur
+{
+    text-align: center!important;
+    align-items: center;
+    margin-top:50px;     
+}
 table 
 {
     margin : auto;
@@ -27,7 +33,7 @@ td
 .proposition
 {
     margin:auto;
-    margin-top:25px;
+    margin-top:15px;
     text-align: center!important;
     align-self: center;
 }
@@ -49,9 +55,29 @@ td
     color:#fff;
     font-size:1.5rem;
     height:3rem;
-    width:5%;
     border-radius:6px;
     margin-top:15px;
 }
 
 
+
+
+.survie
+{
+    width:100%;
+    display:flex;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+
+.vie
+{
+    text-align: center;
+    width: 50%;
+}
+
+.score
+{
+    text-align: center;
+    width: 50%; 
+}

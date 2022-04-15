@@ -30,8 +30,16 @@ def recup_table():
     mode_de_jeu=cur.execute("SELECT Mode_de_jeu FROM Modes ")
     mode_de_jeu=mode_de_jeu.fetchall()
     #print(mode_de_jeu)
+
+    vie=cur.execute("SELECT Survie_vie FROM Modes ")
+    vie=vie.fetchall()
+    #print(vie)
+
+    score=cur.execute("SELECT Survie_score FROM Modes ")
+    score=score.fetchall()
+    #print(score)
     #______________________________________________________________________#
-    return nb_essais, nb_lettres, mot_cherche, mots_proposes, etat_lettres, mode_de_jeu
+    return nb_essais, nb_lettres, mot_cherche, mots_proposes, etat_lettres, mode_de_jeu, vie, score
 
 
 

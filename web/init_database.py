@@ -64,6 +64,8 @@ cursor.execute("""create table Modes(
     mots_proposes varchar, 
     etat_lettres  varchar,
     Mode_de_jeu varchar, 
+    Survie_vie integer,
+    Survie_score integer,
     PRIMARY KEY(Nb_essais))""")
 
 
@@ -96,7 +98,7 @@ cursor.execute("INSERT INTO Quetes_rea VALUES(7, 7, 'Adrien',FALSE)")
 cursor.execute("INSERT INTO Quetes_rea VALUES(8, 8, 'Adrien',FALSE)")
 cursor.execute("INSERT INTO Quetes_rea VALUES(9, 9, 'Adrien',FALSE)")
 
-cursor.execute("INSERT INTO Modes VALUES(6,6,'','','','Classique')")
+cursor.execute("INSERT INTO Modes VALUES(6,6,'','','','classique',3,0)")
 
 
 
