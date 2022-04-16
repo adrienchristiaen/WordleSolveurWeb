@@ -88,7 +88,7 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
     vie =  vie[0][0]
 
     score_survie = recup_table()[7]
-    score_survie =  score_survie[0][0]
+    
 
     nb_essais_big50 = recup_table()[8]
 
@@ -100,6 +100,10 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
         nb_essais[i]=nb_essais[i][0]                                       #On passe d'une liste de la forme [(5,)(6,)] à [5,6]
     nb_essais.reverse()                                                    #Car je souhaite une liste décroissant : [5,6] => [6,5]
     #print("nb_essais :",nb_essais)
+    for i in range(len(score_survie)):
+        score_survie[i]=score_survie[i][0]                                       #On passe d'une liste de la forme [(3,)(0,)] à [3,0]
+    score_survie.reverse()                                                    #Car je souhaite une liste décroissant : [0,3] => [0,3]
+    #print("score_survie :",score_survie)
     for i in range(len(nb_essais_big50)):
         nb_essais_big50[i]=nb_essais_big50[i][0]                                       #On passe d'une liste de la forme [(49,)(50,)] à [49,50]
     nb_essais_big50.reverse()                                                    #Car je souhaite une liste décroissant : [50,49] => [50,49]
@@ -121,7 +125,7 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
         #print("etat_lettres",etat_lettres)
         mot_cherche=choisir_mot(nb_lettres)
         cur.execute("DELETE FROM Modes WHERE mot_cherche=('') ")
-        cur.execute("INSERT INTO Modes VALUES (?,?,?,?,?,?,?,?,?,?) ",(nb_essais[-1],nb_lettres,mot_cherche,mot_propose,etat_lettres,mode_de_jeu,vie,score_survie,nb_essais_big50[-1],score_big50)) 
+        cur.execute("INSERT INTO Modes VALUES (?,?,?,?,?,?,?,?,?,?) ",(nb_essais[-1],nb_lettres,mot_cherche,mot_propose,etat_lettres,mode_de_jeu,vie,score_survie[-1],nb_essais_big50[-1],score_big50)) 
         con.commit()
     #______________________________________________________________________#
     
@@ -151,10 +155,11 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
             if nb_essais[-1]==0 and mode_de_jeu=='survie':
                 vie-=1
             if etat_lettres == '2'*nb_lettres and mode_de_jeu=='survie': 
-                score_survie+= nb_essais[0]
+                score_survie.append(score_survie[-1]+nb_essais[-1]+1)
+                print(score_survie[-1])
             if etat_lettres == '2'*nb_lettres and mode_de_jeu == 'big50':
                 score_big50+=1
-            cur.execute("INSERT INTO Modes VALUES (?,?,?,?,?,?,?,?,?,?) ",(nb_essais[-1],nb_lettres,mot_cherche,mot_propose,etat_lettres,mode_de_jeu,vie,score_survie,nb_essais_big50[-1],score_big50)) 
+            cur.execute("INSERT INTO Modes VALUES (?,?,?,?,?,?,?,?,?,?) ",(nb_essais[-1],nb_lettres,mot_cherche,mot_propose,etat_lettres,mode_de_jeu,vie,score_survie[-1],nb_essais_big50[-1],score_big50)) 
             con.commit()
             #________________________________________________________________#
             if etat_lettres == '2'*nb_lettres:                                  #Si le dernier etat_lettres = '2222222222' par exemple c'est que le mot est trouvé

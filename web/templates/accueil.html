@@ -82,7 +82,8 @@
                     <button class="bouton">Continuer</button>  
                 </form>
                 <p style="color: green;">Bien joué !</p>
-                <p style="color: green;">Vous gagnez {{score_survie}} points</p>
+                {% set score = score_survie[-1]- score_survie[-2] %}
+                <p style="color: green;">Vous gagnez {{score}} points</p>
             {% else %}
                 {% if vie ==0 %}
                     <form method="POST" action="/rejouer_classique">
@@ -115,7 +116,7 @@
                 <h3>Nombre de vie : {{vie}}</h3>
             </div>
             <div class="score">
-                <h3>Score : {{score_survie}}</h3>
+                <h3>Score : {{score_survie[-1]}}</h3>
             </div>
         </div>
     {% endif %}
