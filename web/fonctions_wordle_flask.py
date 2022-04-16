@@ -35,11 +35,19 @@ def recup_table():
     vie=vie.fetchall()
     #print(vie)
 
-    score=cur.execute("SELECT Survie_score FROM Modes ")
-    score=score.fetchall()
+    score_survie=cur.execute("SELECT Survie_score FROM Modes ")
+    score_survie=score_survie.fetchall()
     #print(score)
+
+    nb_essais_big50=cur.execute("SELECT Big50_nb_essais FROM Modes ")
+    nb_essais_big50=nb_essais_big50.fetchall()
+    #print(nb_essais_big50)
+
+    score_big50=cur.execute("SELECT Big50_score FROM Modes ")
+    score_big50=score_big50.fetchall()
+    #print(score_big50)
     #______________________________________________________________________#
-    return nb_essais, nb_lettres, mot_cherche, mots_proposes, etat_lettres, mode_de_jeu, vie, score
+    return nb_essais, nb_lettres, mot_cherche, mots_proposes, etat_lettres, mode_de_jeu, vie, score_survie,nb_essais_big50, score_big50
 
 
 

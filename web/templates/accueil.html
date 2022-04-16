@@ -82,7 +82,7 @@
                     <button class="bouton">Continuer</button>  
                 </form>
                 <p style="color: green;">Bien joué !</p>
-                <p style="color: green;">Vous gagnez {{score}} points</p>
+                <p style="color: green;">Vous gagnez {{score_survie}} points</p>
             {% else %}
                 {% if vie ==0 %}
                     <form method="POST" action="/rejouer_classique">
@@ -115,7 +115,66 @@
                 <h3>Nombre de vie : {{vie}}</h3>
             </div>
             <div class="score">
-                <h3>Score : {{score}}</h3>
+                <h3>Score : {{score_survie}}</h3>
+            </div>
+        </div>
+    {% endif %}
+    {% if mode_de_jeu == 'big50' %}
+        <table>
+            {% for i in range(nb_essais[0]) %}
+                <tr>
+                    {% for j in range(nb_lettres) %}
+                        {% if liste_etat_lettres[i][j] == '2' %}
+                            <td style="background-color: green;">{{liste_mot_propose[i][j]}}</td>
+                        {% elif liste_etat_lettres[i][j] == '1' %}
+                            <td style="background-color: gold;">{{liste_mot_propose[i][j]}}</td>
+                        {% else %}
+                            <td>{{liste_mot_propose[i][j]}}</td>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </table>
+        <div class="proposition">
+            {% if nb_essais_big50[-1] != 0 %}
+                {% set win = '2'*nb_lettres | int %}
+                {% if liste_etat_lettres[nb_essais[0]-nb_essais[-1]-1] == win %}
+                    <form method="POST" action="/rejouer_big50">
+                        <input class="input" type="mot_propose" name="mot_propose" placeholder="Votre Proposition" autofocus="" disabled>
+                        <button class="bouton">Continuer</button>  
+                    </form>
+                    <p style="color: green;">Vous avez gagné</p>
+                {% else %}
+                    {% if nb_essais[-1]==0 %}
+                        <form method="POST" action="/rejouer_big50">
+                            <input class="input" type="mot_propose" name="mot_propose" placeholder="Votre Proposition" autofocus="" disabled>
+                            <button class="bouton">Continuer</button>  
+                        </form>
+                        <p style="color: red;">Vous n'avez pas trouvé le mot</p>
+                        <h2>Le mot était : {{mot_cherche}}</h1>
+                    
+                    {% else %}
+                        <form method="POST" action="/accueil">
+                            <input class="input" type="mot_propose" name="mot_propose" placeholder="Votre Proposition" autofocus="">
+                            <button class="bouton">Valider</button>  
+                        </form>
+                    {% endif %}
+                {% endif %}
+            {% else %}
+                <form method="POST" action="/rejouer_classique">
+                    <input class="input" type="mot_propose" name="mot_propose" placeholder="Votre Proposition" autofocus="" disabled>
+                    <button class="bouton">Rejouer</button>  
+                </form>
+                <p style="color: red;"> La partie est terminée </p>
+                <h2>Le mot était : {{mot_cherche}}</h1>
+            {% endif %}
+        </div>
+        <div class="big50">
+            <div class="vie">
+                <h3>Nombre d'essais restants : {{nb_essais_big50[-1]}}</h3>
+            </div>
+            <div class="score">
+                <h3>Nombre de mot trouvés : {{score_big50}}</h3>
             </div>
         </div>
     {% endif %}
