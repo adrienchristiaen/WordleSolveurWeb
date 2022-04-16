@@ -183,7 +183,7 @@ function update() { // on veut compter le nombre de lettres qui sont bonnes
 
         // On passe la lettre si elle a été marqué correcte
         if (!currTile.classList.contains("correct")) {
-            //Is it in the word?         //make sure we don't double count
+            //Est-ce que c'est dans le mot         //On fait attention à pas compter deux fois la lettre
             if (word.includes(letter) && letterCount[letter] > 0) { // on vérifie que dans notre liste de lettres, on a encore des lettres
                 currTile.classList.add("present");
                 
@@ -192,7 +192,7 @@ function update() { // on veut compter le nombre de lettres qui sont bonnes
                     keyTile.classList.add("present");
                 }
                 letterCount[letter] -= 1; // même principe que précédemment, on réduit
-            } // Not in the word or (was in word but letters all used up to avoid overcount)
+            } // Pas dans le mot 
             else {
                 currTile.classList.add("absent");
                 let keyTile = document.getElementById("Key" + letter);
