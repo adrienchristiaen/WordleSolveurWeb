@@ -177,19 +177,20 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
             else:
                 if nb_essais[-1]==0:
                     if mode_de_jeu == 'classique':
-                        user=session["username"]
-                        nb_defaites=cur.execute("SELECT Nb_defaites FROM Utilisateur WHERE Nom_utilisateur=(?) ",([user]))
-                        nb_defaites=nb_defaites.fetchall()[0][0]
-                        #print("nb_defaites",nb_defaites)
-                        nb_defaites+=1
+                        if current_user.is_authenticated:
+                            user=session["username"]
+                            nb_defaites=cur.execute("SELECT Nb_defaites FROM Utilisateur WHERE Nom_utilisateur=(?) ",([user]))
+                            nb_defaites=nb_defaites.fetchall()[0][0]
+                            #print("nb_defaites",nb_defaites)
+                            nb_defaites+=1
 
-                        experience=cur.execute("SELECT Experience FROM Utilisateur WHERE Nom_utilisateur=(?) ",([user]))
-                        experience=experience.fetchall()[0][0]
-                        #print("experience",experience)
-                        experience+=10
+                            experience=cur.execute("SELECT Experience FROM Utilisateur WHERE Nom_utilisateur=(?) ",([user]))
+                            experience=experience.fetchall()[0][0]
+                            #print("experience",experience)
+                            experience+=10
 
-                        cur.execute("UPDATE Utilisateur SET Nb_defaites = (?), Experience = (?) WHERE Nom_utilisateur=(?)",(nb_defaites,experience,user))
-                        con.commit()
+                            cur.execute("UPDATE Utilisateur SET Nb_defaites = (?), Experience = (?) WHERE Nom_utilisateur=(?)",(nb_defaites,experience,user))
+                            con.commit()
                 liste_mot_propose = place_premiere_lettre(nb_lettres,liste_mot_propose,mot_cherche,point) #On place la première lettre dans le mot a deviné
                 return render_template("accueil.html",nb_lettres=nb_lettres, nb_essais=nb_essais,mode_de_jeu=mode_de_jeu,mot_cherche=mot_cherche, liste_mot_propose=liste_mot_propose,liste_etat_lettres=liste_etat_lettres,vie=vie,score_survie=score_survie,nb_essais_big50=nb_essais_big50,score_big50=score_big50)
         else:
