@@ -34,7 +34,8 @@ cursor.execute("""create table Historique(
     Etat boolean, 
     Nb_coups integer, 
     Date varchar, 
-    Mode_de_jeu varchar, 
+    Mode_de_jeu varchar,
+    Mot varchar, 
     PRIMARY KEY(Id_partie))""")
 
 
@@ -76,7 +77,7 @@ password = hashlib.sha224(bytes('test12',encoding='utf-8')).hexdigest()
 
 cursor.execute("INSERT INTO Utilisateur VALUES(0,'Adrien',?,'christiaen.adrien@gmail.com',0,0,0)", ([password]))
 
-cursor.execute("INSERT INTO Historique VALUES(0,'Adrien','Vrai',10,'10/03/2022','Survival%')")
+cursor.execute("INSERT INTO Historique VALUES(0,'Adrien','Vrai',10,'10/03/2022','Survival%','muret')")
 
 cursor.execute("INSERT INTO Quetes VALUES(0,'Stratège','Trouver le mot cherché en 4 coups ou moins',1000)")
 cursor.execute("INSERT INTO Quetes VALUES(1,'Mentaliste','Trouver le mot cherché en 3 coups ou moins',5000)")
