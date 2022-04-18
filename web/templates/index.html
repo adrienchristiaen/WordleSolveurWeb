@@ -22,9 +22,10 @@
                 <li><a href="statistiques">Statistiques</a></li>
                 <li><a href="parametres">Paramètres</a></li>
                 {% if not current_user.is_authenticated %}
-                <li><a href="connexion">Connexion</a></li>
-                <li><a href="inscription">Inscription</a></li>
+                    <li><a href="connexion">Connexion</a></li>
+                    <li><a href="inscription">Inscription</a></li>
                 {% else %}
+                    <li><a href="profil">Profil</a></li>
                     <li><a href="deconnexion">Déconnexion</a></li>
                 {% endif %}
             </ul>
