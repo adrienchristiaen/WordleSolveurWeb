@@ -444,7 +444,7 @@ def inscription():
                 req = cur.execute("SELECT COUNT(Nom_utilisateur) FROM utilisateur")
                 num = req.fetchone()[0] + 1
                 #Insertion de l'utilisateur dans la BD
-                cur.execute("INSERT INTO utilisateur(Id, Nom_utilisateur, Mot_de_passe, Email) VALUES (?,?,?,?)", (num, username, password, email))
+                cur.execute("INSERT INTO utilisateur(Id, Nom_utilisateur, Mot_de_passe, Email, Nb_victoires, Nb_defaites, Experience) VALUES (?,?,?,?,?,?,?)", (num, username, password, email, 0, 0, 0))#Certaines données s'initialisent à zéro (nb parties, xp...)
                 con.commit()
                 #Création du compte et connexion
                 session['username'] = username
