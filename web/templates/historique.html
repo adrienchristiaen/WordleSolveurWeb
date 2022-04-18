@@ -14,7 +14,10 @@
 {% block body %}
     <body>
     
+   <button onclick="window.location.href = 'statistiques';">Retour aux statistiques</button>
+
     <h1 class="titre"> Historique </h1>
+        
     {% for u in histo %}
 	<p><br>Date : {{u[4]}} 
 	<br> {{u[2]}}
