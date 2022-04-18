@@ -14,18 +14,36 @@
 {% block body %}
     <body>
     
-   <button onclick="window.location.href = 'statistiques';">Retour aux statistiques</button>
+   <button class="bouton" onclick="window.location.href = 'statistiques';">Retour aux Statistiques</button>
 
     <h1 class="titre"> Historique </h1>
         
     {% for u in histo %}
-	<p><br>Date : {{u[4]}} 
-	<br> {{u[2]}}
-	<br>Mode de jeu : {{u[5]}}
-	{% if u[3]!=0 %}
-		<br>Nombre de coup : {{u[3]}}
-	{% endif %}
-	<br>Mot à trouver : {{u[6]}}</p>  
+    	{% if u[2]!="Victoire" %}
+    		<div class="box_red">
+		<p><br>Date : {{u[4]}} 
+		<br>Mode de jeu : {{u[5]}}
+		<br> {{u[2]}}
+		{% if u[3]!=0 %}
+			<br>Nombre de coup : {{u[3]}}
+		{% endif %}
+		<br>Mot à trouver : {{u[6]}}
+		</p>
+		</div>
+	{% else %}
+	    	<div class="box_green">
+		<p><br>Date : {{u[4]}}
+		<br>Mode de jeu : {{u[5]}}
+		<br> {{u[2]}}
+		{% if u[3]!=0 %}
+			<br>Nombre de coup : {{u[3]}}
+		{% endif %}
+		<br>Mot à trouver : {{u[6]}}
+		</p>
+		</div>
+	{% endif %}	
+
+	
      {% endfor %}     
 		
 {% endblock %}
