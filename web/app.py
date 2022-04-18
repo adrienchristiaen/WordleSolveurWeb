@@ -383,6 +383,35 @@ def stat():
 
     return render_template("statistiques.html", liste=[nb_parties,nb_vict,taux_vict,xp,lvl])
 
+#Historique
+@app.route('/historique')
+@login_required
+def histo():
+    user=session["username"]
+    histo=[]
+    histo_perso=[]
+
+    #Connection a la bdd
+    con=sqlite3.connect('wordle.sql')
+    cur = con.cursor()
+    for i in cur.execute("SELECT * FROM Historique"):
+        histo.append(i)
+    con.commit()
+    con.close()
+
+    for u in histo:
+        if u[1]==user:
+            histo_perso.append(list(u))
+    print(histo_perso)
+    for u in histo_perso:
+        if u[2]=="Vrai":
+            u[2]="Victoire"
+        else:
+            u[2]="Défaite"
+
+    
+    return render_template("historique.html",histo=histo_perso)
+
 
 #Succès
 @app.route('/succes')

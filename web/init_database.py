@@ -77,7 +77,8 @@ password = hashlib.sha224(bytes('test12',encoding='utf-8')).hexdigest()
 
 cursor.execute("INSERT INTO Utilisateur VALUES(0,'Adrien',?,'christiaen.adrien@gmail.com',0,0,0)", ([password]))
 
-cursor.execute("INSERT INTO Historique VALUES(0,'Adrien','Vrai',10,'10/03/2022','Survival%','muret')")
+cursor.execute("INSERT INTO Historique VALUES(0,'Adrien','Vrai',6,'10/03/2022','Classique','muret')")
+cursor.execute("INSERT INTO Historique VALUES(1,'Adrien','Faux',0,'10/03/2022','Classique','table')")
 
 cursor.execute("INSERT INTO Quetes VALUES(0,'Stratège','Trouver le mot cherché en 4 coups ou moins',1000)")
 cursor.execute("INSERT INTO Quetes VALUES(1,'Mentaliste','Trouver le mot cherché en 3 coups ou moins',5000)")

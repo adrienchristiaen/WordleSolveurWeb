@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+{% extends "index.html" %}
+
+<html>
+
+{% block head %}
+    <head>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="../static/histo.css" />
+        <title>Historique</title>
+    </head>
+{% endblock %}
+
+{% block body %}
+    <body>
+    
+    <h1 class="titre"> Historique </h1>
+    {% for u in histo %}
+	<p><br>Date : {{u[4]}} 
+	<br> {{u[2]}}
+	<br>Mode de jeu : {{u[5]}}
+	{% if u[3]!=0 %}
+		<br>Nombre de coup : {{u[3]}}
+	{% endif %}
+	<br>Mot à trouver : {{u[6]}}</p>  
+     {% endfor %}     
+		
+{% endblock %}
+
+</html>
