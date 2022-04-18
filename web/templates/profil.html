@@ -1,0 +1,11 @@
+{% extends "index.html" %}
+{% block head %}
+    <link href='../static/profil.css' rel="stylesheet" type="text/css">
+{% endblock %}
+{% block body %}
+    <div>
+        <div>Adresse email reliée à votre compte : {{email}}</div>
+        <div>Niveau de votre compte : {{lvl}}</div>
+        <div>Vos <a href="succes">succès</a></div>
+    </div>
+{% endblock %}
