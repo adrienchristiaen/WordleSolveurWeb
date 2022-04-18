@@ -356,7 +356,7 @@ def stat():
     else:
         taux_vict=str((nb_vict/nb_parties)*100)+"%"
     xp=info[6]
-    lvl = get_level(xp)
+    lvl = level_function(xp)
 
     #Tracer courbe
     histo=[]
@@ -402,12 +402,12 @@ def histo():
     for u in histo:
         if u[1]==user:
             histo_perso.append(list(u))
-    print(histo_perso)
     for u in histo_perso:
         if u[2]=="Vrai":
             u[2]="Victoire"
         else:
             u[2]="Défaite"
+    
 
     
     return render_template("historique.html",histo=histo_perso)
@@ -465,6 +465,7 @@ def inscription():
         #Encodage du mot de passe
         password = hashlib.sha224(bytes(password,encoding='utf-8')).hexdigest()
         #Connexion base de données•••••••••••••••
+        con = sqlite3.connect('wordle.sql')
         cur = con.cursor()
         #Vérification de l'unicité de l'utilisateur
         req = cur.execute("SELECT COUNT(Nom_utilisateur) FROM Utilisateur WHERE Nom_utilisateur = (?)", ([username]))
