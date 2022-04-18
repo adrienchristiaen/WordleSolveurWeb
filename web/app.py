@@ -3,6 +3,7 @@ from flask import Flask, render_template, redirect, request, url_for, flash, ses
 from flask_login import LoginManager, UserMixin, login_required, logout_user, current_user, login_user
 import sqlite3, hashlib
 from fonctions_wordle_flask import *
+from fonctions_experience import *
 import matplotlib.pyplot as plt
 app = Flask(__name__)
 
@@ -347,6 +348,7 @@ def stat():
     else:
         taux_vict=str((nb_vict/nb_parties)*100)+"%"
     xp=info[6]
+    lvl = level_function(xp)
 
     #Tracer courbe
     histo=[]
@@ -370,7 +372,7 @@ def stat():
     plt.ylabel("Nombres de parties", size = 16)
     plt.savefig('static/image.png')
 
-    return render_template("statistiques.html", liste=[nb_parties,nb_vict,taux_vict,xp])
+    return render_template("statistiques.html", liste=[nb_parties,nb_vict,taux_vict,xp,lvl])
 
 #Succès
 @app.route('/succes')
