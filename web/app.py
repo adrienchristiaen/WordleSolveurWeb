@@ -354,11 +354,12 @@ def stat():
     if nb_vict==0 or nb_parties==0:
         taux_vict ='0%'
     else:
-        taux_vict=str((nb_vict/nb_parties)*100)+"%"
+        taux_vict=str((nb_vict/nb_parties)*100)
+        taux_vict=taux_vict[:4]+"%"
     xp=info[6]
     lvl = level_function(xp)
 
-    #Tracer courbe
+    #Tracer histogramme
     histo=[]
     con=sqlite3.connect('wordle.sql')
     cur = con.cursor()
@@ -366,19 +367,16 @@ def stat():
         histo.append(i)
     con.commit()
     con.close()
-
-    y=[0 for i in range(15)]
-    x=[i for i in range (15)]
-
+    x=[]
     for u in histo:
-        if u[1]==user:
-            y[int(u[3])]+=1
-    y[0]=0
+        if u[1]==user and u[3]!=0:
+            x.append(u[3])
+    print(x)
     plt.clf()
-    plt.plot(x, y)
+    plt.hist(x, range=(0, 10), bins=10, rwidth = 0.6, align='left')
+    plt.xlabel('Nombre de parties')
+    plt.ylabel('Nombres X de coups')
     plt.title("Nombres de parties gagnées en X coups")
-    plt.xlabel("Nombre de coups", size = 16,)
-    plt.ylabel("Nombres de parties", size = 16)
     plt.savefig('static/image.png')
 
     return render_template("statistiques.html", liste=[nb_parties,nb_vict,taux_vict,xp,lvl])
@@ -399,16 +397,15 @@ def histo():
     con.commit()
     con.close()
 
+    #Trie dans les donnees
     for u in histo:
         if u[1]==user:
             histo_perso.append(list(u))
-    for u in histo_perso:
+    for u in histo_perso:                       #Change le valeur "Vrai" en "Victoire" pour affichage
         if u[2]=="Vrai":
             u[2]="Victoire"
         else:
             u[2]="Défaite"
-    
-
     
     return render_template("historique.html",histo=histo_perso)
 
@@ -564,5 +561,5 @@ def profil():
     elements = req.fetchall()
     email, xp = elements[0][0], elements[0][1]
     #Calcul niveau joueur
-    lvl = get_level(xp)
+    lvl = level_function(xp)
     return render_template('profil.html', email=email, lvl=lvl)
