@@ -152,13 +152,35 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
                 nb_essais_big50.append(nb_essais_big50[-1]-1)
 
             #_____________________Mise à jour de la BD_______________________#
+            #Recherche nom d'utilisateur
+            if current_user.is_authenticated:
+                user=session["username"]
+            #Fin de vie et fin de partie du mode survie
             if nb_essais[-1]==0 and mode_de_jeu=='survie':
                 vie-=1
+                #MAJ de l'expérience
+                if vie == 0 and current_user.is_authenticated:
+                    experience=cur.execute("SELECT Experience FROM Utilisateur WHERE Nom_utilisateur=(?) ",([user]))
+                    experience=experience.fetchall()[0][0]
+                    print("experience",experience)
+                    experience+=75*score_survie[-1]
+                    print("experience",experience)
+                    cur.execute("UPDATE Utilisateur SET Experience = (?) WHERE Nom_utilisateur=(?)",(experience,user))
+                    con.commit()
             if etat_lettres == '2'*nb_lettres and mode_de_jeu=='survie': 
                 score_survie.append(score_survie[-1]+nb_essais[-1]+1)
                 print(score_survie[-1])
             if etat_lettres == '2'*nb_lettres and mode_de_jeu == 'big50':
                 score_big50+=1
+            #Fin de partie du mode big50, MAJ du score
+            if nb_essais_big50[-1] == 0 and mode_de_jeu=='big50' and current_user.is_authenticated:
+                experience=cur.execute("SELECT Experience FROM Utilisateur WHERE Nom_utilisateur=(?) ",([user]))
+                experience=experience.fetchall()[0][0]
+                print("experience",experience)
+                experience+=250*score_big50
+                print("experience",experience)
+                cur.execute("UPDATE Utilisateur SET Experience = (?) WHERE Nom_utilisateur=(?)",(experience,user))
+                con.commit()
             cur.execute("INSERT INTO Modes VALUES (?,?,?,?,?,?,?,?,?,?) ",(nb_essais[-1],nb_lettres,mot_cherche,mot_propose,etat_lettres,mode_de_jeu,vie,score_survie[-1],nb_essais_big50[-1],score_big50)) 
             con.commit()
             #________________________________________________________________#
@@ -174,7 +196,7 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
                         experience=cur.execute("SELECT Experience FROM Utilisateur WHERE Nom_utilisateur=(?) ",([user]))
                         experience=experience.fetchall()[0][0]
                         #print("experience",experience)
-                        experience+=100
+                        experience+=250
 
                         cur.execute("UPDATE Utilisateur SET Nb_victoires = (?), Experience = (?) WHERE Nom_utilisateur=(?)",(nb_victoires,experience,user))
                         con.commit()
@@ -192,7 +214,7 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
                             experience=cur.execute("SELECT Experience FROM Utilisateur WHERE Nom_utilisateur=(?) ",([user]))
                             experience=experience.fetchall()[0][0]
                             #print("experience",experience)
-                            experience+=10
+                            experience+=25
 
                             cur.execute("UPDATE Utilisateur SET Nb_defaites = (?), Experience = (?) WHERE Nom_utilisateur=(?)",(nb_defaites,experience,user))
                             con.commit()
