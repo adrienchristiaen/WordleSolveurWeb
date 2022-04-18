@@ -1,4 +1,4 @@
-def level_function(xp):
+def get_level(xp):
     return int((xp//100)**(1/2) + 1)
 
 # def updatelevel(xp):

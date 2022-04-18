@@ -356,7 +356,7 @@ def stat():
     else:
         taux_vict=str((nb_vict/nb_parties)*100)+"%"
     xp=info[6]
-    lvl = level_function(xp)
+    lvl = get_level(xp)
 
     #Tracer courbe
     histo=[]
@@ -435,8 +435,7 @@ def inscription():
         email = request.form.get("email")
         #Encodage du mot de passe
         password = hashlib.sha224(bytes(password,encoding='utf-8')).hexdigest()
-        #Connexion base de données
-        con = sqlite3.connect('wordle.sql')
+        #Connexion base de données•••••••••••••••
         cur = con.cursor()
         #Vérification de l'unicité de l'utilisateur
         req = cur.execute("SELECT COUNT(Nom_utilisateur) FROM Utilisateur WHERE Nom_utilisateur = (?)", ([username]))
@@ -522,3 +521,18 @@ def deconnexion():
     return redirect("accueil")
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+#Profil
+@app.route("/profil")
+@login_required
+def profil():
+    #Connexion BD
+    con=sqlite3.connect('wordle.sql')
+    cur = con.cursor()
+    #Expérience joueur
+    req = cur.execute("SELECT Email, Experience FROM Utilisateur WHERE Nom_utilisateur = (?)", ([session['username']]))
+    elements = req.fetchall()
+    email, xp = elements[0][0], elements[0][1]
+    #Calcul niveau joueur
+    lvl = get_level(xp)
+    return render_template('profil.html', email=email, lvl=lvl)
