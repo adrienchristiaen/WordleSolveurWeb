@@ -17,8 +17,8 @@ cursor.execute("""create table Utilisateur(
     Nom_utilisateur text,
     Mot_de_passe varchar, 
     Email varchar, 
-    Nb_victoires integer, 
-    Nb_defaites integer, 
+    Nb_victoires_classique integer, 
+    Nb_defaites_classique integer, 
     Experience integer, 
     PRIMARY KEY(Id))""")
 
@@ -27,12 +27,12 @@ cursor.execute("""create table Utilisateur(
 # ]
 # cursor.executemany("insert into Utilisateur values(?,?,?,?,?,?,?)", Utilisateur_list)
 
-#Table Historique
+#Table Historique                                   Nb_coups ---> Score pour mieux gere diff mdj
 cursor.execute("""create table Historique(
     Id_partie integer, 
     Identifiant varchar, 
     Etat boolean, 
-    Nb_coups integer, 
+    Score integer,       
     Date varchar, 
     Mode_de_jeu varchar,
     Mot varchar, 

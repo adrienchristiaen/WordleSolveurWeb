@@ -4,6 +4,7 @@ from flask_login import LoginManager, UserMixin, login_required, logout_user, cu
 import sqlite3, hashlib
 from fonctions_wordle_flask import *
 from fonctions_experience import *
+from fonctions_stat import *
 import matplotlib.pyplot as plt
 app = Flask(__name__)
 from datetime import date
@@ -370,59 +371,37 @@ def rejouer_clm():
     connection.commit()
     return redirect("accueil")
 
-#Statistiques
+#--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#Statistiques Classique
 @app.route('/statistiques')
 @login_required
 def stat():
     user=session["username"]
-    data=[]
-
     #Connection a la bdd
-    con=sqlite3.connect('wordle.sql')
-    cur = con.cursor()
-    for i in cur.execute("SELECT * FROM Utilisateur"):
-        data.append(i)
-    con.commit()
-    con.close()
-
+    data=recup_data(user)
     #Selection des stats d'un joueur en particulier
-    for u in data:
-        if u[1]==user:
-            info=u
-    nb_vict=info[4]
-    nb_parties=info[4]+info[5]
-    if nb_vict==0 or nb_parties==0:
-        taux_vict ='0%'
-    else:
-        taux_vict=str((nb_vict/nb_parties)*100)
-        taux_vict=taux_vict[:4]+"%"
-    xp=info[6]
-    lvl = level_function(xp)
-
+    nb_vict,nb_parties,xp,taux_vict=selection_joueur(user,data)
     #Tracer histogramme
-    histo=[]
-    con=sqlite3.connect('wordle.sql')
-    cur = con.cursor()
-    for i in cur.execute("SELECT * FROM Historique"):
-        histo.append(i)
-    con.commit()
-    con.close()
-    x=[]
-    for u in histo:
-        if u[1]==user and u[3]!=0:
-            x.append(u[3])
-    print(x)
-    plt.clf()
-    plt.hist(x, range=(0, 10), bins=10, rwidth = 0.6, align='left')
-    plt.xlabel('Nombre de parties')
-    plt.ylabel('Nombres X de coups')
-    plt.title("Nombres de parties gagnées en X coups")
-    plt.savefig('static/image.png')
+    moyenne=trace_histo(user)
 
-    return render_template("statistiques.html", liste=[nb_parties,nb_vict,taux_vict,xp,lvl])
+    return render_template("statistiques.html", liste=[nb_parties,nb_vict,taux_vict,xp,moyenne])
+
+#Statistiques MDJ1
+@app.route('/statistiques-mdj1')
+@login_required
+def stat_mdj1():
+    user=session["username"]
+    #Connection a la bdd
+    data=recup_data(user)
+    #Selection des stats d'un joueur en particulier
+    nb_vict,nb_parties,xp,taux_vict=selection_joueur(user,data)
+    #Tracer histogramme
+    moyenne=trace_histo(user)
+
+    return render_template("statistiques-mdj1.html", liste=[nb_parties,nb_vict,taux_vict,xp,moyenne])
 
 #Historique
-@app.route('/historique')
+@app.route('/historique', methods=['GET', 'POST'])
 @login_required
 def histo():
     user=session["username"]
@@ -449,6 +428,7 @@ def histo():
     histo_perso.reverse()
     return render_template("historique.html",histo=histo_perso)
 
+#--------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 #Succès
 @app.route('/succes')
