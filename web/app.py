@@ -198,7 +198,7 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
                 if mode_de_jeu == 'classique':
                     if current_user.is_authenticated:
                         user=session["username"]
-                        nb_victoires=cur.execute("SELECT Nb_victoires FROM Utilisateur WHERE Nom_utilisateur=(?) ",([user]))
+                        nb_victoires=cur.execute("SELECT Nb_victoires_classique FROM Utilisateur WHERE Nom_utilisateur=(?) ",([user]))
                         nb_victoires=nb_victoires.fetchall()[0][0]
                         #print("nb_victoires",nb_victoires)
                         nb_victoires+=1
@@ -208,7 +208,7 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
                         #print("experience",experience)
                         experience+=250
 
-                        cur.execute("UPDATE Utilisateur SET Nb_victoires = (?), Experience = (?) WHERE Nom_utilisateur=(?)",(nb_victoires,experience,user))
+                        cur.execute("UPDATE Utilisateur SET Nb_victoires_classique = (?), Experience = (?) WHERE Nom_utilisateur=(?)",(nb_victoires,experience,user))
                         id_partie=cur.execute("SELECT COUNT(*) FROM Historique")
                         id_partie=id_partie.fetchall()[0][0]
                         date_partie=str(date.today())[5:]+"-"+str(date.today())[:4]
@@ -221,7 +221,7 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
                     if mode_de_jeu == 'classique':
                         if current_user.is_authenticated:
                             user=session["username"]
-                            nb_defaites=cur.execute("SELECT Nb_defaites FROM Utilisateur WHERE Nom_utilisateur=(?) ",([user]))
+                            nb_defaites=cur.execute("SELECT Nb_defaites_classique FROM Utilisateur WHERE Nom_utilisateur=(?) ",([user]))
                             nb_defaites=nb_defaites.fetchall()[0][0]
                             #print("nb_defaites",nb_defaites)
                             nb_defaites+=1
@@ -231,7 +231,7 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
                             #print("experience",experience)
                             experience+=10
 
-                            cur.execute("UPDATE Utilisateur SET Nb_defaites = (?), Experience = (?) WHERE Nom_utilisateur=(?)",(nb_defaites,experience,user))
+                            cur.execute("UPDATE Utilisateur SET Nb_defaites_classique = (?), Experience = (?) WHERE Nom_utilisateur=(?)",(nb_defaites,experience,user))
                             id_partie=cur.execute("SELECT COUNT(*) FROM Historique")
                             id_partie=id_partie.fetchall()[0][0]
                             date_partie=str(date.today())[5:]+"-"+str(date.today())[:4]
@@ -251,11 +251,11 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
 
 
 #Rejouer si mode de jeu est classique
-@app.route('/rejouer_classique',methods=['GET','POST'])
-def rejouer_classique():
+@app.route('/rejouer',methods=['GET','POST'])
+def rejouer():
     connection = sqlite3.connect('wordle.sql')
     cur = connection.cursor()
-
+    #________________Récupération depuis la base de données________________#
     nb_essais = recup_table()[0]
     nb_essais = nb_essais[-1][0] 
 
@@ -268,108 +268,46 @@ def rejouer_classique():
     mode_de_jeu = recup_table()[5]
     mode_de_jeu =  mode_de_jeu[0][0]
 
-    cur.execute('''DELETE FROM Modes;''')
-    #print(nb_essais,nb_lettres,mode_de_jeu)
-    cur.execute("INSERT INTO Modes VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",(nb_essais,nb_lettres,'','','',mode_de_jeu,3,0,50,0,'',0))
-    connection.commit()
-    return redirect("accueil")
-
-
-#Rejouer si mode de jeu est survie
-@app.route('/rejouer_survie',methods=['GET','POST'])
-def rejouer_survie():
-    connection = sqlite3.connect('wordle.sql')
-    cur = connection.cursor()
-
-    nb_essais = recup_table()[0]
-    nb_essais = nb_essais[-1][0] 
-
-
-    nb_lettres = recup_table()[1]
-    nb_lettres = nb_lettres[0][0] 
-
-    mot_cherche = recup_table()[2]
-    mot_cherche = mot_cherche[0][0]  
-
-    mode_de_jeu = recup_table()[5]
-    mode_de_jeu =  mode_de_jeu[0][0]
-
     vie = recup_table()[6]
     vie =  vie[0][0]
 
     score_survie = recup_table()[7]
     score_survie = score_survie[0][0]
-    
-    cur.execute('''DELETE FROM Modes;''')
-    #print(nb_essais,nb_lettres,mode_de_jeu)
-    cur.execute("INSERT INTO Modes VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",(nb_essais,nb_lettres,'','','',mode_de_jeu,vie,score_survie,50,0,'',0))
-    connection.commit()
-    return redirect("accueil")
-
-
-
-#Rejouer si mode de jeu est Big50
-@app.route('/rejouer_big50',methods=['GET','POST'])
-def rejouer_big50():
-    connection = sqlite3.connect('wordle.sql')
-    cur = connection.cursor()
-
-    nb_essais = recup_table()[0]
-    nb_essais = nb_essais[-1][0] 
-
-
-    nb_lettres = recup_table()[1]
-    nb_lettres = nb_lettres[0][0]                                          
-
-    mot_cherche = recup_table()[2]
-    mot_cherche = mot_cherche[0][0]                                        
-    
-    mode_de_jeu = recup_table()[5]
-    mode_de_jeu =  mode_de_jeu[0][0]
 
     nb_essais_big50 = recup_table()[8]
     nb_essais_big50 =  nb_essais_big50[0][0]
 
     score_big50 = recup_table()[9]
     score_big50 = score_big50[0][0]
-    
-    cur.execute('''DELETE FROM Modes;''')
-    #print(nb_essais,nb_lettres,mode_de_jeu)
-    cur.execute("INSERT INTO Modes VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",(nb_essais,nb_lettres,'','','',mode_de_jeu,3,0,nb_essais_big50,score_big50,'',0))
-    connection.commit()
-    return redirect("accueil")
-
-
-#Rejouer si mode de jeu est Contre la montre
-@app.route('/rejouer_clm',methods=['GET','POST'])
-def rejouer_clm():
-    connection = sqlite3.connect('wordle.sql')
-    cur = connection.cursor()
-
-    nb_essais = recup_table()[0]
-    nb_essais = nb_essais[-1][0] 
-
-
-    nb_lettres = recup_table()[1]
-    nb_lettres = nb_lettres[0][0]                                          
-
-    mot_cherche = recup_table()[2]
-    mot_cherche = mot_cherche[0][0]                                        
-    
-    mode_de_jeu = recup_table()[5]
-    mode_de_jeu =  mode_de_jeu[0][0]
 
     depart_clm = recup_table()[10]
     depart_clm =  depart_clm[0][0]
 
     score_clm = recup_table()[11]
     score_clm =  score_clm[0][0]
-    
+    #______________________________________________________________________#
+
+    #_____________________On supprime la table de Jeu______________________#
     cur.execute('''DELETE FROM Modes;''')
-    #print(nb_essais,nb_lettres,mode_de_jeu)
-    cur.execute("INSERT INTO Modes VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",(nb_essais,nb_lettres,'','','',mode_de_jeu,3,0,50,0,depart_clm,score_clm))
-    connection.commit()
+    #______________________________________________________________________#
+
+    #_____________On actualise la table selon le mode de jeu_______________#
+    if mode_de_jeu == 'classique' or (mode_de_jeu == 'survie' and vie == 0) or (mode_de_jeu == 'big50' and nb_essais_big50 == 0) or (mode_de_jeu == 'clm' and chrono(depart_clm)) == '00:00':
+        cur.execute("INSERT INTO Modes VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",(nb_essais,nb_lettres,'','','',mode_de_jeu,3,0,50,0,'',0))
+        connection.commit()
+    if mode_de_jeu == 'survie' and vie !=0 :
+        cur.execute("INSERT INTO Modes VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",(nb_essais,nb_lettres,'','','',mode_de_jeu,vie,score_survie,50,0,'',0))
+        connection.commit()
+    if mode_de_jeu == 'big50' and nb_essais_big50 !=0 :
+        cur.execute("INSERT INTO Modes VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",(nb_essais,nb_lettres,'','','',mode_de_jeu,3,0,nb_essais_big50,score_big50,'',0))
+        connection.commit()
+    if mode_de_jeu == 'clm' and chrono(depart_clm) != '00:00':
+        cur.execute("INSERT INTO Modes VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",(nb_essais,nb_lettres,'','','',mode_de_jeu,3,0,50,0,depart_clm,score_clm))
+        connection.commit()
+    #______________________________________________________________________#
+
     return redirect("accueil")
+
 
 #--------------------------------------------------------------------------------------------------------------------------------------------------------------------
 #Statistiques Classique
@@ -461,7 +399,7 @@ def parametres():
         cur = con.cursor()
         cur.execute('''DELETE FROM Modes;''')
         #print(nb_essais,nb_lettres,mode_de_jeu)
-        cur.execute("INSERT INTO Modes VALUES(?,?,?,?,?,?,?,?,?,?)",(select_essais,select_lettres,'','','',select_mode_de_jeu,3,0,50,0))
+        cur.execute("INSERT INTO Modes VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",(select_essais,select_lettres,'','','',select_mode_de_jeu,3,0,50,0,'',0))
         con.commit()
         if not multi == None:
             return render_template("construction.html")
