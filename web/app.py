@@ -82,7 +82,6 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
 
     score_survie = recup_table()[7]
     
-
     nb_essais_big50 = recup_table()[8]
 
     score_big50 = recup_table()[9]
@@ -94,7 +93,8 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
     score_clm = recup_table()[11]
     score_clm =  score_clm[0][0]
     #______________________________________________________________________#
-    
+
+    #__________________Mise des tuples sous forme de liste_________________#
     for i in range(len(nb_essais)):
         nb_essais[i]=nb_essais[i][0]                                       #On passe d'une liste de la forme [(5,)(6,)] à [5,6]
     nb_essais.reverse()                                                    #Car je souhaite une liste décroissant : [5,6] => [6,5]
@@ -107,9 +107,9 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
         nb_essais_big50[i]=nb_essais_big50[i][0]                                       #On passe d'une liste de la forme [(49,)(50,)] à [49,50]
     nb_essais_big50.reverse()                                                    #Car je souhaite une liste décroissant : [50,49] => [50,49]
     #print("nb_essais_big50 :",nb_essais_big50)
-    
+    #______________________________________________________________________#
 
-    #__________________Mise des tuples sous forme de liste_________________#
+    #______________Initialisation des listes pour le tableau_______________#
     liste_mot_propose = creation_liste_mots_proposes(nb_lettres,nb_essais,mots_proposes,point)
     print('liste_mot_propose :',liste_mot_propose)
 
@@ -117,7 +117,7 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
     print('liste_etat_lettres :',liste_etat_lettres)
     #______________________________________________________________________#
 
-    #___________________________Si la partie commmence_____________________#
+    #____________Si la partie commmence pour chaque mode de jeu____________#
     if mot_cherche=='':
         mot_propose = ''
         etat_lettres = ''
@@ -127,20 +127,32 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
         cur.execute("INSERT INTO Modes VALUES (?,?,?,?,?,?,?,?,?,?,?,?) ",(nb_essais[-1],nb_lettres,mot_cherche,mot_propose,etat_lettres,mode_de_jeu,vie,score_survie[-1],nb_essais_big50[-1],score_big50,depart_clm,score_clm)) 
         con.commit()
     #______________________________________________________________________#
+
+    #__________________Si on commence un contre la montre__________________#
+
+    #______________On sauvegarde le temps du début de partie_______________#
     if depart_clm == '' and mode_de_jeu =='clm':
         depart_clm = depart()
         cur.execute("DELETE FROM Modes WHERE Clm_depart=('') ")
         cur.execute("INSERT INTO Modes VALUES (?,?,?,?,?,?,?,?,?,?,?,?) ",(nb_essais[-1],nb_lettres,mot_cherche,mot_propose,etat_lettres,mode_de_jeu,vie,score_survie[-1],nb_essais_big50[-1],score_big50,depart_clm,score_clm)) 
         con.commit()
-    
+    #______________________________________________________________________#
+
+    #________On capture le temps actuel pour calculer le timer_____________#    
     if mode_de_jeu =='clm':
         timer=chrono(depart_clm)
-        print(timer,depart_clm,'yup')
+        #print(timer,depart_clm,'yup')
+    #______________________________________________________________________#
 
+    #______________________________________________________________________#
+
+    #________________Si le joueur vient de proposer un mot_________________#
     if request.method == "POST":
         liste_mot_propose = place_premiere_lettre(nb_lettres,liste_mot_propose,mot_cherche,point)       #On place la première lettre dans le mot a deviné
         print("Le mot à trouver est : ",mot_cherche)
         mot_propose=request.form.get("mot_propose")
+
+        #_________________Si le mot proposé est de la bonne forme__________________#
         if verif_mot(mot_propose,mot_cherche):                                  #Voir fonction verif_mot
             mot_propose = mot_propose.upper()
             #print(nb_essais[0],nb_essais[-1], nb_essais[0]-nb_essais[-1])
@@ -156,48 +168,33 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
             print(liste_etat_lettres)
             nb_essais.append(nb_essais[-1]-1)                                   #On décrémente le nombre d'essai restant
             #print(liste_etat_lettres[nb_essais[0]-nb_essais[-1]-1])
+            
+            #__Si le mode de jeu est big50, on décrémente le nombre total d'essais__#
             if mode_de_jeu=='big50':
                 nb_essais_big50.append(nb_essais_big50[-1]-1)
+            #_______________________________________________________________________#
 
-            #_____________________Mise à jour de la BD_______________________#
-            #Recherche nom d'utilisateur
-            if current_user.is_authenticated:
-                user=session["username"]
-            #Fin de vie et fin de partie du mode survie
-            if nb_essais[-1]==0 and mode_de_jeu=='survie':
-                vie-=1
-                #MAJ de l'expérience
-                if vie == 0 and current_user.is_authenticated:
-                    experience=cur.execute("SELECT Experience FROM Utilisateur WHERE Nom_utilisateur=(?) ",([user]))
-                    experience=experience.fetchall()[0][0]
-                    print("experience",experience)
-                    experience+=75*score_survie[-1]
-                    print("experience",experience)
-                    cur.execute("UPDATE Utilisateur SET Experience = (?) WHERE Nom_utilisateur=(?)",(experience,user))
-                    con.commit()
-            if etat_lettres == '2'*nb_lettres and mode_de_jeu=='survie': 
-                score_survie.append(score_survie[-1]+nb_essais[-1]+1)
-                #print(score_survie[-1])
-            if etat_lettres == '2'*nb_lettres and mode_de_jeu == 'big50':
-                score_big50+=1
-            if etat_lettres == '2'*nb_lettres and mode_de_jeu == 'clm':
-                score_clm+=1
-            #Fin de partie du mode big50, MAJ du score
-            if nb_essais_big50[-1] == 0 and mode_de_jeu=='big50' and current_user.is_authenticated:
-                experience=cur.execute("SELECT Experience FROM Utilisateur WHERE Nom_utilisateur=(?) ",([user]))
-                experience=experience.fetchall()[0][0]
-                print("experience",experience)
-                experience+=250*score_big50
-                print("experience",experience)
-                cur.execute("UPDATE Utilisateur SET Experience = (?) WHERE Nom_utilisateur=(?)",(experience,user))
-                con.commit()
+            #____________________Mise à jour de la table de Jeu_____________________#
+            if etat_lettres == '2'*nb_lettres:
+                if mode_de_jeu == 'survie':
+                    score_survie.append(score_survie[-1]+nb_essais[-1]+1)
+                if mode_de_jeu == 'big50':
+                    score_big50+=1
+                if mode_de_jeu == 'clm':
+                    score_clm+=1
+            
+            if nb_essais[-1]==0:
+                if mode_de_jeu == 'survie':
+                    vie-=1
             cur.execute("INSERT INTO Modes VALUES (?,?,?,?,?,?,?,?,?,?,?,?) ",(nb_essais[-1],nb_lettres,mot_cherche,mot_propose,etat_lettres,mode_de_jeu,vie,score_survie[-1],nb_essais_big50[-1],score_big50,depart_clm,score_clm)) 
             con.commit()
-            #________________________________________________________________#
-            if etat_lettres == '2'*nb_lettres:                                  #Si le dernier etat_lettres = '2222222222' par exemple c'est que le mot est trouvé
+            #_______________________________________________________________________#
+
+            #_________On met à jour les stats si l'utilisateur est connecté_________#
+            if current_user.is_authenticated:
+                user=session["username"]
                 if mode_de_jeu == 'classique':
-                    if current_user.is_authenticated:
-                        user=session["username"]
+                    if etat_lettres == '2'*nb_lettres:
                         nb_victoires=cur.execute("SELECT Nb_victoires_classique FROM Utilisateur WHERE Nom_utilisateur=(?) ",([user]))
                         nb_victoires=nb_victoires.fetchall()[0][0]
                         #print("nb_victoires",nb_victoires)
@@ -215,12 +212,8 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
                         Partie=[id_partie,user,'Vrai',nb_essais[0]-nb_essais[-1],date_partie,'Classique',mot_cherche]  #ajout a la table historique
                         cur.execute("insert into Historique values(?,?,?,?,?,?,?)", Partie)
                         con.commit()
-                return render_template("accueil.html",nb_lettres=nb_lettres, nb_essais=nb_essais,mode_de_jeu=mode_de_jeu,mot_cherche=mot_cherche, liste_mot_propose=liste_mot_propose,liste_etat_lettres=liste_etat_lettres,vie=vie,score_survie=score_survie,nb_essais_big50=nb_essais_big50,score_big50=score_big50,timer=timer,score_clm=score_clm)
-            else:
-                if nb_essais[-1]==0:
-                    if mode_de_jeu == 'classique':
-                        if current_user.is_authenticated:
-                            user=session["username"]
+                    else:
+                        if nb_essais[-1]==0:
                             nb_defaites=cur.execute("SELECT Nb_defaites_classique FROM Utilisateur WHERE Nom_utilisateur=(?) ",([user]))
                             nb_defaites=nb_defaites.fetchall()[0][0]
                             #print("nb_defaites",nb_defaites)
@@ -238,6 +231,31 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
                             Partie=[id_partie,user,'Faux',nb_essais[0]-nb_essais[-1],date_partie,'Classique',mot_cherche]  #ajout a la table historique
                             cur.execute("insert into Historique values(?,?,?,?,?,?,?)", Partie)
                             con.commit()
+
+                if mode_de_jeu == 'survie':
+                    if vie == 0:
+                        experience=cur.execute("SELECT Experience FROM Utilisateur WHERE Nom_utilisateur=(?) ",([user]))
+                        experience=experience.fetchall()[0][0]
+                        print("experience",experience)
+                        experience+=75*score_survie[-1]
+                        print("experience",experience)
+                        cur.execute("UPDATE Utilisateur SET Experience = (?) WHERE Nom_utilisateur=(?)",(experience,user))
+                        con.commit()
+                        
+                if mode_de_jeu == 'big50':
+                    if nb_essais_big50[-1] == 0:
+                        experience=cur.execute("SELECT Experience FROM Utilisateur WHERE Nom_utilisateur=(?) ",([user]))
+                        experience=experience.fetchall()[0][0]
+                        print("experience",experience)
+                        experience+=250*score_big50
+                        print("experience",experience)
+                        cur.execute("UPDATE Utilisateur SET Experience = (?) WHERE Nom_utilisateur=(?)",(experience,user))
+                        con.commit()
+        
+            #_______________________________________________________________________#
+            if etat_lettres == '2'*nb_lettres:
+                return render_template("accueil.html",nb_lettres=nb_lettres, nb_essais=nb_essais,mode_de_jeu=mode_de_jeu,mot_cherche=mot_cherche, liste_mot_propose=liste_mot_propose,liste_etat_lettres=liste_etat_lettres,vie=vie,score_survie=score_survie,nb_essais_big50=nb_essais_big50,score_big50=score_big50,timer=timer,score_clm=score_clm)
+            else:
                 liste_mot_propose = place_premiere_lettre(nb_lettres,liste_mot_propose,mot_cherche,point) #On place la première lettre dans le mot a deviné
                 return render_template("accueil.html",nb_lettres=nb_lettres, nb_essais=nb_essais,mode_de_jeu=mode_de_jeu,mot_cherche=mot_cherche, liste_mot_propose=liste_mot_propose,liste_etat_lettres=liste_etat_lettres,vie=vie,score_survie=score_survie,nb_essais_big50=nb_essais_big50,score_big50=score_big50,timer=timer,score_clm=score_clm)
         else:
@@ -250,7 +268,7 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
         return render_template("accueil.html",nb_lettres=nb_lettres, nb_essais=nb_essais,mode_de_jeu=mode_de_jeu,mot_cherche=mot_cherche, liste_mot_propose=liste_mot_propose,liste_etat_lettres=liste_etat_lettres,vie=vie,score_survie=score_survie,nb_essais_big50=nb_essais_big50,score_big50=score_big50,timer=timer,score_clm=score_clm)
 
 
-#Rejouer si mode de jeu est classique
+#Fonction qui permet de rejouer
 @app.route('/rejouer',methods=['GET','POST'])
 def rejouer():
     connection = sqlite3.connect('wordle.sql')
