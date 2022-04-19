@@ -6,6 +6,7 @@ from fonctions_wordle_flask import *
 from fonctions_experience import *
 import matplotlib.pyplot as plt
 app = Flask(__name__)
+from datetime import date
 
 #Configuration
 app.config.update(
@@ -209,7 +210,8 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
                         cur.execute("UPDATE Utilisateur SET Nb_victoires = (?), Experience = (?) WHERE Nom_utilisateur=(?)",(nb_victoires,experience,user))
                         id_partie=cur.execute("SELECT COUNT(*) FROM Historique")
                         id_partie=id_partie.fetchall()[0][0]
-                        Partie=[id_partie,user,'Vrai',nb_essais[0]-nb_essais[-1],'25/01/2022','classique',mot_cherche]
+                        date_partie=str(date.today())[5:]+"-"+str(date.today())[:4]
+                        Partie=[id_partie,user,'Vrai',nb_essais[0]-nb_essais[-1],date_partie,'Classique',mot_cherche]  #ajout a la table historique
                         cur.execute("insert into Historique values(?,?,?,?,?,?,?)", Partie)
                         con.commit()
                 return render_template("accueil.html",nb_lettres=nb_lettres, nb_essais=nb_essais,mode_de_jeu=mode_de_jeu,mot_cherche=mot_cherche, liste_mot_propose=liste_mot_propose,liste_etat_lettres=liste_etat_lettres,vie=vie,score_survie=score_survie,nb_essais_big50=nb_essais_big50,score_big50=score_big50,timer=timer,score_clm=score_clm)
@@ -229,6 +231,11 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
                             experience+=10
 
                             cur.execute("UPDATE Utilisateur SET Nb_defaites = (?), Experience = (?) WHERE Nom_utilisateur=(?)",(nb_defaites,experience,user))
+                            id_partie=cur.execute("SELECT COUNT(*) FROM Historique")
+                            id_partie=id_partie.fetchall()[0][0]
+                            date_partie=str(date.today())[5:]+"-"+str(date.today())[:4]
+                            Partie=[id_partie,user,'Faux',nb_essais[0]-nb_essais[-1],date_partie,'Classique',mot_cherche]  #ajout a la table historique
+                            cur.execute("insert into Historique values(?,?,?,?,?,?,?)", Partie)
                             con.commit()
                 liste_mot_propose = place_premiere_lettre(nb_lettres,liste_mot_propose,mot_cherche,point) #On place la première lettre dans le mot a deviné
                 return render_template("accueil.html",nb_lettres=nb_lettres, nb_essais=nb_essais,mode_de_jeu=mode_de_jeu,mot_cherche=mot_cherche, liste_mot_propose=liste_mot_propose,liste_etat_lettres=liste_etat_lettres,vie=vie,score_survie=score_survie,nb_essais_big50=nb_essais_big50,score_big50=score_big50,timer=timer,score_clm=score_clm)
@@ -439,7 +446,7 @@ def histo():
             u[2]="Victoire"
         else:
             u[2]="Défaite"
-    
+    histo_perso.reverse()
     return render_template("historique.html",histo=histo_perso)
 
 
