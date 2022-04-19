@@ -50,21 +50,11 @@ global point, zero
 point = '.'
 zero = '0'
 
-def verif_mot(mot_propose,mot_cherche):     #L'argument mot_complet sert uniquement pour le test de longueur
-    #Regarde si le mot proposé est de la même taille que le mot à trouver
-    #Il faudra également regarder si le mot fait partie de la liste_mots
-    if len(mot_propose)!=len(mot_cherche):              
-        return False
-    for i in range(len(mot_propose)):
-        if not mot_propose[i].isalpha():    #Regarde si l'on a bien que des lettres
-            return False
-    return True
-
 
 #Accueil
 @app.route('/')
 @app.route('/accueil',methods=['GET','POST'])
-def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, liste_mot_propose=[],liste_etat_lettres=[],vie=None,score_survie=None,nb_essais_big50=None,score_big50=None):
+def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, liste_mot_propose=[],liste_etat_lettres=[],vie=None,score_survie=None,nb_essais_big50=None,score_big50=None,timer=None,score_clm=None):
     #Connexion base de données
     con=sqlite3.connect('wordle.sql')
     cur = con.cursor()
@@ -95,6 +85,12 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
 
     score_big50 = recup_table()[9]
     score_big50 =  score_big50[0][0]
+
+    depart_clm = recup_table()[10]
+    depart_clm = depart_clm[0][0]
+
+    score_clm = recup_table()[11]
+    score_clm =  score_clm[0][0]
     #______________________________________________________________________#
     
     for i in range(len(nb_essais)):
@@ -126,10 +122,19 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
         #print("etat_lettres",etat_lettres)
         mot_cherche=choisir_mot(nb_lettres)
         cur.execute("DELETE FROM Modes WHERE mot_cherche=('') ")
-        cur.execute("INSERT INTO Modes VALUES (?,?,?,?,?,?,?,?,?,?) ",(nb_essais[-1],nb_lettres,mot_cherche,mot_propose,etat_lettres,mode_de_jeu,vie,score_survie[-1],nb_essais_big50[-1],score_big50)) 
+        cur.execute("INSERT INTO Modes VALUES (?,?,?,?,?,?,?,?,?,?,?,?) ",(nb_essais[-1],nb_lettres,mot_cherche,mot_propose,etat_lettres,mode_de_jeu,vie,score_survie[-1],nb_essais_big50[-1],score_big50,depart_clm,score_clm)) 
         con.commit()
     #______________________________________________________________________#
+    if depart_clm == '' and mode_de_jeu =='clm':
+        depart_clm = depart()
+        cur.execute("DELETE FROM Modes WHERE Clm_depart=('') ")
+        cur.execute("INSERT INTO Modes VALUES (?,?,?,?,?,?,?,?,?,?,?,?) ",(nb_essais[-1],nb_lettres,mot_cherche,mot_propose,etat_lettres,mode_de_jeu,vie,score_survie[-1],nb_essais_big50[-1],score_big50,depart_clm,score_clm)) 
+        con.commit()
     
+    if mode_de_jeu =='clm':
+        timer=chrono(depart_clm)
+        print(timer,depart_clm,'yup')
+
     if request.method == "POST":
         liste_mot_propose = place_premiere_lettre(nb_lettres,liste_mot_propose,mot_cherche,point)       #On place la première lettre dans le mot a deviné
         print("Le mot à trouver est : ",mot_cherche)
@@ -138,7 +143,7 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
             mot_propose = mot_propose.upper()
             #print(nb_essais[0],nb_essais[-1], nb_essais[0]-nb_essais[-1])
             liste_mot_propose[nb_essais[0]-nb_essais[-1]] = mot_propose         #Ajoute le mot proposé dans la liste liste_mot_propose
-            print(nb_essais)
+            #print(nb_essais)
             #print(liste_mot_propose)
 
             print("Le mot proposé est : ",mot_propose)
@@ -148,7 +153,7 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
             liste_etat_lettres[nb_essais[0]-nb_essais[-1]] = etat_lettres       #On ajoute l'état des lettres du mot dans la liste liste_etat_lettres
             print(liste_etat_lettres)
             nb_essais.append(nb_essais[-1]-1)                                   #On décrémente le nombre d'essai restant
-            print(liste_etat_lettres[nb_essais[0]-nb_essais[-1]-1])
+            #print(liste_etat_lettres[nb_essais[0]-nb_essais[-1]-1])
             if mode_de_jeu=='big50':
                 nb_essais_big50.append(nb_essais_big50[-1]-1)
 
@@ -170,9 +175,11 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
                     con.commit()
             if etat_lettres == '2'*nb_lettres and mode_de_jeu=='survie': 
                 score_survie.append(score_survie[-1]+nb_essais[-1]+1)
-                print(score_survie[-1])
+                #print(score_survie[-1])
             if etat_lettres == '2'*nb_lettres and mode_de_jeu == 'big50':
                 score_big50+=1
+            if etat_lettres == '2'*nb_lettres and mode_de_jeu == 'clm':
+                score_clm+=1
             #Fin de partie du mode big50, MAJ du score
             if nb_essais_big50[-1] == 0 and mode_de_jeu=='big50' and current_user.is_authenticated:
                 experience=cur.execute("SELECT Experience FROM Utilisateur WHERE Nom_utilisateur=(?) ",([user]))
@@ -182,7 +189,7 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
                 print("experience",experience)
                 cur.execute("UPDATE Utilisateur SET Experience = (?) WHERE Nom_utilisateur=(?)",(experience,user))
                 con.commit()
-            cur.execute("INSERT INTO Modes VALUES (?,?,?,?,?,?,?,?,?,?) ",(nb_essais[-1],nb_lettres,mot_cherche,mot_propose,etat_lettres,mode_de_jeu,vie,score_survie[-1],nb_essais_big50[-1],score_big50)) 
+            cur.execute("INSERT INTO Modes VALUES (?,?,?,?,?,?,?,?,?,?,?,?) ",(nb_essais[-1],nb_lettres,mot_cherche,mot_propose,etat_lettres,mode_de_jeu,vie,score_survie[-1],nb_essais_big50[-1],score_big50,depart_clm,score_clm)) 
             con.commit()
             #________________________________________________________________#
             if etat_lettres == '2'*nb_lettres:                                  #Si le dernier etat_lettres = '2222222222' par exemple c'est que le mot est trouvé
@@ -205,7 +212,7 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
                         Partie=[id_partie,user,'Vrai',nb_essais[0]-nb_essais[-1],'25/01/2022','classique',mot_cherche]
                         cur.execute("insert into Historique values(?,?,?,?,?,?,?)", Partie)
                         con.commit()
-                return render_template("accueil.html",nb_lettres=nb_lettres, nb_essais=nb_essais,mode_de_jeu=mode_de_jeu,mot_cherche=mot_cherche, liste_mot_propose=liste_mot_propose,liste_etat_lettres=liste_etat_lettres,vie=vie,score_survie=score_survie,nb_essais_big50=nb_essais_big50,score_big50=score_big50)
+                return render_template("accueil.html",nb_lettres=nb_lettres, nb_essais=nb_essais,mode_de_jeu=mode_de_jeu,mot_cherche=mot_cherche, liste_mot_propose=liste_mot_propose,liste_etat_lettres=liste_etat_lettres,vie=vie,score_survie=score_survie,nb_essais_big50=nb_essais_big50,score_big50=score_big50,timer=timer,score_clm=score_clm)
             else:
                 if nb_essais[-1]==0:
                     if mode_de_jeu == 'classique':
@@ -219,24 +226,20 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
                             experience=cur.execute("SELECT Experience FROM Utilisateur WHERE Nom_utilisateur=(?) ",([user]))
                             experience=experience.fetchall()[0][0]
                             #print("experience",experience)
-                            experience+=25
+                            experience+=10
 
                             cur.execute("UPDATE Utilisateur SET Nb_defaites = (?), Experience = (?) WHERE Nom_utilisateur=(?)",(nb_defaites,experience,user))
-                            id_partie=cur.execute("SELECT COUNT(*) FROM Historique")
-                            id_partie=id_partie.fetchall()[0][0]
-                            Partie=[id_partie,user,'Faux',0,'25/01/2022','classique',mot_cherche]
-                            cur.execute("insert into Historique values(?,?,?,?,?,?,?)", Partie)
                             con.commit()
                 liste_mot_propose = place_premiere_lettre(nb_lettres,liste_mot_propose,mot_cherche,point) #On place la première lettre dans le mot a deviné
-                return render_template("accueil.html",nb_lettres=nb_lettres, nb_essais=nb_essais,mode_de_jeu=mode_de_jeu,mot_cherche=mot_cherche, liste_mot_propose=liste_mot_propose,liste_etat_lettres=liste_etat_lettres,vie=vie,score_survie=score_survie,nb_essais_big50=nb_essais_big50,score_big50=score_big50)
+                return render_template("accueil.html",nb_lettres=nb_lettres, nb_essais=nb_essais,mode_de_jeu=mode_de_jeu,mot_cherche=mot_cherche, liste_mot_propose=liste_mot_propose,liste_etat_lettres=liste_etat_lettres,vie=vie,score_survie=score_survie,nb_essais_big50=nb_essais_big50,score_big50=score_big50,timer=timer,score_clm=score_clm)
         else:
             #print("mot non valide")
-            return render_template("accueil_fail.html",nb_lettres=nb_lettres, nb_essais=nb_essais,mode_de_jeu=mode_de_jeu,mot_cherche=mot_cherche, liste_mot_propose=liste_mot_propose,liste_etat_lettres=liste_etat_lettres,vie=vie,score_survie=score_survie,nb_essais_big50=nb_essais_big50,score_big50=score_big50)
+            return render_template("accueil_fail.html",nb_lettres=nb_lettres, nb_essais=nb_essais,mode_de_jeu=mode_de_jeu,mot_cherche=mot_cherche, liste_mot_propose=liste_mot_propose,liste_etat_lettres=liste_etat_lettres,vie=vie,score_survie=score_survie,nb_essais_big50=nb_essais_big50,score_big50=score_big50,timer=timer,score_clm=score_clm)
         
     else:
         print("Le mot à trouver est : ",mot_cherche)
         liste_mot_propose = place_premiere_lettre(nb_lettres,liste_mot_propose,mot_cherche,point) #On place la première lettre dans le mot a deviné
-        return render_template("accueil.html",nb_lettres=nb_lettres, nb_essais=nb_essais,mode_de_jeu=mode_de_jeu,mot_cherche=mot_cherche, liste_mot_propose=liste_mot_propose,liste_etat_lettres=liste_etat_lettres,vie=vie,score_survie=score_survie,nb_essais_big50=nb_essais_big50,score_big50=score_big50)
+        return render_template("accueil.html",nb_lettres=nb_lettres, nb_essais=nb_essais,mode_de_jeu=mode_de_jeu,mot_cherche=mot_cherche, liste_mot_propose=liste_mot_propose,liste_etat_lettres=liste_etat_lettres,vie=vie,score_survie=score_survie,nb_essais_big50=nb_essais_big50,score_big50=score_big50,timer=timer,score_clm=score_clm)
 
 
 #Rejouer si mode de jeu est classique
@@ -248,19 +251,18 @@ def rejouer_classique():
     nb_essais = recup_table()[0]
     nb_essais = nb_essais[-1][0] 
 
-
     nb_lettres = recup_table()[1]
-    nb_lettres = nb_lettres[0][0]                                          #Idem mot_cherche
+    nb_lettres = nb_lettres[0][0]                                         
 
     mot_cherche = recup_table()[2]
-    mot_cherche = mot_cherche[0][0]                                        #On prend le premier élément de la liste mot_cherche (tous les éléments sont identiques)
+    mot_cherche = mot_cherche[0][0]                                        
     
     mode_de_jeu = recup_table()[5]
     mode_de_jeu =  mode_de_jeu[0][0]
 
     cur.execute('''DELETE FROM Modes;''')
     #print(nb_essais,nb_lettres,mode_de_jeu)
-    cur.execute("INSERT INTO Modes VALUES(?,?,?,?,?,?,?,?,?,?)",(nb_essais,nb_lettres,'','','',mode_de_jeu,3,0,50,0))
+    cur.execute("INSERT INTO Modes VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",(nb_essais,nb_lettres,'','','',mode_de_jeu,3,0,50,0,'',0))
     connection.commit()
     return redirect("accueil")
 
@@ -276,11 +278,11 @@ def rejouer_survie():
 
 
     nb_lettres = recup_table()[1]
-    nb_lettres = nb_lettres[0][0]                                          #Idem mot_cherche
+    nb_lettres = nb_lettres[0][0] 
 
     mot_cherche = recup_table()[2]
-    mot_cherche = mot_cherche[0][0]                                        #On prend le premier élément de la liste mot_cherche (tous les éléments sont identiques)
-    
+    mot_cherche = mot_cherche[0][0]  
+
     mode_de_jeu = recup_table()[5]
     mode_de_jeu =  mode_de_jeu[0][0]
 
@@ -292,7 +294,7 @@ def rejouer_survie():
     
     cur.execute('''DELETE FROM Modes;''')
     #print(nb_essais,nb_lettres,mode_de_jeu)
-    cur.execute("INSERT INTO Modes VALUES(?,?,?,?,?,?,?,?,?,?)",(nb_essais,nb_lettres,'','','',mode_de_jeu,vie,score_survie,50,0))
+    cur.execute("INSERT INTO Modes VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",(nb_essais,nb_lettres,'','','',mode_de_jeu,vie,score_survie,50,0,'',0))
     connection.commit()
     return redirect("accueil")
 
@@ -309,10 +311,10 @@ def rejouer_big50():
 
 
     nb_lettres = recup_table()[1]
-    nb_lettres = nb_lettres[0][0]                                          #Idem mot_cherche
+    nb_lettres = nb_lettres[0][0]                                          
 
     mot_cherche = recup_table()[2]
-    mot_cherche = mot_cherche[0][0]                                        #On prend le premier élément de la liste mot_cherche (tous les éléments sont identiques)
+    mot_cherche = mot_cherche[0][0]                                        
     
     mode_de_jeu = recup_table()[5]
     mode_de_jeu =  mode_de_jeu[0][0]
@@ -325,10 +327,41 @@ def rejouer_big50():
     
     cur.execute('''DELETE FROM Modes;''')
     #print(nb_essais,nb_lettres,mode_de_jeu)
-    cur.execute("INSERT INTO Modes VALUES(?,?,?,?,?,?,?,?,?,?)",(nb_essais,nb_lettres,'','','',mode_de_jeu,3,0,nb_essais_big50,score_big50))
+    cur.execute("INSERT INTO Modes VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",(nb_essais,nb_lettres,'','','',mode_de_jeu,3,0,nb_essais_big50,score_big50,'',0))
     connection.commit()
     return redirect("accueil")
 
+
+#Rejouer si mode de jeu est Contre la montre
+@app.route('/rejouer_clm',methods=['GET','POST'])
+def rejouer_clm():
+    connection = sqlite3.connect('wordle.sql')
+    cur = connection.cursor()
+
+    nb_essais = recup_table()[0]
+    nb_essais = nb_essais[-1][0] 
+
+
+    nb_lettres = recup_table()[1]
+    nb_lettres = nb_lettres[0][0]                                          
+
+    mot_cherche = recup_table()[2]
+    mot_cherche = mot_cherche[0][0]                                        
+    
+    mode_de_jeu = recup_table()[5]
+    mode_de_jeu =  mode_de_jeu[0][0]
+
+    depart_clm = recup_table()[10]
+    depart_clm =  depart_clm[0][0]
+
+    score_clm = recup_table()[11]
+    score_clm =  score_clm[0][0]
+    
+    cur.execute('''DELETE FROM Modes;''')
+    #print(nb_essais,nb_lettres,mode_de_jeu)
+    cur.execute("INSERT INTO Modes VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",(nb_essais,nb_lettres,'','','',mode_de_jeu,3,0,50,0,depart_clm,score_clm))
+    connection.commit()
+    return redirect("accueil")
 
 #Statistiques
 @app.route('/statistiques')

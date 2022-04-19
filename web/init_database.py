@@ -69,7 +69,10 @@ cursor.execute("""create table Modes(
     Survie_score integer,
     Big50_nb_essais integer,
     Big50_score integer,
+    Clm_depart varchar,
+    Clm_score integer,
     PRIMARY KEY(Nb_essais))""")
+
 
 
 #Encodage du mot de passe
@@ -102,7 +105,8 @@ cursor.execute("INSERT INTO Quetes_rea VALUES(7, 7, 'Adrien',FALSE)")
 cursor.execute("INSERT INTO Quetes_rea VALUES(8, 8, 'Adrien',FALSE)")
 cursor.execute("INSERT INTO Quetes_rea VALUES(9, 9, 'Adrien',FALSE)")
 
-cursor.execute("INSERT INTO Modes VALUES(6,6,'','','','classique',3,0,50,0)")
+cursor.execute("INSERT INTO Modes VALUES(6,6,'','','','classique',3,0,50,0,'',0)")
+
 
 
 

@@ -1,5 +1,7 @@
 from random import choice
 import sqlite3
+import datetime 
+import time
 
 
 def recup_table():
@@ -46,10 +48,26 @@ def recup_table():
     score_big50=cur.execute("SELECT Big50_score FROM Modes ")
     score_big50=score_big50.fetchall()
     #print(score_big50)
+
+    depart_clm=cur.execute("SELECT Clm_depart FROM Modes ")
+    depart_clm=depart_clm.fetchall()
+    #print(depart_clm)
+
+    score_clm=cur.execute("SELECT Clm_score FROM Modes ")
+    score_clm=score_clm.fetchall()
+    #print(score_clm)
     #______________________________________________________________________#
-    return nb_essais, nb_lettres, mot_cherche, mots_proposes, etat_lettres, mode_de_jeu, vie, score_survie,nb_essais_big50, score_big50
+    return nb_essais, nb_lettres, mot_cherche, mots_proposes, etat_lettres, mode_de_jeu, vie, score_survie,nb_essais_big50, score_big50, depart_clm, score_clm
 
-
+def verif_mot(mot_propose,mot_cherche):     #L'argument mot_complet sert uniquement pour le test de longueur
+    #Regarde si le mot proposé est de la même taille que le mot à trouver
+    #Il faudra également regarder si le mot fait partie de la liste_mots
+    if len(mot_propose)!=len(mot_cherche):              
+        return False
+    for i in range(len(mot_propose)):
+        if not mot_propose[i].isalpha():    #Regarde si l'on a bien que des lettres
+            return False
+    return True
 
 
 def creation_liste_mots_proposes(nb_lettres,nb_essais,mots_proposes,point):
@@ -225,3 +243,50 @@ def choisir_mot(nombre_lettres):
     liste_mots = ouvrir_fichier(nomFichier)
     mot_propose = choice(liste_mots)
     return mot_propose
+
+
+
+
+def depart():
+    depart=time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
+    depart=str(depart)
+    print(depart)
+    depart= depart[14]+depart[15]+':'+depart[17]+depart[18]
+    print(depart)
+    return depart
+
+
+def chrono(depart):
+    temps_max=2
+    minutes_depart = 10*int(depart[0])+int(depart[1])
+    secondes_depart = 10*int(depart[3])+int(depart[4])
+    
+    actuel=time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
+    actuel = str(actuel)
+    minutes_actuel = 10*int(actuel[14])+int(actuel[15])
+    secondes_actuel = 10*int(actuel[17])+int(actuel[18])
+
+    #print('minutes_depart secondes_depart',minutes_depart, secondes_depart)
+    #print('minutes_actuel secondes_actuel',minutes_actuel, secondes_actuel)
+    depart = datetime.timedelta(hours=1,minutes=minutes_depart, seconds=secondes_depart)
+    actuel = datetime.timedelta(hours=1,minutes=minutes_actuel, seconds=secondes_actuel)
+    time_delta = actuel - depart  
+    delta_in_seconds = time_delta.total_seconds()
+    #print('delta',delta_in_seconds)
+    if delta_in_seconds >= 120:
+        temps_retour='00:00'
+    else:   
+        if delta_in_seconds==0:
+            minutes_timer = temps_max-int(delta_in_seconds//60)
+            secondes_timer=0
+        else:
+            minutes_timer = temps_max-int(delta_in_seconds//60)-1
+            secondes_timer = 60-int(delta_in_seconds%60)
+
+        if secondes_timer<10:
+                temps_retour = '0'+str(minutes_timer)+':0'+str(secondes_timer)
+            
+        else:
+            temps_retour = '0'+str(minutes_timer)+':'+str(secondes_timer)
+    #print(temps_retour)
+    return temps_retour

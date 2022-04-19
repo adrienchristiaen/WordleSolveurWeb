@@ -179,5 +179,64 @@
             </div>
         </div>
     {% endif %}
+    {% if mode_de_jeu == 'clm' %}
+        <table>
+            {% for i in range(nb_essais[0]) %}
+                <tr>
+                    {% for j in range(nb_lettres) %}
+                        {% if liste_etat_lettres[i][j] == '2' %}
+                            <td style="background-color: green;">{{liste_mot_propose[i][j]}}</td>
+                        {% elif liste_etat_lettres[i][j] == '1' %}
+                            <td style="background-color: gold;">{{liste_mot_propose[i][j]}}</td>
+                        {% else %}
+                            <td>{{liste_mot_propose[i][j]}}</td>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </table>
+        <div class="proposition">
+            {% if timer != '00:00' %}
+                {% set win = '2'*nb_lettres | int %}
+                {% if liste_etat_lettres[nb_essais[0]-nb_essais[-1]-1] == win %}
+                    <form method="POST" action="/rejouer_clm">
+                        <input class="input" type="mot_propose" name="mot_propose" placeholder="Votre Proposition" autofocus="" disabled>
+                        <button class="bouton">Continuer</button>  
+                    </form>
+                    <p style="color: green;">Bien joué !</p>
+                {% else %}
+                    {% if nb_essais[-1]==0 %}
+                        <form method="POST" action="/rejouer_clm">
+                            <input class="input" type="mot_propose" name="mot_propose" placeholder="Votre Proposition" autofocus="" disabled>
+                            <button class="bouton">Continuer</button>  
+                        </form>
+                        <p style="color: red;">Vous avez perdu</p>
+                        <h2>Le mot était : {{mot_cherche}}</h1>
+                    
+                    {% else %}
+                        <form method="POST" action="/accueil">
+                            <input class="input" type="mot_propose" name="mot_propose" placeholder="Votre Proposition" autofocus="">
+                            <button class="bouton">Valider</button>  
+                        </form>
+                    {% endif %}
+                {% endif %}
+            {% else %}
+                <form method="POST" action="/rejouer_classique">
+                    <input class="input" type="mot_propose" name="mot_propose" placeholder="Votre Proposition" autofocus="" disabled>
+                    <button class="bouton">Rejouer</button>  
+                </form>
+                <p style="color: red;"> La partie est terminée </p>
+                <h2>Le mot était : {{mot_cherche}}</h1>
+            {% endif %}
+        </div>
+        <div class="clm">
+            <div class="vie">
+                <h3> Temps restant : {{timer}}</h3>
+            </div>
+            <div class="score">
+                <h3>Nombre de mot trouvés : {{score_clm}}</h3>
+            </div>
+        </div>
+    {% endif %}
 </div>
 {% endblock %}
