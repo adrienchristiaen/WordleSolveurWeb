@@ -1,8 +1,11 @@
 html{
     background-color: lightblue;
+    height: 100%;
+    margin: 0;
 }
 
 body {
+    height: 100%;
     margin: 0;
 }
 
@@ -10,7 +13,7 @@ body {
     margin-top: 0;
     background-color: midnightblue;  
 }
-
+ 
 .box-title{
     background-color: midnightblue;
     margin-top: 0;
@@ -60,3 +63,27 @@ a{
 a:focus, a:hover {
     color: white;
 }
+
+.content 
+{
+    min-height: 100%;
+}
+
+.content-inside 
+{
+    padding: 20px;
+    padding-bottom: 50px;
+}
+
+.footer 
+{
+    width:100%;
+    height: 80px;
+    margin-top: -80px;
+    background-color: midnightblue;  
+    text-align: center;
+    padding-top: 20px;
+}
+
+
+
