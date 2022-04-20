@@ -330,6 +330,7 @@ def rejouer():
 #--------------------------------------------------------------------------------------------------------------------------------------------------------------------
 #Statistiques Classique
 @app.route('/statistiques')
+@app.route('/statistiques-classique')
 @login_required
 def stat():
     user=session["username"]
@@ -355,6 +356,22 @@ def stat_mdj1():
     moyenne=trace_histo(user)
 
     return render_template("statistiques-mdj1.html", liste=[nb_parties,nb_vict,taux_vict,xp,moyenne])
+
+#Statistiques MDJ2
+@app.route('/statistiques-mdj2')
+@login_required
+def stat_mdj2():
+    user=session["username"]
+    #Connection a la bdd
+    data=recup_data(user)
+    #Selection des stats d'un joueur en particulier
+    nb_vict,nb_parties,xp,taux_vict=selection_joueur(user,data)
+    #Tracer histogramme
+    moyenne=trace_histo(user)
+
+    return render_template("statistiques-mdj2.html", liste=[nb_parties,nb_vict,taux_vict,xp,moyenne])
+
+
 
 #Historique
 @app.route('/historique', methods=['GET', 'POST'])
@@ -456,7 +473,7 @@ def inscription():
                 req = cur.execute("SELECT COUNT(Nom_utilisateur) FROM utilisateur")
                 num = req.fetchone()[0] + 1
                 #Insertion de l'utilisateur dans la BD
-                cur.execute("INSERT INTO utilisateur(Id, Nom_utilisateur, Mot_de_passe, Email, Nb_victoires, Nb_defaites, Experience) VALUES (?,?,?,?,?,?,?)", (num, username, password, email, 0, 0, 0))#Certaines données s'initialisent à zéro (nb parties, xp...)
+                cur.execute("INSERT INTO utilisateur(Id, Nom_utilisateur, Mot_de_passe, Email, Nb_victoires_classique, Nb_defaites_classique, Experience) VALUES (?,?,?,?,?,?,?)", (num, username, password, email, 0, 0, 0))#Certaines données s'initialisent à zéro (nb parties, xp...)
                 con.commit()
                 #Création du compte et connexion
                 session['username'] = username

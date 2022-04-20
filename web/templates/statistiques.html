@@ -16,15 +16,19 @@
    
    <button class="bouton" onclick="window.location.href = 'historique';">Votre Historique</button>
    <button class="bouton" onclick="window.location.href = 'statistiques-mdj1';">Mode de jeu 1</button>
+   <button class="bouton" onclick="window.location.href = 'statistiques-mdj2';">Mode de jeu 2</button>
     
     <h1 class="titre"> Parties classiques </h1>
-      
-    	<p class="graph"><img src="static/image.png" class="histogramme" alt="image" title="Histogramme"></p> 
+    
+      	<p class="graph"><img src="static/image.png" class="histogramme" alt="image" title="Histogramme"></p> 
+    	<div class="box">
 	<p><br>Parties jouées : {{liste[0]}} 
 	<br><br>Parties gagnées : {{liste[1]}}
 	<br><br>Taux de victoire : {{liste[2]}}
 	<br><br>Nombre de coups moyen : {{liste[4]}}
 	<br><br>Expérience : {{liste[3]}}
+	</p>
+	</div>
 		
 {% endblock %}
 
