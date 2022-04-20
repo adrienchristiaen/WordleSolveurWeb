@@ -42,6 +42,11 @@ def trace_histo(user):              #ET CALCULE MOYENNE
         moyenne=str(moyenne/len(x))
     if len(x)>=4:
         moyenne=moyenne[:3]
+    
+    if x==[]:
+        meilleur=0
+    else:
+        meilleur=min(x)
 
     plt.clf()
     plt.hist(x, range=(0, 10), bins=10, rwidth = 0.6, align='left')
@@ -49,7 +54,7 @@ def trace_histo(user):              #ET CALCULE MOYENNE
     plt.ylabel('Nombres X de coups')
     plt.title("Nombres de parties gagnées en X coups")
     plt.savefig('static/image.png')
-    return(moyenne)
+    return(moyenne,meilleur)
 
 def selection_joueur(user,data):
     for u in data:

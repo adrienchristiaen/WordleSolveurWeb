@@ -17,7 +17,11 @@
    <button class="bouton" onclick="window.location.href = 'statistiques';">Retour aux Statistiques</button>
 
     <h1 class="titre"> Historique </h1>
-        
+    
+    {% if histo==[] %}
+    	<P> Vous n'avez pas encore joué de partie ! </p>
+    {% endif %}
+    
     {% for u in histo %}
     	{% if u[2]!="Victoire" %}
     		<div class="box_red">

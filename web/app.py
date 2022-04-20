@@ -343,9 +343,9 @@ def stat():
     #Selection des stats d'un joueur en particulier
     nb_vict,nb_parties,xp,taux_vict=selection_joueur(user,data)
     #Tracer histogramme
-    moyenne=trace_histo(user)
+    moyenne,meilleur=trace_histo(user)
 
-    return render_template("statistiques.html", liste=[nb_parties,nb_vict,taux_vict,xp,moyenne])
+    return render_template("statistiques.html", liste=[nb_parties,nb_vict,taux_vict,xp,moyenne,meilleur])
 
 #Statistiques MDJ1
 @app.route('/statistiques-mdj1')
