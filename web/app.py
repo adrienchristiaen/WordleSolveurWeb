@@ -1,7 +1,7 @@
 from pydoc import visiblename
 from flask import Flask, render_template, redirect, request, url_for, flash, session, g
 from flask_login import LoginManager, UserMixin, login_required, logout_user, current_user, login_user
-import sqlite3, hashlib
+import sqlite3, hashlib, random
 from fonctions_wordle_flask import *
 from fonctions_experience import *
 from fonctions_stat import *
@@ -314,12 +314,15 @@ def rejouer():
         cur.execute("INSERT INTO Modes VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",(nb_essais,nb_lettres,'','','',mode_de_jeu,3,0,50,0,'',0))
         connection.commit()
     if mode_de_jeu == 'survie' and vie !=0 :
+        nb_lettres = random.randint(4, 12)
         cur.execute("INSERT INTO Modes VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",(nb_essais,nb_lettres,'','','',mode_de_jeu,vie,score_survie,50,0,'',0))
         connection.commit()
     if mode_de_jeu == 'big50' and nb_essais_big50 !=0 :
+        nb_lettres = random.randint(4, 12)
         cur.execute("INSERT INTO Modes VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",(nb_essais,nb_lettres,'','','',mode_de_jeu,3,0,nb_essais_big50,score_big50,'',0))
         connection.commit()
     if mode_de_jeu == 'clm' and chrono(depart_clm) != '00:00':
+        nb_lettres = random.randint(4, 12)
         cur.execute("INSERT INTO Modes VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",(nb_essais,nb_lettres,'','','',mode_de_jeu,3,0,50,0,depart_clm,score_clm))
         connection.commit()
     #______________________________________________________________________#
@@ -438,8 +441,14 @@ def parametres():
         cur = con.cursor()
         cur.execute('''DELETE FROM Modes;''')
         #print(nb_essais,nb_lettres,mode_de_jeu)
-        cur.execute("INSERT INTO Modes VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",(select_essais,select_lettres,'','','',select_mode_de_jeu,3,0,50,0,'',0))
-        con.commit()
+        if select_mode_de_jeu == 'classique':
+            cur.execute("INSERT INTO Modes VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",(select_essais,select_lettres,'','','',select_mode_de_jeu,3,0,50,0,'',0))
+            con.commit()
+        else:
+            select_essais = 5
+            select_lettres = random.randint(4, 12)
+            cur.execute("INSERT INTO Modes VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",(select_essais,select_lettres,'','','',select_mode_de_jeu,3,0,50,0,'',0))
+            con.commit()
         if not multi == None:
             return render_template("construction.html")
         if not solo == None:
