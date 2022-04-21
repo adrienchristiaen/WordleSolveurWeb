@@ -1,52 +1,8 @@
-/*=========================Général=========================*/
-body
-{
-    background-color: goldenrod;
-}
-/*=========================================================*/
-
-
-
-/*========================Bandeau_sup======================*/
-header  
-{
-    background-color:midnightblue;
-    margin-left: -8px;
-    margin-right: -8px;
-    margin-top: -12px;
-    height: 125px;
-    display:flex;  
-    align-items:center; /*Centre au centre(milieu) verticalement*/
-    justify-content:flex-start; /*Centre au début horizontalement*/
-}
-
-.titre
-{
-    color: aliceblue;
-    margin-left: auto;
-    margin-right: auto;
-}
-/*=========================================================*/
-
-
-/*=======================Corps_page========================*/
-.general
-{
-    text-align:center!important;
-    padding-bottom:1.5rem;
-    padding-top:1.5rem;
-    min-height:100vh;
-    color:white;
-    flex:none;
-    /*width:25%;*/
-}
-
 .corps
 {
-    display:flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    margin-left:-8px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
 }
 
 /*=======================Barre_cotes========================*/
@@ -107,39 +63,40 @@ header
 }
 /*=========================================================*/
 
-.corps_sans_barres
-{
-    width:84%;
-    margin-right: -8px;
-}
 
 /*=======================Barres_défilantes=================*/
-.choix
+
+.choix_mode_jeu
+{
+    width:100%;
+    text-align: center;
+    margin-top:50px;
+}
+
+
+
+.option_classique
 {
     width:100%;
     margin-top: 50px;
-    margin-left: 70px;
+    text-align: center;
     display:flex;
     align-items: flex-start;
     justify-content: space-between;
 }
+
 .choix_nblettres
 {
-    width:33%;
+    width:50%;
     margin-top: 20px;
 }
 
 .choix_nbessais
 {
-    width:33%;
+    width:50%;
     margin-top: 20px;
 }
 
-.choix_mode_jeu
-{
-    width:33%;
-    margin-top: 20px;
-}
 
 
 /*===================Style_de_la_barre==================*/
