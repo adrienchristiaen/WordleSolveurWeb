@@ -203,7 +203,7 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
                         experience=cur.execute("SELECT Experience FROM Utilisateur WHERE Nom_utilisateur=(?) ",([user]))
                         experience=experience.fetchall()[0][0]
                         #print("experience",experience)
-                        experience+=250
+                        experience+=250*(nb_lettres/5)
 
                         cur.execute("UPDATE Utilisateur SET Nb_victoires_classique = (?), Experience = (?) WHERE Nom_utilisateur=(?)",(nb_victoires,experience,user))
                         id_partie=cur.execute("SELECT COUNT(*) FROM Historique")
@@ -222,7 +222,7 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
                             experience=cur.execute("SELECT Experience FROM Utilisateur WHERE Nom_utilisateur=(?) ",([user]))
                             experience=experience.fetchall()[0][0]
                             #print("experience",experience)
-                            experience+=10
+                            experience+=10*(nb_lettres/5)
 
                             cur.execute("UPDATE Utilisateur SET Nb_defaites_classique = (?), Experience = (?) WHERE Nom_utilisateur=(?)",(nb_defaites,experience,user))
                             id_partie=cur.execute("SELECT COUNT(*) FROM Historique")
@@ -251,9 +251,6 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
                         print("experience",experience)
                         cur.execute("UPDATE Utilisateur SET Experience = (?) WHERE Nom_utilisateur=(?)",(experience,user))
                         con.commit()
-                
-                # if mode_de_jeu == 'clm' and chrono(depart_clm) == '00:00':
-                #     score_clm
         
             #_______________________________________________________________________#
             if etat_lettres == '2'*nb_lettres:
@@ -261,6 +258,23 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
             else:
                 liste_mot_propose = place_premiere_lettre(nb_lettres,liste_mot_propose,mot_cherche,point) #On place la première lettre dans le mot a deviné
                 return render_template("accueil.html",nb_lettres=nb_lettres, nb_essais=nb_essais,mode_de_jeu=mode_de_jeu,mot_cherche=mot_cherche, liste_mot_propose=liste_mot_propose,liste_etat_lettres=liste_etat_lettres,vie=vie,score_survie=score_survie,nb_essais_big50=nb_essais_big50,score_big50=score_big50,timer=timer,score_clm=score_clm)
+        
+        #La distrubution d'expérience pour les modes avec timer doit se faire en dehors de la vérification des mots
+        if current_user.is_authenticated and mode_de_jeu == 'clm' and chrono(depart_clm) == '00:00':
+            user=session["username"]
+            experience=cur.execute("SELECT Experience FROM Utilisateur WHERE Nom_utilisateur=(?) ",([user]))
+            experience=experience.fetchall()[0][0]
+            print("experience",experience)
+            experience+=250*score_clm
+            print("experience",experience)
+            cur.execute("UPDATE Utilisateur SET Experience = (?) WHERE Nom_utilisateur=(?)",(experience,user))
+            con.commit()
+            if etat_lettres == '2'*nb_lettres:
+                return render_template("accueil.html",nb_lettres=nb_lettres, nb_essais=nb_essais,mode_de_jeu=mode_de_jeu,mot_cherche=mot_cherche, liste_mot_propose=liste_mot_propose,liste_etat_lettres=liste_etat_lettres,vie=vie,score_survie=score_survie,nb_essais_big50=nb_essais_big50,score_big50=score_big50,timer=timer,score_clm=score_clm)
+            else:
+                liste_mot_propose = place_premiere_lettre(nb_lettres,liste_mot_propose,mot_cherche,point) #On place la première lettre dans le mot a deviné
+                return render_template("accueil.html",nb_lettres=nb_lettres, nb_essais=nb_essais,mode_de_jeu=mode_de_jeu,mot_cherche=mot_cherche, liste_mot_propose=liste_mot_propose,liste_etat_lettres=liste_etat_lettres,vie=vie,score_survie=score_survie,nb_essais_big50=nb_essais_big50,score_big50=score_big50,timer=timer,score_clm=score_clm)
+
         else:
             #print("mot non valide")
             print(mot_propose)
