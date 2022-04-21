@@ -251,6 +251,9 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
                         print("experience",experience)
                         cur.execute("UPDATE Utilisateur SET Experience = (?) WHERE Nom_utilisateur=(?)",(experience,user))
                         con.commit()
+                
+                '''if mode_de_jeu == 'clm' and chrono(depart_clm) == '00:00':
+                    score_clm'''
         
             #_______________________________________________________________________#
             if etat_lettres == '2'*nb_lettres:

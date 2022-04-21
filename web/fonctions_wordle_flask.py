@@ -67,6 +67,12 @@ def verif_mot(mot_propose,mot_cherche):     #L'argument mot_complet sert uniquem
     for i in range(len(mot_propose)):
         if not mot_propose[i].isalpha():    #Regarde si l'on a bien que des lettres
             return False
+    #Vérification mot valide
+    nombre_lettres = len(mot_cherche)
+    nomFichier = "Dictionnaire/liste_taille_" + str(nombre_lettres) + ".txt"
+    liste_mots = ouvrir_fichier(nomFichier)
+    if not mot_propose in liste_mots:
+        return False
     return True
 
 
