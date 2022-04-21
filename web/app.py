@@ -314,15 +314,15 @@ def rejouer():
         cur.execute("INSERT INTO Modes VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",(nb_essais,nb_lettres,'','','',mode_de_jeu,3,0,50,0,'',0))
         connection.commit()
     if mode_de_jeu == 'survie' and vie !=0 :
-        nb_lettres = random.randint(4, 12)
+        nb_lettres = random.randint(5, 10)
         cur.execute("INSERT INTO Modes VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",(nb_essais,nb_lettres,'','','',mode_de_jeu,vie,score_survie,50,0,'',0))
         connection.commit()
     if mode_de_jeu == 'big50' and nb_essais_big50 !=0 :
-        nb_lettres = random.randint(4, 12)
+        nb_lettres = random.randint(5, 10)
         cur.execute("INSERT INTO Modes VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",(nb_essais,nb_lettres,'','','',mode_de_jeu,3,0,nb_essais_big50,score_big50,'',0))
         connection.commit()
     if mode_de_jeu == 'clm' and chrono(depart_clm) != '00:00':
-        nb_lettres = random.randint(4, 12)
+        nb_lettres = random.randint(5, 10)
         cur.execute("INSERT INTO Modes VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",(nb_essais,nb_lettres,'','','',mode_de_jeu,3,0,50,0,depart_clm,score_clm))
         connection.commit()
     #______________________________________________________________________#
@@ -446,7 +446,7 @@ def parametres():
             con.commit()
         else:
             select_essais = 5
-            select_lettres = random.randint(4, 12)
+            select_lettres = random.randint(5, 10)
             cur.execute("INSERT INTO Modes VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",(select_essais,select_lettres,'','','',select_mode_de_jeu,3,0,50,0,'',0))
             con.commit()
         if not multi == None:
