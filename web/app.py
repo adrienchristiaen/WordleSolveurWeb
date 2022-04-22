@@ -586,4 +586,6 @@ def profil():
     email, xp = elements[0][0], elements[0][1]
     #Calcul niveau joueur
     lvl = level_function(xp)
-    return render_template('profil.html', email=email, lvl=lvl)
+    #Infos expériences
+    L_info_xp = lvl_info(xp)
+    return render_template('profil.html', email=email, lvl=lvl, L_info_xp=L_info_xp)
