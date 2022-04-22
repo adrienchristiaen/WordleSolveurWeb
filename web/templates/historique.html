@@ -7,7 +7,7 @@
     <head>
         <meta charset="utf-8" />
         <link rel="stylesheet" href="../static/histo.css" />
-        <title>Historique</title>
+        <title>Historique - Worlde DELUXE</title>
     </head>
 {% endblock %}
 
@@ -23,7 +23,16 @@
     {% endif %}
     
     {% for u in histo %}
-    	{% if u[2]!="Victoire" %}
+    	{% if u[5]!="Classique" %}
+    		<div class="box_yellow">
+		<p>Date : {{u[4]}} 
+		<br>Mode de jeu : {{u[5]}}
+		{% if u[3]!=0 %}
+			<br>Score : {{u[3]}}
+		{% endif %}
+		</p>
+		</div>
+    	{% elif u[2]!="Victoire" %}
     		<div class="box_red">
 		<p>Date : {{u[4]}} 
 		<br>Mode de jeu : {{u[5]}}

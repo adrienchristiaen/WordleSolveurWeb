@@ -27,7 +27,7 @@ def trace_histo(user):              #ET CALCULE MOYENNE
     histo=[]
     con=sqlite3.connect('wordle.sql')
     cur = con.cursor()
-    for i in cur.execute("SELECT * FROM Historique WHERE Identifiant = (?)", ([user])):
+    for i in cur.execute("SELECT * FROM Historique WHERE Identifiant = (?) AND Mode_de_jeu = (?)", ([user,"Classique"])):
         histo.append(i)
     con.commit()
     con.close()
