@@ -114,10 +114,15 @@
         </div>
         <div class="survie">
             <div class="vie">
-                <h3>Nombre de vie : {{vie}}</h3>
+                {% if vie != 0 %}
+                    <img src="../static/Survie/vie{{vie}}.png">
+                {% endif %}
             </div>
-            <div class="score">
-                <h3>Score : {{score_survie[-1]}}</h3>
+            <div class="score" style="margin-top: 10px;">
+                {% set strscore = score_survie[-1] | string %}
+                {% for chiffre in strscore %}
+                    <img src="../static/Survie/{{chiffre}}.png">
+                {% endfor %}
             </div>
         </div>
     {% endif %}
