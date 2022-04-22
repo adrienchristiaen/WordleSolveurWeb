@@ -16,8 +16,9 @@ def recup_data(user):
     data=[]
     con=sqlite3.connect('wordle.sql')
     cur = con.cursor()
-    for i in cur.execute("SELECT * FROM Utilisateur"):
-        data.append(i)
+    data = cur.execute("SELECT * FROM Utilisateur WHERE Nom_utilisateur = (?)", ([user]))
+    data = list(data.fetchall()[0])
+    print(data)
     con.commit()
     con.close()
     return(data)
@@ -26,13 +27,13 @@ def trace_histo(user):              #ET CALCULE MOYENNE
     histo=[]
     con=sqlite3.connect('wordle.sql')
     cur = con.cursor()
-    for i in cur.execute("SELECT * FROM Historique"):
+    for i in cur.execute("SELECT * FROM Historique WHERE Identifiant = (?)", ([user])):
         histo.append(i)
     con.commit()
     con.close()
     x=[]
     for u in histo:
-        if u[1]==user and u[3]!=0:
+        if  u[3]!=0:
             x.append(u[3])
     
     moyenne=0
@@ -57,17 +58,14 @@ def trace_histo(user):              #ET CALCULE MOYENNE
     return(moyenne,meilleur)
 
 def selection_joueur(user,data):
-    for u in data:
-        if u[1]==user:
-            info=u
-    nb_vict=info[4]
-    nb_parties=info[4]+info[5]
+    nb_vict=data[4]
+    nb_parties=data[4]+data[5]
     if nb_vict==0 or nb_parties==0:
         taux_vict ='0%'
     else:
         taux_vict=str((nb_vict/nb_parties)*100)
         taux_vict=taux_vict[:4]+"%"
-    xp=info[6]
+    xp=data[6]
     return(nb_vict,nb_parties,xp,taux_vict)
 
 #--------------------------------------------------PARTIE MDJ 1 ------------------------------------------------
