@@ -55,6 +55,21 @@ p
 	margin-bottom:35px;
 }
 
+.box_yellow
+{
+	background-color:#edef2a;
+	border-style: solid;
+	border-width: 10px;
+	border-color:#b5b80b;
+	width:auto;
+	height:auto;
+	border-radius:10px;
+	text-align:center;
+	margin-left:10%;
+	margin-right:10%;
+	margin-bottom:35px;
+}
+
 
 
 

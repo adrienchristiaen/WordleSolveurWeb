@@ -240,6 +240,11 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
                         experience+=75*score_survie[-1]
                         print("experience",experience)
                         cur.execute("UPDATE Utilisateur SET Experience = (?) WHERE Nom_utilisateur=(?)",(experience,user))
+                        id_partie=cur.execute("SELECT COUNT(*) FROM Historique")
+                        id_partie=id_partie.fetchall()[0][0]
+                        date_partie=str(date.today())[5:]+"-"+str(date.today())[:4]
+                        Partie=[id_partie,user,'Vrai',score_survie[-1],date_partie,'Survie',"NOPE"]  #ajout a la table historique
+                        cur.execute("insert into Historique values(?,?,?,?,?,?,?)", Partie)
                         con.commit()
                         
                 if mode_de_jeu == 'big50':
@@ -250,6 +255,11 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
                         experience+=250*score_big50
                         print("experience",experience)
                         cur.execute("UPDATE Utilisateur SET Experience = (?) WHERE Nom_utilisateur=(?)",(experience,user))
+                        id_partie=cur.execute("SELECT COUNT(*) FROM Historique")
+                        id_partie=id_partie.fetchall()[0][0]
+                        date_partie=str(date.today())[5:]+"-"+str(date.today())[:4]
+                        Partie=[id_partie,user,'Vrai',score_big50,date_partie,'Big 50',"NOPE"]  #ajout a la table historique
+                        cur.execute("insert into Historique values(?,?,?,?,?,?,?)", Partie)
                         con.commit()
         
             #_______________________________________________________________________#
