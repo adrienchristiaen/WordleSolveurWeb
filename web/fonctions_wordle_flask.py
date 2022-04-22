@@ -295,4 +295,5 @@ def chrono(depart):
         else:
             temps_retour = '0'+str(minutes_timer)+':'+str(secondes_timer)
     #print(temps_retour)
-    return temps_retour
+    temps_retour_dyn = 60 * int(temps_retour[1]) + 10 * int(temps_retour[3]) + int(temps_retour[4])
+    return temps_retour,temps_retour_dyn

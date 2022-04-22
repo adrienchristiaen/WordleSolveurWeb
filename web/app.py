@@ -1,5 +1,5 @@
 from pydoc import visiblename
-from flask import Flask, render_template, redirect, request, url_for, flash, session, g
+from flask import Flask, render_template, redirect, request, url_for, flash, session, g, json
 from flask_login import LoginManager, UserMixin, login_required, logout_user, current_user, login_user
 import sqlite3, hashlib, random
 from fonctions_wordle_flask import *
@@ -56,7 +56,7 @@ zero = '0'
 #Accueil
 @app.route('/')
 @app.route('/accueil',methods=['GET','POST'])
-def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, liste_mot_propose=[],liste_etat_lettres=[],vie=None,score_survie=None,nb_essais_big50=None,score_big50=None,timer=None,score_clm=None):
+def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, liste_mot_propose=[],liste_etat_lettres=[],vie=None,score_survie=None,nb_essais_big50=None,score_big50=None,timer1=None,timer2=None,score_clm=None):
     #Connexion base de données
     con=sqlite3.connect('wordle.sql')
     cur = con.cursor()
@@ -140,8 +140,12 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
 
     #________On capture le temps actuel pour calculer le timer_____________#    
     if mode_de_jeu =='clm':
-        timer=chrono(depart_clm)
+        timer=chrono(depart_clm)[0]
+        timer_dyn = chrono(depart_clm)[1]
         #print(timer,depart_clm,'yup')
+    else:
+        timer_dyn=0
+        timer = '00:00'
     #______________________________________________________________________#
 
     #______________________________________________________________________#
@@ -264,13 +268,13 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
         
             #_______________________________________________________________________#
             if etat_lettres == '2'*nb_lettres:
-                return render_template("accueil.html",nb_lettres=nb_lettres, nb_essais=nb_essais,mode_de_jeu=mode_de_jeu,mot_cherche=mot_cherche, liste_mot_propose=liste_mot_propose,liste_etat_lettres=liste_etat_lettres,vie=vie,score_survie=score_survie,nb_essais_big50=nb_essais_big50,score_big50=score_big50,timer=timer,score_clm=score_clm)
+                return render_template("accueil.html",nb_lettres=nb_lettres, nb_essais=nb_essais,mode_de_jeu=mode_de_jeu,mot_cherche=mot_cherche, liste_mot_propose=liste_mot_propose,liste_etat_lettres=liste_etat_lettres,vie=vie,score_survie=score_survie,nb_essais_big50=nb_essais_big50,score_big50=score_big50,timer1=timer,timer2=json.dumps(timer_dyn),score_clm=score_clm)
             else:
                 liste_mot_propose = place_premiere_lettre(nb_lettres,liste_mot_propose,mot_cherche,point) #On place la première lettre dans le mot a deviné
-                return render_template("accueil.html",nb_lettres=nb_lettres, nb_essais=nb_essais,mode_de_jeu=mode_de_jeu,mot_cherche=mot_cherche, liste_mot_propose=liste_mot_propose,liste_etat_lettres=liste_etat_lettres,vie=vie,score_survie=score_survie,nb_essais_big50=nb_essais_big50,score_big50=score_big50,timer=timer,score_clm=score_clm)
+                return render_template("accueil.html",nb_lettres=nb_lettres, nb_essais=nb_essais,mode_de_jeu=mode_de_jeu,mot_cherche=mot_cherche, liste_mot_propose=liste_mot_propose,liste_etat_lettres=liste_etat_lettres,vie=vie,score_survie=score_survie,nb_essais_big50=nb_essais_big50,score_big50=score_big50,timer1=timer,timer2=json.dumps(timer_dyn),score_clm=score_clm)
         
         #La distrubution d'expérience pour les modes avec timer doit se faire en dehors de la vérification des mots
-        if current_user.is_authenticated and mode_de_jeu == 'clm' and chrono(depart_clm) == '00:00':
+        if current_user.is_authenticated and mode_de_jeu == 'clm' and chrono(depart_clm)[0] == '00:00':
             user=session["username"]
             experience=cur.execute("SELECT Experience FROM Utilisateur WHERE Nom_utilisateur=(?) ",([user]))
             experience=experience.fetchall()[0][0]
@@ -280,20 +284,26 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
             cur.execute("UPDATE Utilisateur SET Experience = (?) WHERE Nom_utilisateur=(?)",(experience,user))
             con.commit()
             if etat_lettres == '2'*nb_lettres:
-                return render_template("accueil.html",nb_lettres=nb_lettres, nb_essais=nb_essais,mode_de_jeu=mode_de_jeu,mot_cherche=mot_cherche, liste_mot_propose=liste_mot_propose,liste_etat_lettres=liste_etat_lettres,vie=vie,score_survie=score_survie,nb_essais_big50=nb_essais_big50,score_big50=score_big50,timer=timer,score_clm=score_clm)
+                return render_template("accueil.html",nb_lettres=nb_lettres, nb_essais=nb_essais,mode_de_jeu=mode_de_jeu,mot_cherche=mot_cherche, liste_mot_propose=liste_mot_propose,liste_etat_lettres=liste_etat_lettres,vie=vie,score_survie=score_survie,nb_essais_big50=nb_essais_big50,score_big50=score_big50,timer1=timer,timer2=json.dumps(timer_dyn),score_clm=score_clm)
             else:
                 liste_mot_propose = place_premiere_lettre(nb_lettres,liste_mot_propose,mot_cherche,point) #On place la première lettre dans le mot a deviné
-                return render_template("accueil.html",nb_lettres=nb_lettres, nb_essais=nb_essais,mode_de_jeu=mode_de_jeu,mot_cherche=mot_cherche, liste_mot_propose=liste_mot_propose,liste_etat_lettres=liste_etat_lettres,vie=vie,score_survie=score_survie,nb_essais_big50=nb_essais_big50,score_big50=score_big50,timer=timer,score_clm=score_clm)
+                return render_template("accueil.html",nb_lettres=nb_lettres, nb_essais=nb_essais,mode_de_jeu=mode_de_jeu,mot_cherche=mot_cherche, liste_mot_propose=liste_mot_propose,liste_etat_lettres=liste_etat_lettres,vie=vie,score_survie=score_survie,nb_essais_big50=nb_essais_big50,score_big50=score_big50,timer1=timer,timer2=json.dumps(timer_dyn),score_clm=score_clm)
 
         else:
             #print("mot non valide")
             print(mot_propose)
-            return render_template("accueil_fail.html",nb_lettres=nb_lettres, nb_essais=nb_essais,mode_de_jeu=mode_de_jeu,mot_cherche=mot_cherche, liste_mot_propose=liste_mot_propose,liste_etat_lettres=liste_etat_lettres,vie=vie,score_survie=score_survie,nb_essais_big50=nb_essais_big50,score_big50=score_big50,timer=timer,score_clm=score_clm)
+            return render_template("accueil_fail.html",nb_lettres=nb_lettres, nb_essais=nb_essais,mode_de_jeu=mode_de_jeu,mot_cherche=mot_cherche, liste_mot_propose=liste_mot_propose,liste_etat_lettres=liste_etat_lettres,vie=vie,score_survie=score_survie,nb_essais_big50=nb_essais_big50,score_big50=score_big50,timer1=timer,timer2=json.dumps(timer_dyn),score_clm=score_clm)
         
     else:
         print("Le mot à trouver est : ",mot_cherche)
         liste_mot_propose = place_premiere_lettre(nb_lettres,liste_mot_propose,mot_cherche,point) #On place la première lettre dans le mot a deviné
-        return render_template("accueil.html",nb_lettres=nb_lettres, nb_essais=nb_essais,mode_de_jeu=mode_de_jeu,mot_cherche=mot_cherche, liste_mot_propose=liste_mot_propose,liste_etat_lettres=liste_etat_lettres,vie=vie,score_survie=score_survie,nb_essais_big50=nb_essais_big50,score_big50=score_big50,timer=timer,score_clm=score_clm)
+        return render_template("accueil.html",nb_lettres=nb_lettres, nb_essais=nb_essais,mode_de_jeu=mode_de_jeu,mot_cherche=mot_cherche, liste_mot_propose=liste_mot_propose,liste_etat_lettres=liste_etat_lettres,vie=vie,score_survie=score_survie,nb_essais_big50=nb_essais_big50,score_big50=score_big50,timer1=timer,timer2=json.dumps(timer_dyn),score_clm=score_clm)
+
+
+
+
+
+
 
 
 #Fonction qui permet de rejouer
@@ -338,7 +348,7 @@ def rejouer():
     #______________________________________________________________________#
 
     #_____________On actualise la table selon le mode de jeu_______________#
-    if mode_de_jeu == 'classique' or (mode_de_jeu == 'survie' and vie == 0) or (mode_de_jeu == 'big50' and nb_essais_big50 == 0) or (mode_de_jeu == 'clm' and chrono(depart_clm)) == '00:00':
+    if mode_de_jeu == 'classique' or (mode_de_jeu == 'survie' and vie == 0) or (mode_de_jeu == 'big50' and nb_essais_big50 == 0) or (mode_de_jeu == 'clm' and chrono(depart_clm))[0] == '00:00':
         cur.execute("INSERT INTO Modes VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",(nb_essais,nb_lettres,'','','',mode_de_jeu,3,0,50,0,'',0))
         connection.commit()
     if mode_de_jeu == 'survie' and vie !=0 :
@@ -349,7 +359,7 @@ def rejouer():
         nb_lettres = random.randint(5, 10)
         cur.execute("INSERT INTO Modes VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",(nb_essais,nb_lettres,'','','',mode_de_jeu,3,0,nb_essais_big50,score_big50,'',0))
         connection.commit()
-    if mode_de_jeu == 'clm' and chrono(depart_clm) != '00:00':
+    if mode_de_jeu == 'clm' and chrono(depart_clm)[0] != '00:00':
         nb_lettres = random.randint(5, 10)
         cur.execute("INSERT INTO Modes VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",(nb_essais,nb_lettres,'','','',mode_de_jeu,3,0,50,0,depart_clm,score_clm))
         connection.commit()
