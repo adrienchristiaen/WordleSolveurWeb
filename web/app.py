@@ -624,4 +624,6 @@ def profil():
     lvl = level_function(xp)
     #Infos expériences
     L_info_xp = lvl_info(xp)
-    return render_template('profil.html', email=email, lvl=lvl, L_info_xp=L_info_xp)
+    #Pourcentage de progression
+    progress = int(L_info_xp[1]/L_info_xp[2]*100)
+    return render_template('profil.html', email=email, lvl=lvl, L_info_xp=L_info_xp, progress=progress, xp=xp)

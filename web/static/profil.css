@@ -1,0 +1,37 @@
+#progress-box{
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+    margin: 20px;
+}
+
+#progress-bar{
+    height: 30px;
+    width: 200px;
+    background-color: darkcyan;
+}
+
+#current-progress{
+    height: 30px;
+    background-color: darkblue;
+}
+
+#progress-data{
+    font-weight: bold;
+    align-self: flex-end;
+}
+
+#level{
+    font-weight: bold;
+    align-self: flex-start;
+}
+
+#username{
+    font-weight: bold;
+    align-self: flex-start;
+}
+
+#other-data{
+    font-weight: bold;
+    margin: 20px;
+}

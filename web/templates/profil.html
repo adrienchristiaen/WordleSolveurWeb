@@ -4,10 +4,26 @@
     <title>Profil - Worlde DELUXE</title>
 {% endblock %}
 {% block body %}
-    <div>
+    <div id="progress-box">
+        {% if current_user.is_authenticated %}
+            <div id="username">
+                {{session['username']}}
+            </div>
+        {% endif %}
+        <div id="level">
+            Niv. {{lvl}}
+        </div>
+        <div id="progress-bar">
+            <div id="current-progress" style="width:{{L_info_xp[1]/L_info_xp[2]*100}}%;"></div>
+        </div>
+        <div id="progress-data">
+            {{progress}}%
+        </div>
+    </div>
+    <div id="other-data">
         <div>Adresse email reliée à votre compte : {{email}}</div>
         <div>Niveau de votre compte : {{lvl}}</div>
-        <div>Avancée de l'expérience : {{L_info_xp[0]}} -> {{L_info_xp[1]}} -> {{L_info_xp[2]}}</div>
-        <div>Vos <a href="succes">succès</a></div>
+        <div>Avancée de l'expérience : {{L_info_xp[1]}}/{{L_info_xp[2]}}</div>
+        <div>Expérience totale: {{xp}}</div>
     </div>
 {% endblock %}
