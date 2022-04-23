@@ -388,19 +388,7 @@ def stat():
 
     return render_template("statistiques.html", liste=[nb_parties,nb_vict,taux_vict,xp,moyenne,meilleur])
 
-#Statistiques Big50
-@app.route('/statistiques-big50')
-@login_required
-def stat_big50():
-    user=session["username"]
-    #Connection a la bdd
-    data=recup_data(user)
-    #Selection des stats d'un joueur en particulier
-    nb_vict,nb_parties,xp,taux_vict=selection_joueur(user,data)
-    #Tracer histogramme
-    moyenne,inutile,meilleur=trace_histo(user,"Big50")
 
-    return render_template("statistiques-big50.html", liste=[nb_parties,nb_vict,taux_vict,xp,moyenne])
 
 #Statistiques Survie
 @app.route('/statistiques-survie')
@@ -416,6 +404,34 @@ def stat_survie():
 
     return render_template("statistiques-survie.html", liste=[nb_parties,nb_vict,taux_vict,xp,moyenne])
 
+#Statistiques Big50
+@app.route('/statistiques-big50')
+@login_required
+def stat_big50():
+    user=session["username"]
+    #Connection a la bdd
+    data=recup_data(user)
+    #Selection des stats d'un joueur en particulier
+    nb_vict,nb_parties,xp,taux_vict=selection_joueur(user,data)
+    #Tracer histogramme
+    moyenne,inutile,meilleur=trace_histo(user,"Big50")
+
+    return render_template("statistiques-big50.html", liste=[nb_parties,nb_vict,taux_vict,xp,moyenne])
+
+
+#Statistiques CLM
+@app.route('/statistiques-clm')
+@login_required
+def stat_clm():
+    user=session["username"]
+    #Connection a la bdd
+    data=recup_data(user)
+    #Selection des stats d'un joueur en particulier
+    nb_vict,nb_parties,xp,taux_vict=selection_joueur(user,data)
+    #Tracer histogramme
+    moyenne,inutile,meilleur=trace_histo(user,"CLM")
+
+    return render_template("statistiques-clm.html", liste=[nb_parties,nb_vict,taux_vict,xp,moyenne])
 
 
 #Historique

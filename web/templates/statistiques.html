@@ -1,39 +1,40 @@
-<!DOCTYPE html>
 {% extends "index.html" %}
-
-<html>
-
 {% block head %}
-    <head>
-        <meta charset="utf-8" />
-        <link rel="stylesheet" href="../static/stat.css" />
-        <title>Statistiques - Worlde DELUXE</title>
-    </head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../static/stat.css" />
+    <title>Statistiques - Worlde DELUXE</title>
 {% endblock %}
 
 {% block body %}
-    <body>
-   
-   <button class="bouton" onclick="window.location.href = 'historique';">Votre Historique</button>
-   <button class="bouton" onclick="window.location.href = 'succes';">Vos Succès</button>
-   <button class="bouton" onclick="window.location.href = 'statistiques-survie';">Mode de jeu Survie</button>
-   <button class="bouton" onclick="window.location.href = 'statistiques-big50';">Mode de jeu Big50</button>
-    
-    <h1 class="titre"> Parties classiques </h1>
-    
-      	<p class="graph"><img src="static/image.png" class="histogramme" alt="image" title="Histogramme"></p> 
-    	<div class="box">
-	<p><br>Parties jouées : {{liste[0]}} 
-	<br><br>Parties gagnées : {{liste[1]}}
-	<br><br>Taux de victoire : {{liste[2]}}
-	<br><br>Nombre de coups moyen : {{liste[4]}}
-	<br><br>Meilleur partie : {{liste[5]}}
-	<br><br>Expérience : {{liste[3]}}
-	</p>
-	</div>
-		
+    <div class="corps">
+        <table>
+            <tr>
+                <td><button class="bouton" onclick="window.location.href = 'historique';">Votre Historique</button></td>
+                <td><button class="bouton" onclick="window.location.href = 'statistiques-survie';">Survie</button></td>
+                <td><button class="bouton" onclick="window.location.href = 'statistiques-big50';">Big50</button></td>
+                <td><button class="bouton" onclick="window.location.href = 'statistiques-big50';">Contre la montre</button></td>
+            </tr>
+            <tr>
+                <td><button class="bouton" onclick="window.location.href = 'succes';">Vos Succès</button></td>
+            </tr>
+        </table>
+        <h1 class="titre"> Parties classiques</h1>
+        
+        <div class="box_graph">
+            <div class="box">
+                <p>
+                    <br>Parties jouées : {{liste[0]}} 
+                    <br><br>Parties gagnées : {{liste[1]}}
+                    <br><br>Taux de victoire : {{liste[2]}}
+                    <br><br>Nombre de coups moyen : {{liste[4]}}
+                    <br><br>Meilleur partie : {{liste[5]}}
+                    <br><br>Expérience : {{liste[3]}}
+                </p>
+            </div>
+            <div class="graph">
+                <img src="static/image.png" class="histogramme" alt="image" title="Histogramme">
+            </div>
+        </div>
+    </div>
 {% endblock %}
-
-</html>
-
 
