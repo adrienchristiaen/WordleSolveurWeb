@@ -384,37 +384,37 @@ def stat():
     #Selection des stats d'un joueur en particulier
     nb_vict,nb_parties,xp,taux_vict=selection_joueur(user,data)
     #Tracer histogramme
-    moyenne,meilleur=trace_histo(user)
+    moyenne,meilleur,inutile=trace_histo(user,"Classique")
 
     return render_template("statistiques.html", liste=[nb_parties,nb_vict,taux_vict,xp,moyenne,meilleur])
 
-#Statistiques MDJ1
-@app.route('/statistiques-mdj1')
+#Statistiques Big50
+@app.route('/statistiques-big50')
 @login_required
-def stat_mdj1():
+def stat_big50():
     user=session["username"]
     #Connection a la bdd
     data=recup_data(user)
     #Selection des stats d'un joueur en particulier
     nb_vict,nb_parties,xp,taux_vict=selection_joueur(user,data)
     #Tracer histogramme
-    moyenne=trace_histo(user)
+    moyenne,inutile,meilleur=trace_histo(user,"Big50")
 
-    return render_template("statistiques-mdj1.html", liste=[nb_parties,nb_vict,taux_vict,xp,moyenne])
+    return render_template("statistiques-big50.html", liste=[nb_parties,nb_vict,taux_vict,xp,moyenne])
 
-#Statistiques MDJ2
-@app.route('/statistiques-mdj2')
+#Statistiques Survie
+@app.route('/statistiques-survie')
 @login_required
-def stat_mdj2():
+def stat_survie():
     user=session["username"]
     #Connection a la bdd
     data=recup_data(user)
     #Selection des stats d'un joueur en particulier
     nb_vict,nb_parties,xp,taux_vict=selection_joueur(user,data)
     #Tracer histogramme
-    moyenne=trace_histo(user)
+    moyenne,inutile,meilleur=trace_histo(user,"Survie")
 
-    return render_template("statistiques-mdj2.html", liste=[nb_parties,nb_vict,taux_vict,xp,moyenne])
+    return render_template("statistiques-survie.html", liste=[nb_parties,nb_vict,taux_vict,xp,moyenne])
 
 
 

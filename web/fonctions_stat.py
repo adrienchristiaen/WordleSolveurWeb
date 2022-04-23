@@ -23,11 +23,11 @@ def recup_data(user):
     con.close()
     return(data)
 
-def trace_histo(user):              #ET CALCULE MOYENNE
+def trace_histo(user,mdj):              #ET CALCULE MOYENNE
     histo=[]
     con=sqlite3.connect('wordle.sql')
     cur = con.cursor()
-    for i in cur.execute("SELECT * FROM Historique WHERE Identifiant = (?) AND Mode_de_jeu = (?)", ([user,"Classique"])):
+    for i in cur.execute("SELECT * FROM Historique WHERE Identifiant = (?) AND Mode_de_jeu = (?)", ([user,mdj])):
         histo.append(i)
     con.commit()
     con.close()
@@ -45,9 +45,11 @@ def trace_histo(user):              #ET CALCULE MOYENNE
         moyenne=moyenne[:3]
     
     if x==[]:
-        meilleur=0
+        meilleur_classique=0
+        meilleur_score=0
     else:
-        meilleur=min(x)
+        meilleur_classique=min(x)
+        meilleur_score=max(x)
 
     plt.clf()
     plt.hist(x, range=(0, 10), bins=10, rwidth = 0.6, align='left')
@@ -55,7 +57,7 @@ def trace_histo(user):              #ET CALCULE MOYENNE
     plt.ylabel('Nombres X de coups')
     plt.title("Nombres de parties gagnées en X coups")
     plt.savefig('static/image.png')
-    return(moyenne,meilleur)
+    return(moyenne,meilleur_classique,meilleur_score)
 
 def selection_joueur(user,data):
     nb_vict=data[4]
