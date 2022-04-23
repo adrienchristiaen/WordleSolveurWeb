@@ -348,7 +348,7 @@ def rejouer():
     #______________________________________________________________________#
 
     #_____________On actualise la table selon le mode de jeu_______________#
-    if mode_de_jeu == 'classique' or (mode_de_jeu == 'survie' and vie == 0) or (mode_de_jeu == 'big50' and nb_essais_big50 == 0) or (mode_de_jeu == 'clm' and chrono(depart_clm))[0] == '00:00':
+    if mode_de_jeu == 'classique' or (mode_de_jeu == 'survie' and vie == 0) or (mode_de_jeu == 'big50' and nb_essais_big50 == 0) or (mode_de_jeu == 'clm' and chrono(depart_clm)[0]) == '00:00':
         cur.execute("INSERT INTO Modes VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",(nb_essais,nb_lettres,'','','',mode_de_jeu,3,0,50,0,'',0))
         connection.commit()
     if mode_de_jeu == 'survie' and vie !=0 :
