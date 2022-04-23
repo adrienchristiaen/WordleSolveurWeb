@@ -100,3 +100,45 @@ td
     align-items: flex-start;
     justify-content: space-between;
 }
+
+/* ---------------------- Tout ce qui est en lien avec l'expérience --------------------- */
+
+#progress-box{
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+    margin: 20px;
+    font-size: 1.5rem;
+}
+
+#progress-bar{
+    height: 30px;
+    width: 350px;
+    background-color: darkcyan;
+}
+
+#current-progress{
+    height: 30px;
+    background-color: darkblue;
+}
+
+#progress-data{
+    font-weight: bold;
+    align-self: flex-end;
+}
+
+#level{
+    font-weight: bold;
+    align-self: flex-start;
+}
+
+#username{
+    font-weight: bold;
+    align-self: flex-start;
+}
+
+#progress-box-position{
+    display: flex;
+    flex-direction: row-reverse;
+}
+/* ------------------------------------------------------------------------------------------ */

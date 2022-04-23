@@ -5,6 +5,24 @@
 {% endblock %}
 {% block body %}
 <div class = "corps">
+    {% if current_user.is_authenticated %}
+        <div id="progress-box-position">
+            <div id="progress-box">
+                <div id="username">
+                    {{session['username']}}
+                </div>
+                <div id="level">
+                    Niv. {{lvl}}
+                </div>
+                <div id="progress-bar">
+                    <div id="current-progress" style="width:{{L_info_xp[1]/L_info_xp[2]*100}}%;"></div>
+                </div>
+                <div id="progress-data">
+                    {{progress}}%
+                </div>
+            </div>
+        </div>
+    {% endif %}
     <!-- Flash -->
     {% with messages = get_flashed_messages() %}
         {% if messages %}

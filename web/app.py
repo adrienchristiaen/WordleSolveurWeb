@@ -117,6 +117,28 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
     print('liste_etat_lettres :',liste_etat_lettres)
     #______________________________________________________________________#
 
+    #_________________Actualisation de la barre d'expérience_______________#
+    #Cette fonctionnalité est réservée au joueurs connectés
+    if current_user.is_authenticated:
+        #Connexion BD
+        con=sqlite3.connect('wordle.sql')
+        cur = con.cursor()
+        #Expérience joueur
+        req = cur.execute("SELECT Experience FROM Utilisateur WHERE Nom_utilisateur = (?)", ([session['username']]))
+        elements = req.fetchall()
+        xp = elements[0][0]
+        #Calcul niveau joueur
+        lvl = level_function(xp)
+        #Infos expériences
+        L_info_xp = lvl_info(xp)
+        #Pourcentage de progression
+        progress = int(L_info_xp[1]/L_info_xp[2]*100)
+    
+    #Valeurs par défaut
+    if not current_user.is_authenticated:
+        xp, lvl, L_info_xp, progress = 0,0,[0,0,0],0
+    #______________________________________________________________________#
+
     #____________Si la partie commmence pour chaque mode de jeu____________#
     if mot_cherche=='':
         mot_propose = ''
@@ -206,8 +228,9 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
 
                         experience=cur.execute("SELECT Experience FROM Utilisateur WHERE Nom_utilisateur=(?) ",([user]))
                         experience=experience.fetchall()[0][0]
-                        #print("experience",experience)
+                        print("experience",experience)
                         experience+=250*(nb_lettres/5)
+                        print("experience",experience)
 
                         cur.execute("UPDATE Utilisateur SET Nb_victoires_classique = (?), Experience = (?) WHERE Nom_utilisateur=(?)",(nb_victoires,experience,user))
                         id_partie=cur.execute("SELECT COUNT(*) FROM Historique")
@@ -268,10 +291,10 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
         
             #_______________________________________________________________________#
             if etat_lettres == '2'*nb_lettres:
-                return render_template("accueil.html",nb_lettres=nb_lettres, nb_essais=nb_essais,mode_de_jeu=mode_de_jeu,mot_cherche=mot_cherche, liste_mot_propose=liste_mot_propose,liste_etat_lettres=liste_etat_lettres,vie=vie,score_survie=score_survie,nb_essais_big50=nb_essais_big50,score_big50=score_big50,timer1=timer,timer2=json.dumps(timer_dyn),score_clm=score_clm)
+                return render_template("accueil.html",nb_lettres=nb_lettres, nb_essais=nb_essais,mode_de_jeu=mode_de_jeu,mot_cherche=mot_cherche, liste_mot_propose=liste_mot_propose,liste_etat_lettres=liste_etat_lettres,vie=vie,score_survie=score_survie,nb_essais_big50=nb_essais_big50,score_big50=score_big50,timer1=timer,timer2=json.dumps(timer_dyn),score_clm=score_clm, lvl=lvl, L_info_xp=L_info_xp, progress=progress, xp=xp)
             else:
                 liste_mot_propose = place_premiere_lettre(nb_lettres,liste_mot_propose,mot_cherche,point) #On place la première lettre dans le mot a deviné
-                return render_template("accueil.html",nb_lettres=nb_lettres, nb_essais=nb_essais,mode_de_jeu=mode_de_jeu,mot_cherche=mot_cherche, liste_mot_propose=liste_mot_propose,liste_etat_lettres=liste_etat_lettres,vie=vie,score_survie=score_survie,nb_essais_big50=nb_essais_big50,score_big50=score_big50,timer1=timer,timer2=json.dumps(timer_dyn),score_clm=score_clm)
+                return render_template("accueil.html",nb_lettres=nb_lettres, nb_essais=nb_essais,mode_de_jeu=mode_de_jeu,mot_cherche=mot_cherche, liste_mot_propose=liste_mot_propose,liste_etat_lettres=liste_etat_lettres,vie=vie,score_survie=score_survie,nb_essais_big50=nb_essais_big50,score_big50=score_big50,timer1=timer,timer2=json.dumps(timer_dyn),score_clm=score_clm, lvl=lvl, L_info_xp=L_info_xp, progress=progress, xp=xp)
         
         #La distrubution d'expérience pour les modes avec timer doit se faire en dehors de la vérification des mots
         if current_user.is_authenticated and mode_de_jeu == 'clm' and chrono(depart_clm)[0] == '00:00':
@@ -284,20 +307,20 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
             cur.execute("UPDATE Utilisateur SET Experience = (?) WHERE Nom_utilisateur=(?)",(experience,user))
             con.commit()
             if etat_lettres == '2'*nb_lettres:
-                return render_template("accueil.html",nb_lettres=nb_lettres, nb_essais=nb_essais,mode_de_jeu=mode_de_jeu,mot_cherche=mot_cherche, liste_mot_propose=liste_mot_propose,liste_etat_lettres=liste_etat_lettres,vie=vie,score_survie=score_survie,nb_essais_big50=nb_essais_big50,score_big50=score_big50,timer1=timer,timer2=json.dumps(timer_dyn),score_clm=score_clm)
+                return render_template("accueil.html",nb_lettres=nb_lettres, nb_essais=nb_essais,mode_de_jeu=mode_de_jeu,mot_cherche=mot_cherche, liste_mot_propose=liste_mot_propose,liste_etat_lettres=liste_etat_lettres,vie=vie,score_survie=score_survie,nb_essais_big50=nb_essais_big50,score_big50=score_big50,timer1=timer,timer2=json.dumps(timer_dyn),score_clm=score_clm, lvl=lvl, L_info_xp=L_info_xp, progress=progress, xp=xp)
             else:
                 liste_mot_propose = place_premiere_lettre(nb_lettres,liste_mot_propose,mot_cherche,point) #On place la première lettre dans le mot a deviné
-                return render_template("accueil.html",nb_lettres=nb_lettres, nb_essais=nb_essais,mode_de_jeu=mode_de_jeu,mot_cherche=mot_cherche, liste_mot_propose=liste_mot_propose,liste_etat_lettres=liste_etat_lettres,vie=vie,score_survie=score_survie,nb_essais_big50=nb_essais_big50,score_big50=score_big50,timer1=timer,timer2=json.dumps(timer_dyn),score_clm=score_clm)
+                return render_template("accueil.html",nb_lettres=nb_lettres, nb_essais=nb_essais,mode_de_jeu=mode_de_jeu,mot_cherche=mot_cherche, liste_mot_propose=liste_mot_propose,liste_etat_lettres=liste_etat_lettres,vie=vie,score_survie=score_survie,nb_essais_big50=nb_essais_big50,score_big50=score_big50,timer1=timer,timer2=json.dumps(timer_dyn),score_clm=score_clm, lvl=lvl, L_info_xp=L_info_xp, progress=progress, xp=xp)
 
         else:
             #print("mot non valide")
             print(mot_propose)
-            return render_template("accueil_fail.html",nb_lettres=nb_lettres, nb_essais=nb_essais,mode_de_jeu=mode_de_jeu,mot_cherche=mot_cherche, liste_mot_propose=liste_mot_propose,liste_etat_lettres=liste_etat_lettres,vie=vie,score_survie=score_survie,nb_essais_big50=nb_essais_big50,score_big50=score_big50,timer1=timer,timer2=json.dumps(timer_dyn),score_clm=score_clm)
+            return render_template("accueil_fail.html",nb_lettres=nb_lettres, nb_essais=nb_essais,mode_de_jeu=mode_de_jeu,mot_cherche=mot_cherche, liste_mot_propose=liste_mot_propose,liste_etat_lettres=liste_etat_lettres,vie=vie,score_survie=score_survie,nb_essais_big50=nb_essais_big50,score_big50=score_big50,timer1=timer,timer2=json.dumps(timer_dyn),score_clm=score_clm, lvl=lvl, L_info_xp=L_info_xp, progress=progress, xp=xp)
         
     else:
         print("Le mot à trouver est : ",mot_cherche)
         liste_mot_propose = place_premiere_lettre(nb_lettres,liste_mot_propose,mot_cherche,point) #On place la première lettre dans le mot a deviné
-        return render_template("accueil.html",nb_lettres=nb_lettres, nb_essais=nb_essais,mode_de_jeu=mode_de_jeu,mot_cherche=mot_cherche, liste_mot_propose=liste_mot_propose,liste_etat_lettres=liste_etat_lettres,vie=vie,score_survie=score_survie,nb_essais_big50=nb_essais_big50,score_big50=score_big50,timer1=timer,timer2=json.dumps(timer_dyn),score_clm=score_clm)
+        return render_template("accueil.html",nb_lettres=nb_lettres, nb_essais=nb_essais,mode_de_jeu=mode_de_jeu,mot_cherche=mot_cherche, liste_mot_propose=liste_mot_propose,liste_etat_lettres=liste_etat_lettres,vie=vie,score_survie=score_survie,nb_essais_big50=nb_essais_big50,score_big50=score_big50,timer1=timer,timer2=json.dumps(timer_dyn),score_clm=score_clm, lvl=lvl, L_info_xp=L_info_xp, progress=progress, xp=xp)
 
 
 
