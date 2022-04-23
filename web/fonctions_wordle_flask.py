@@ -278,8 +278,10 @@ def chrono(depart):
     actuel = datetime.timedelta(hours=1,minutes=minutes_actuel, seconds=secondes_actuel)
     time_delta = actuel - depart  
     delta_in_seconds = time_delta.total_seconds()
-    #print('delta',delta_in_seconds)
-    if delta_in_seconds >= 300:
+    if delta_in_seconds <0:
+        delta_in_seconds = temps_max*60 + 1
+    print('delta',delta_in_seconds)
+    if delta_in_seconds >= temps_max*60:
         temps_retour='00:00'
     else:   
         if delta_in_seconds==0:
@@ -295,5 +297,5 @@ def chrono(depart):
         else:
             temps_retour = '0'+str(minutes_timer)+':'+str(secondes_timer)
     #print(temps_retour)
-    temps_retour_dyn = 60 * int(temps_retour[1]) + 10 * int(temps_retour[3]) + int(temps_retour[4])
+    temps_retour_dyn = temps_max*60 - delta_in_seconds
     return temps_retour,temps_retour_dyn
