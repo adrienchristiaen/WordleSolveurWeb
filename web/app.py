@@ -232,6 +232,33 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
                         experience+=250*(nb_lettres/5)
                         print("experience",experience)
 
+                        #Gestion des succès
+                        nb_coups = nb_essais[0]-nb_essais[-1]
+                        if nb_coups == 4:
+                            req = cur.execute("SELECT Etat FROM Quetes_rea WHERE Identifiant=(?) AND Id_quete=(0)",([user]))
+                            etat_quete = req[0][0]
+                            if etat_quete == 0:
+                                cur.execute("UPDATE Quetes_rea SET Etat =(TRUE) WHERE Identifiant=(?) AND Id_quete=(0)",([user]))
+                                experience += 1000
+                        if nb_victoires == 5:
+                            cur.execute("UPDATE Quetes_rea SET Etat =(TRUE) WHERE Identifiant=(?) AND Id_quete=(4)",([user]))
+                            experience += 1000
+                        if nb_victoires == 10:
+                            cur.execute("UPDATE Quetes_rea SET Etat =(TRUE) WHERE Identifiant=(?) AND Id_quete=(5)",([user]))
+                            experience += 2000
+                        if nb_victoires == 20:
+                            cur.execute("UPDATE Quetes_rea SET Etat =(TRUE) WHERE Identifiant=(?) AND Id_quete=(6)",([user]))
+                            experience += 3000
+                        if nb_victoires == 50:
+                            cur.execute("UPDATE Quetes_rea SET Etat =(TRUE) WHERE Identifiant=(?) AND Id_quete=(7)",([user]))
+                            experience += 5000
+                        if nb_victoires == 100:
+                            cur.execute("UPDATE Quetes_rea SET Etat =(TRUE) WHERE Identifiant=(?) AND Id_quete=(8)",([user]))
+                            experience += 10000
+                        if nb_victoires == 1000:
+                            cur.execute("UPDATE Quetes_rea SET Etat =(TRUE) WHERE Identifiant=(?) AND Id_quete=(9)",([user]))
+                            experience += 100000
+
                         cur.execute("UPDATE Utilisateur SET Nb_victoires_classique = (?), Experience = (?) WHERE Nom_utilisateur=(?)",(nb_victoires,experience,user))
                         id_partie=cur.execute("SELECT COUNT(*) FROM Historique")
                         id_partie=id_partie.fetchall()[0][0]
