@@ -68,6 +68,7 @@ td
     display:flex;
     align-items: flex-start;
     justify-content: space-between;
+    margin-bottom: 5%;
 }
 
 .vie
@@ -79,7 +80,7 @@ td
 .score
 {
     text-align: center;
-    width: 50%; 
+    width: 50%;
 }
 
 
@@ -90,6 +91,7 @@ td
     display:flex;
     align-items: flex-start;
     justify-content: space-between;
+    margin-bottom: 5%;
 }
 
 
@@ -99,6 +101,7 @@ td
     display:flex;
     align-items: flex-start;
     justify-content: space-between;
+    margin-bottom: 5%;
 }
 
 /* ---------------------- Tout ce qui est en lien avec l'expérience --------------------- */

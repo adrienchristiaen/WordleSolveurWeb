@@ -238,7 +238,7 @@
             {% endfor %}
         </table>
         <div class="proposition">
-            {% if timer != '00:00' %}
+            {% if timer1 != '00:00' %}
                 {% set win = '2'*nb_lettres | int %}
                 {% if liste_etat_lettres[nb_essais[0]-nb_essais[-1]-1] == win %}
                     <form method="POST" action="/rejouer">
@@ -273,25 +273,31 @@
         </div>
         <div class="clm">
             <div class="vie">
-                <h3> Temps restant : {{timer1}}</h3>
                 <div>
-                    <span id="time">{{timer1}}</span>
+                    <span id="time" style="font-size:2rem">{{timer1}}</span>
                     <script>
                         function startTimer(duration, display) 
                         {
                             var timer = duration, minutes, seconds;
                             setInterval(function () {
-                                minutes = parseInt(timer / 60, 10);
-                                seconds = parseInt(timer % 60, 10);
-
-                                minutes = minutes < 10 ? "0" + minutes : minutes;
-                                seconds = seconds < 10 ? "0" + seconds : seconds;
-
+                                if (--timer < 0) {
+                                    timer = 0;
+                                    minutes = parseInt(timer / 60, 10);
+                                    seconds = parseInt(timer % 60, 10);
+                                    
+                                    minutes = minutes < 10 ? "0" + minutes : minutes;
+                                    seconds = seconds < 10 ? "0" + seconds : seconds;
+                                }
+                                else{
+                                    minutes = parseInt(timer / 60, 10);
+                                    seconds = parseInt(timer % 60, 10);
+                                    
+                                    minutes = minutes < 10 ? "0" + minutes : minutes;
+                                    seconds = seconds < 10 ? "0" + seconds : seconds;
+                                }
                                 display.textContent = minutes + ":" + seconds;
 
-                                if (--timer < 0) {
-                                    timer = duration;
-                                }
+
                             }, 1000);
                         }
 
@@ -303,8 +309,11 @@
                     </script>
                 </div>
             </div>
-            <div class="score">
-                <h3>Nombre de mot trouvés : {{score_clm}}</h3>
+            <div class="score" style="margin-top: 10px;">
+                {% set strscore = score_clm | string %}
+                {% for chiffre in strscore %}
+                    <img src="../static/Survie/Score/{{chiffre}}.png">
+                {% endfor %}
             </div>
         </div>
     {% endif %}
