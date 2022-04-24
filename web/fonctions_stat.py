@@ -11,7 +11,6 @@ from datetime import date
 
 
 
-#-------------------------------------------------PARTIE CLASSIQUE--------------------------------------------
 def recup_data(user):
     data=[]
     con=sqlite3.connect('wordle.sql')
@@ -54,8 +53,12 @@ def trace_histo(user,mdj):              #ET CALCULE MOYENNE
     plt.clf()
     plt.hist(x, range=(0, 10), bins=10, rwidth = 0.6, align='left')
     plt.xlabel('Nombre de parties')
-    plt.ylabel('Nombres X de coups')
-    plt.title("Nombres de parties gagnées en X coups")
+    if mdj=="Classique":
+        plt.ylabel('Nombres X de coups')
+        plt.title("Nombres de parties gagnées en X coups")
+    else:
+        plt.ylabel('Score')
+        plt.title("Scores des différentes parties")
     plt.savefig('static/image.png')
     return(moyenne,meilleur_classique,meilleur_score)
 
@@ -70,4 +73,53 @@ def selection_joueur(user,data):
     xp=data[6]
     return(nb_vict,nb_parties,xp,taux_vict)
 
-#--------------------------------------------------PARTIE MDJ 1 ------------------------------------------------
+
+def histo_histo(user,mdj):
+    histo=[]
+    con=sqlite3.connect('wordle.sql')
+    cur = con.cursor()
+    for i in cur.execute("SELECT * FROM Historique WHERE Identifiant = (?) AND Mode_de_jeu = (?)", ([user,mdj])):
+        histo.append(i)
+    con.commit()
+    con.close()
+
+    histo=histo[-5:]
+    x=[]
+    y=[]
+
+    for u in histo:
+        y.append(u[3])
+        x.append(u[4])
+
+    x_test=[i for i in range(1,len(x)+1)]
+    print(x)
+    print(y)
+
+    plt.clf()
+    plt.plot(x_test,y,marker="o")
+    plt.xticks(x_test,x)
+    plt.xlabel('')
+    plt.ylabel('Score')
+    plt.title("Progressqion sur les 5 dernières parties")
+    plt.savefig('static/image2.png')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

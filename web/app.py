@@ -435,6 +435,7 @@ def stat():
     nb_vict,nb_parties,xp,taux_vict=selection_joueur(user,data)
     #Tracer histogramme
     moyenne,meilleur,inutile=trace_histo(user,"Classique")
+    histo_histo(user,"Classique")
 
     return render_template("statistiques.html", liste=[nb_parties,nb_vict,taux_vict,xp,moyenne,meilleur])
 
@@ -451,6 +452,7 @@ def stat_survie():
     nb_vict,nb_parties,xp,taux_vict=selection_joueur(user,data)
     #Tracer histogramme
     moyenne,inutile,meilleur=trace_histo(user,"Survie")
+    histo_histo(user,"Survie")
 
     return render_template("statistiques-survie.html", liste=[nb_parties,nb_vict,taux_vict,xp,moyenne])
 
@@ -465,6 +467,7 @@ def stat_big50():
     nb_vict,nb_parties,xp,taux_vict=selection_joueur(user,data)
     #Tracer histogramme
     moyenne,inutile,meilleur=trace_histo(user,"Big50")
+    histo_histo(user,"Big50")
 
     return render_template("statistiques-big50.html", liste=[nb_parties,nb_vict,taux_vict,xp,moyenne])
 
@@ -480,6 +483,7 @@ def stat_clm():
     nb_vict,nb_parties,xp,taux_vict=selection_joueur(user,data)
     #Tracer histogramme
     moyenne,inutile,meilleur=trace_histo(user,"CLM")
+    histo_histo(user,"CLM")
 
     return render_template("statistiques-clm.html", liste=[nb_parties,nb_vict,taux_vict,xp,moyenne])
 

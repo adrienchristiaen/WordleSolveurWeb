@@ -15,7 +15,6 @@
 
 p
 {
-	margin-left: 40px;
 	text-align: center;
 	font-size: 30px;
 }
@@ -27,14 +26,18 @@ p
     display:flex;
     align-items: flex-start;
     justify-content: space-between;
-	margin-bottom: 5%;
 }
 
 
 .graph
 {
 	width: 40%;
-	margin-right:8%;
+}
+
+.graph2
+{
+	width: 40%;
+	margin-right:0.5%;
 }
 
 .histogramme
@@ -67,7 +70,8 @@ p
 	width:35%;
 	height:50%;
 	border-radius:20px;
-	margin-left: 8%;
+	margin-left: 0.5%;
+	margin-bottom: 3%;
 }
 
 
