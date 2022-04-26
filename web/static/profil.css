@@ -1,19 +1,65 @@
-#progress-box{
-    display: flex;
-    flex-direction: column;
-    width: fit-content;
-    margin: 20px;
+.corps
+{
+    width:100%;
+    margin-top: 5%;
 }
 
-#progress-bar{
+.pseudo
+{
+    width:100%;
+    text-align: center;
+    margin-bottom: 2%;
+}
+
+
+.cadre_photo
+{
+    width: fit-content;
+    margin:auto;
+    padding:0.5rem;
+    background-color:#fff;
+    border-radius:6px;
+    box-shadow:0 2px 3px rgba(10,10,10,.1),0 0 0 10px rgba(10,10,10,.1);
+    color:#4a4a4a;
+    display: flex;
+    justify-content: center;
+}
+
+
+.photo
+{
+    margin-top: 0px;
+}
+
+
+.niveau
+{
+    text-align:center;
+    margin-top:4%;
+    margin-bottom:2%;
+}
+
+
+.ensemble_bar
+{
+    margin:auto;
+    display: flex;
+    justify-content: center;
+    margin-top:2%;
+    margin-bottom:1%;
+}
+
+#progress-bar
+{
     height: 30px;
     width: 200px;
-    background-color: darkcyan;
+    background-color: white;
+    box-shadow:0 2px 3px rgba(10,10,10,.1),0 0 0 10px rgba(10,10,10,.1);
 }
 
 #current-progress{
     height: 30px;
-    background-color: darkblue;
+    background-color: red;
 }
 
 #progress-data{
@@ -21,17 +67,13 @@
     align-self: flex-end;
 }
 
-#level{
-    font-weight: bold;
-    align-self: flex-start;
+
+.donnees_utilisateur
+{
+    margin-top:10%;
+    margin-bottom:10%;
+    margin-left:5%;
 }
 
-#username{
-    font-weight: bold;
-    align-self: flex-start;
-}
 
-#other-data{
-    font-weight: bold;
-    margin: 20px;
-}
+

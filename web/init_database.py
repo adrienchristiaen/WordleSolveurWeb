@@ -19,15 +19,12 @@ cursor.execute("""create table Utilisateur(
     Email varchar, 
     Nb_victoires_classique integer, 
     Nb_defaites_classique integer, 
-    Experience integer, 
+    Experience integer,
+    Photo varchar, 
     PRIMARY KEY(Id))""")
 
-# Utilisateur_list = [
-#     (0, "Adrien", "test12", "christiaen.adrien@gmail.com", 10, 10, "10%")
-# ]
-# cursor.executemany("insert into Utilisateur values(?,?,?,?,?,?,?)", Utilisateur_list)
 
-#Table Historique                                   Nb_coups ---> Score pour mieux gere diff mdj
+#Table Historique                                  
 cursor.execute("""create table Historique(
     Id_partie integer, 
     Identifiant varchar, 
@@ -78,7 +75,7 @@ cursor.execute("""create table Modes(
 #Encodage du mot de passe
 password = hashlib.sha224(bytes('test12',encoding='utf-8')).hexdigest()
 
-cursor.execute("INSERT INTO Utilisateur VALUES(0,'Adrien',?,'christiaen.adrien@gmail.com',0,0,0)", ([password]))
+cursor.execute("INSERT INTO Utilisateur VALUES(0,'Adrien',?,'christiaen.adrien@gmail.com',0,0,0,'profil3')", ([password]))
 
 cursor.execute("INSERT INTO Historique VALUES(0,'Adrien','Vrai',6,'10/03/2022','Classique','muret')")
 cursor.execute("INSERT INTO Historique VALUES(1,'Adrien','Faux',0,'10/03/2022','Classique','table')")

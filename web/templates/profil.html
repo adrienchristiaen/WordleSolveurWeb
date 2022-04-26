@@ -4,26 +4,39 @@
     <title>Profil - Worlde DELUXE</title>
 {% endblock %}
 {% block body %}
-    <div id="progress-box">
-        {% if current_user.is_authenticated %}
-            <div id="username">
-                {{session['username']}}
+    <div class = "corps">
+        <div class = "pseudo">
+            <p style="font-size:4rem;">{{session['username']}}</p>
+        </div>
+        <div class = "cadre_photo">
+            <div class = "photo">
+                <img src="../static/Profils/{{photo}}.png">
             </div>
-        {% endif %}
-        <div id="level">
-            Niv. {{lvl}}
+        </div> 
+        <div class = "niveau">
+            <h2>Niveau du joueur : {{lvl}}</h2>
         </div>
-        <div id="progress-bar">
-            <div id="current-progress" style="width:{{L_info_xp[1]/L_info_xp[2]*100}}%;"></div>
+        <div class="ensemble_bar">
+            <div id="progress-bar">
+                <div id="current-progress" style="width:{{L_info_xp[1]/L_info_xp[2]*100}}%;"></div>
+            </div>
         </div>
-        <div id="progress-data">
+        <div style="text-align: center;" id="progress-data">
             {{progress}}%
         </div>
+        <div class = "donnees_utilisateur">
+            <h2>Informations personnelles :</h2>
+            <h4 style="margin-left: 2%;">Adresse email reliée à votre compte : {{email}}</h4>
+            <h4 style="margin-left: 2%;">Avancée de l'expérience : {{L_info_xp[1]}}/{{L_info_xp[2]}}</h4>
+            <h4 style="margin-left: 2%;">Expérience totale: {{xp}}</h4>
+        </div>
+
     </div>
-    <div id="other-data">
-        <div>Adresse email reliée à votre compte : {{email}}</div>
-        <div>Niveau de votre compte : {{lvl}}</div>
-        <div>Avancée de l'expérience : {{L_info_xp[1]}}/{{L_info_xp[2]}}</div>
-        <div>Expérience totale: {{xp}}</div>
-    </div>
+
+
+
+
+
+
+
 {% endblock %}

@@ -666,8 +666,10 @@ def inscription():
                 #Comptage du nombre d'utilisateurs
                 req = cur.execute("SELECT COUNT(Nom_utilisateur) FROM utilisateur")
                 num = req.fetchone()[0] + 1
+                #Sélection au hasard de la photo de profil
+                photo = 'profil'+str(random.randint(1,10))
                 #Insertion de l'utilisateur dans la BD
-                cur.execute("INSERT INTO utilisateur(Id, Nom_utilisateur, Mot_de_passe, Email, Nb_victoires_classique, Nb_defaites_classique, Experience) VALUES (?,?,?,?,?,?,?)", (num, username, password, email, 0, 0, 0))#Certaines données s'initialisent à zéro (nb parties, xp...)
+                cur.execute("INSERT INTO utilisateur(Id, Nom_utilisateur, Mot_de_passe, Email, Nb_victoires_classique, Nb_defaites_classique, Experience, Photo) VALUES (?,?,?,?,?,?,?,?)", (num, username, password, email, 0, 0, 0,photo))#Certaines données s'initialisent à zéro (nb parties, xp...)
                 con.commit()
                 #Création du compte et connexion
                 session['username'] = username
@@ -744,13 +746,14 @@ def profil():
     con=sqlite3.connect('wordle.sql')
     cur = con.cursor()
     #Expérience joueur
-    req = cur.execute("SELECT Email, Experience FROM Utilisateur WHERE Nom_utilisateur = (?)", ([session['username']]))
+    req = cur.execute("SELECT Email, Experience, Photo FROM Utilisateur WHERE Nom_utilisateur = (?)", ([session['username']]))
     elements = req.fetchall()
-    email, xp = elements[0][0], elements[0][1]
+    email, xp, photo = elements[0][0], elements[0][1], elements[0][2]
+    print("photo",photo)
     #Calcul niveau joueur
     lvl = level_function(xp)
     #Infos expériences
     L_info_xp = lvl_info(xp)
     #Pourcentage de progression
     progress = int(L_info_xp[1]/L_info_xp[2]*100)
-    return render_template('profil.html', email=email, lvl=lvl, L_info_xp=L_info_xp, progress=progress, xp=xp)
+    return render_template('profil.html', email=email, lvl=lvl, L_info_xp=L_info_xp, progress=progress, xp=xp, photo=photo)
