@@ -232,105 +232,10 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
                         experience+=250*(nb_lettres/5)
                         print("experience",experience)
 
-                        #Gestion des succès ----------------------------------------
+                        #_________On met à jour les succes_________#
                         nb_coups = nb_essais[0]-nb_essais[-1]
-                        #Succès réussite partie en 4 coups
-                        if nb_coups == 4:
-                            #Succès pour 4 coups ou moins
-                            req = cur.execute("SELECT Etat FROM Quetes_rea WHERE Identifiant=(?) AND Id_quete=(0)",([user]))
-                            req = req.fetchall()
-                            etat_quete = req[0][0]
-                            if etat_quete == 0:
-                                cur.execute("UPDATE Quetes_rea SET Etat =(TRUE) WHERE Identifiant=(?) AND Id_quete=(0)",([user]))
-                                experience += 1000
-                        #Succès réussite partie en 3 coups
-                        if nb_coups == 3:
-                            #Succès pour 4 coups ou moins
-                            req = cur.execute("SELECT Etat FROM Quetes_rea WHERE Identifiant=(?) AND Id_quete=(0)",([user]))
-                            req = req.fetchall()
-                            etat_quete = req[0][0]
-                            if etat_quete == 0:
-                                cur.execute("UPDATE Quetes_rea SET Etat =(TRUE) WHERE Identifiant=(?) AND Id_quete=(0)",([user]))
-                                experience += 1000
-                            #Succès pour 3 coups ou moins
-                            req = cur.execute("SELECT Etat FROM Quetes_rea WHERE Identifiant=(?) AND Id_quete=(1)",([user]))
-                            req = req.fetchall()
-                            etat_quete = req[0][0]
-                            if etat_quete == 0:
-                                cur.execute("UPDATE Quetes_rea SET Etat =(TRUE) WHERE Identifiant=(?) AND Id_quete=(1)",([user]))
-                                experience += 5000
-                        #Succès réussite partie en 2 coups
-                        if nb_coups == 2:
-                            #Succès pour 4 coups ou moins
-                            req = cur.execute("SELECT Etat FROM Quetes_rea WHERE Identifiant=(?) AND Id_quete=(0)",([user]))
-                            req = req.fetchall()
-                            etat_quete = req[0][0]
-                            if etat_quete == 0:
-                                cur.execute("UPDATE Quetes_rea SET Etat =(TRUE) WHERE Identifiant=(?) AND Id_quete=(0)",([user]))
-                                experience += 1000
-                            #Succès pour 3 coups ou moins
-                            req = cur.execute("SELECT Etat FROM Quetes_rea WHERE Identifiant=(?) AND Id_quete=(1)",([user]))
-                            req = req.fetchall()
-                            etat_quete = req[0][0]
-                            if etat_quete == 0:
-                                cur.execute("UPDATE Quetes_rea SET Etat =(TRUE) WHERE Identifiant=(?) AND Id_quete=(1)",([user]))
-                                experience += 5000
-                            #Succès pour 2 coups ou moins
-                            req = cur.execute("SELECT Etat FROM Quetes_rea WHERE Identifiant=(?) AND Id_quete=(2)",([user]))
-                            req = req.fetchall()
-                            etat_quete = req[0][0]
-                            if etat_quete == 0:
-                                cur.execute("UPDATE Quetes_rea SET Etat =(TRUE) WHERE Identifiant=(?) AND Id_quete=(2)",([user]))
-                                experience += 10000
-                        #Succès réussite partie en 1 coup
-                        if nb_coups == 1:
-                            #Succès pour 4 coups ou moins
-                            req = cur.execute("SELECT Etat FROM Quetes_rea WHERE Identifiant=(?) AND Id_quete=(0)",([user]))
-                            req = req.fetchall()
-                            etat_quete = req[0][0]
-                            if etat_quete == 0:
-                                cur.execute("UPDATE Quetes_rea SET Etat =(TRUE) WHERE Identifiant=(?) AND Id_quete=(0)",([user]))
-                                experience += 1000
-                            #Succès pour 3 coups ou moins
-                            req = cur.execute("SELECT Etat FROM Quetes_rea WHERE Identifiant=(?) AND Id_quete=(1)",([user]))
-                            req = req.fetchall()
-                            etat_quete = req[0][0]
-                            if etat_quete == 0:
-                                cur.execute("UPDATE Quetes_rea SET Etat =(TRUE) WHERE Identifiant=(?) AND Id_quete=(1)",([user]))
-                                experience += 5000
-                            #Succès pour 2 coups ou moins
-                            req = cur.execute("SELECT Etat FROM Quetes_rea WHERE Identifiant=(?) AND Id_quete=(2)",([user]))
-                            req = req.fetchall()
-                            etat_quete = req[0][0]
-                            if etat_quete == 0:
-                                cur.execute("UPDATE Quetes_rea SET Etat =(TRUE) WHERE Identifiant=(?) AND Id_quete=(2)",([user]))
-                                experience += 10000
-                            #Succès pour 1 coup
-                            req = cur.execute("SELECT Etat FROM Quetes_rea WHERE Identifiant=(?) AND Id_quete=(3)",([user]))
-                            req = req.fetchall()
-                            etat_quete = req[0][0]
-                            if etat_quete == 0:
-                                cur.execute("UPDATE Quetes_rea SET Etat =(TRUE) WHERE Identifiant=(?) AND Id_quete=(3)",([user]))
-                                experience += 100000
-                        if nb_victoires == 5:
-                            cur.execute("UPDATE Quetes_rea SET Etat =(TRUE) WHERE Identifiant=(?) AND Id_quete=(4)",([user]))
-                            experience += 1000
-                        if nb_victoires == 10:
-                            cur.execute("UPDATE Quetes_rea SET Etat =(TRUE) WHERE Identifiant=(?) AND Id_quete=(5)",([user]))
-                            experience += 2000
-                        if nb_victoires == 20:
-                            cur.execute("UPDATE Quetes_rea SET Etat =(TRUE) WHERE Identifiant=(?) AND Id_quete=(6)",([user]))
-                            experience += 3000
-                        if nb_victoires == 50:
-                            cur.execute("UPDATE Quetes_rea SET Etat =(TRUE) WHERE Identifiant=(?) AND Id_quete=(7)",([user]))
-                            experience += 5000
-                        if nb_victoires == 100:
-                            cur.execute("UPDATE Quetes_rea SET Etat =(TRUE) WHERE Identifiant=(?) AND Id_quete=(8)",([user]))
-                            experience += 10000
-                        if nb_victoires == 1000:
-                            cur.execute("UPDATE Quetes_rea SET Etat =(TRUE) WHERE Identifiant=(?) AND Id_quete=(9)",([user]))
-                            experience += 100000
-                        #------------------------------------------------------------
+                        maj_succes(nb_coups,nb_victoires,experience,[user])
+                        #_______________________________________________________________________#
 
                         cur.execute("UPDATE Utilisateur SET Nb_victoires_classique = (?), Experience = (?) WHERE Nom_utilisateur=(?)",(nb_victoires,experience,user))
                         id_partie=cur.execute("SELECT COUNT(*) FROM Historique")
@@ -419,7 +324,10 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
         
     else:
         print("Le mot à trouver est : ",mot_cherche)
-        if etat_lettres == '':
+        if len(etat_lettres)!=0:
+            etat_lettres = etat_lettres[0][0]
+
+        if etat_lettres != '2'*nb_lettres:
             liste_mot_propose = place_premiere_lettre(nb_lettres,liste_mot_propose,mot_cherche,point) #On place la première lettre dans le mot a deviné
         return render_template("accueil.html",nb_lettres=nb_lettres, nb_essais=nb_essais,mode_de_jeu=mode_de_jeu,mot_cherche=mot_cherche, liste_mot_propose=liste_mot_propose,liste_etat_lettres=liste_etat_lettres,vie=vie,score_survie=score_survie,nb_essais_big50=nb_essais_big50,score_big50=score_big50,timer1=timer,timer2=json.dumps(timer_dyn),score_clm=score_clm, lvl=lvl, L_info_xp=L_info_xp, progress=progress, xp=xp)
 
@@ -600,10 +508,10 @@ def succes():
     cur = con.cursor()
     req = cur.execute("SELECT * FROM Quetes")
     quetes = req.fetchall()
-    print(quetes)
+    #print(quetes)
     req = cur.execute("SELECT * FROM Quetes_rea WHERE Identifiant = (?)", ([session['username']]))
     quetes_rea = req.fetchall()
-    print(quetes_rea)
+    #print(quetes_rea)
     length = len(quetes)
     return render_template("succes.html", length=length, quetes=quetes, quetes_rea=quetes_rea)
 
@@ -750,7 +658,7 @@ def profil():
     req = cur.execute("SELECT Email, Experience, Photo FROM Utilisateur WHERE Nom_utilisateur = (?)", ([session['username']]))
     elements = req.fetchall()
     email, xp, photo = elements[0][0], elements[0][1], elements[0][2]
-    print("photo",photo)
+    #print("photo",photo)
     #Calcul niveau joueur
     lvl = level_function(xp)
     #Infos expériences
