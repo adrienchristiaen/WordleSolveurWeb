@@ -225,18 +225,11 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
                         nb_victoires=nb_victoires.fetchall()[0][0]
                         #print("nb_victoires",nb_victoires)
                         nb_victoires+=1
-
                         experience=cur.execute("SELECT Experience FROM Utilisateur WHERE Nom_utilisateur=(?) ",([user]))
                         experience=experience.fetchall()[0][0]
                         print("experience",experience)
                         experience+=250*(nb_lettres/5)
                         print("experience",experience)
-
-                        #_________On met à jour les succes_________#
-                        nb_coups = nb_essais[0]-nb_essais[-1]
-                        maj_succes(nb_coups,nb_victoires,experience,[user])
-                        #_______________________________________________________________________#
-
                         cur.execute("UPDATE Utilisateur SET Nb_victoires_classique = (?), Experience = (?) WHERE Nom_utilisateur=(?)",(nb_victoires,experience,user))
                         id_partie=cur.execute("SELECT COUNT(*) FROM Historique")
                         id_partie=id_partie.fetchall()[0][0]
@@ -244,6 +237,11 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
                         Partie=[id_partie,user,'Vrai',nb_essais[0]-nb_essais[-1],date_partie,'Classique',mot_cherche]  #ajout a la table historique
                         cur.execute("insert into Historique values(?,?,?,?,?,?,?)", Partie)
                         con.commit()
+                        #Mise à jour des succès classiques
+                        nb_coups = nb_essais[0]-nb_essais[-1]
+                        score_survie = score_survie[-1]
+                        maj_succes(experience, user, vie, score_big50, nb_coups, nb_victoires, score_survie)
+                        
                     else:
                         if nb_essais[-1]==0:
                             nb_defaites=cur.execute("SELECT Nb_defaites_classique FROM Utilisateur WHERE Nom_utilisateur=(?) ",([user]))
@@ -271,13 +269,17 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
                         print("experience",experience)
                         experience+=75*score_survie[-1]
                         print("experience",experience)
-                        cur.execute("UPDATE Utilisateur SET Experience = (?) WHERE Nom_utilisateur=(?)",(experience,user))
+                        cur.execute("UPDATE Utilisateur SET Experience = (?) WHERE Nom_utilisateur=(?)",(experience,user))                       
                         id_partie=cur.execute("SELECT COUNT(*) FROM Historique")
                         id_partie=id_partie.fetchall()[0][0]
                         date_partie=str(date.today())[5:]+"-"+str(date.today())[:4]
                         Partie=[id_partie,user,'Vrai',score_survie[-1],date_partie,'Survie',"NOPE"]  #ajout a la table historique
                         cur.execute("insert into Historique values(?,?,?,?,?,?,?)", Partie)
                         con.commit()
+                        #Mise à jour des succès survie
+                        nb_victoires, nb_coups = 0, 0#Initialisation
+                        score_survie = score_survie[-1]
+                        maj_succes(experience, user, vie, score_big50, nb_coups, nb_victoires, score_survie)
                         
                 if mode_de_jeu == 'big50':
                     if nb_essais_big50[-1] == 0:
@@ -293,6 +295,10 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
                         Partie=[id_partie,user,'Vrai',score_big50,date_partie,'Big 50',"NOPE"]  #ajout a la table historique
                         cur.execute("insert into Historique values(?,?,?,?,?,?,?)", Partie)
                         con.commit()
+                        #Mise à jour des succès big50
+                        nb_victoires, nb_coups = 0, 0#Initialisation
+                        score_survie = score_survie[-1]
+                        maj_succes(experience, user, vie, score_big50, nb_coups, nb_victoires, score_survie)
         
             #_______________________________________________________________________#
             if etat_lettres == '2'*nb_lettres:
@@ -301,7 +307,7 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
                 liste_mot_propose = place_premiere_lettre(nb_lettres,liste_mot_propose,mot_cherche,point) #On place la première lettre dans le mot a deviné
                 return render_template("accueil.html",nb_lettres=nb_lettres, nb_essais=nb_essais,mode_de_jeu=mode_de_jeu,mot_cherche=mot_cherche, liste_mot_propose=liste_mot_propose,liste_etat_lettres=liste_etat_lettres,vie=vie,score_survie=score_survie,nb_essais_big50=nb_essais_big50,score_big50=score_big50,timer1=timer,timer2=json.dumps(timer_dyn),score_clm=score_clm, lvl=lvl, L_info_xp=L_info_xp, progress=progress, xp=xp)
         
-        #La distrubution d'expérience pour les modes avec timer doit se faire en dehors de la vérification des mots
+        #La distrubution d'expérience/succès pour les modes avec timer doit se faire en dehors de la vérification des mots
         if current_user.is_authenticated and mode_de_jeu == 'clm' and chrono(depart_clm)[0] == '00:00':
             user=session["username"]
             experience=cur.execute("SELECT Experience FROM Utilisateur WHERE Nom_utilisateur=(?) ",([user]))
@@ -311,6 +317,9 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
             print("experience",experience)
             cur.execute("UPDATE Utilisateur SET Experience = (?) WHERE Nom_utilisateur=(?)",(experience,user))
             con.commit()
+            #Mise à jour des succès clm
+            maj_succes_clm(user, experience,score_clm)
+            #Renvoi vers l'accueil
             if etat_lettres == '2'*nb_lettres:
                 return render_template("accueil.html",nb_lettres=nb_lettres, nb_essais=nb_essais,mode_de_jeu=mode_de_jeu,mot_cherche=mot_cherche, liste_mot_propose=liste_mot_propose,liste_etat_lettres=liste_etat_lettres,vie=vie,score_survie=score_survie,nb_essais_big50=nb_essais_big50,score_big50=score_big50,timer1=timer,timer2=json.dumps(timer_dyn),score_clm=score_clm, lvl=lvl, L_info_xp=L_info_xp, progress=progress, xp=xp)
             else:
