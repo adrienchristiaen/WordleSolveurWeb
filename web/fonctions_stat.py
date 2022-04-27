@@ -30,6 +30,7 @@ def trace_histo(user,mdj):              #ET CALCULE MOYENNE
         histo.append(i)
     con.commit()
     con.close()
+    nb_partie=len(histo)
     x=[]
     for u in histo:
         if  u[3]!=0:
@@ -60,7 +61,7 @@ def trace_histo(user,mdj):              #ET CALCULE MOYENNE
         plt.ylabel('Score')
         plt.title("Scores des différentes parties")
     plt.savefig('static/image.png')
-    return(moyenne,meilleur_classique,meilleur_score)
+    return(moyenne,meilleur_classique,meilleur_score,nb_partie)
 
 def selection_joueur(user,data):
     nb_vict=data[4]
@@ -82,7 +83,6 @@ def histo_histo(user,mdj):
         histo.append(i)
     con.commit()
     con.close()
-
     histo=histo[-5:]
     x=[]
     y=[]

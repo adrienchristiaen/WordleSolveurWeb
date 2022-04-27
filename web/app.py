@@ -416,7 +416,7 @@ def stat():
     #Selection des stats d'un joueur en particulier
     nb_vict,nb_parties,xp,taux_vict=selection_joueur(user,data)
     #Tracer histogramme
-    moyenne,meilleur,inutile=trace_histo(user,"Classique")
+    moyenne,meilleur,inutile,inutile=trace_histo(user,"Classique")
     histo_histo(user,"Classique")
 
     return render_template("statistiques.html", liste=[nb_parties,nb_vict,taux_vict,xp,moyenne,meilleur])
@@ -433,10 +433,10 @@ def stat_survie():
     #Selection des stats d'un joueur en particulier
     nb_vict,nb_parties,xp,taux_vict=selection_joueur(user,data)
     #Tracer histogramme
-    moyenne,inutile,meilleur=trace_histo(user,"Survie")
+    moyenne,inutile,meilleur,nb_parties=trace_histo(user,"Survie")
     histo_histo(user,"Survie")
 
-    return render_template("statistiques-survie.html", liste=[nb_parties,nb_vict,taux_vict,xp,moyenne])
+    return render_template("statistiques-survie.html", liste=[nb_parties,nb_vict,taux_vict,xp,moyenne,meilleur])
 
 #Statistiques Big50
 @app.route('/statistiques-big50')
@@ -448,10 +448,10 @@ def stat_big50():
     #Selection des stats d'un joueur en particulier
     nb_vict,nb_parties,xp,taux_vict=selection_joueur(user,data)
     #Tracer histogramme
-    moyenne,inutile,meilleur=trace_histo(user,"Big50")
+    moyenne,inutile,meilleur,nb_parties=trace_histo(user,"Big50")
     histo_histo(user,"Big50")
 
-    return render_template("statistiques-big50.html", liste=[nb_parties,nb_vict,taux_vict,xp,moyenne])
+    return render_template("statistiques-big50.html", liste=[nb_parties,nb_vict,taux_vict,xp,moyenne,meilleur])
 
 
 #Statistiques CLM
@@ -464,10 +464,10 @@ def stat_clm():
     #Selection des stats d'un joueur en particulier
     nb_vict,nb_parties,xp,taux_vict=selection_joueur(user,data)
     #Tracer histogramme
-    moyenne,inutile,meilleur=trace_histo(user,"CLM")
+    moyenne,inutile,meilleur,nb_parties=trace_histo(user,"CLM")
     histo_histo(user,"CLM")
 
-    return render_template("statistiques-clm.html", liste=[nb_parties,nb_vict,taux_vict,xp,moyenne])
+    return render_template("statistiques-clm.html", liste=[nb_parties,nb_vict,taux_vict,xp,moyenne,meilleur])
 
 
 #Historique
