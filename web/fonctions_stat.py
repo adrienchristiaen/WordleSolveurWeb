@@ -40,7 +40,8 @@ def trace_histo(user,mdj):              #ET CALCULE MOYENNE
     for u in x:
         moyenne=moyenne+u
     if len(x)!=0:
-        moyenne=str(moyenne/len(x))
+        moyenne=(moyenne/len(x))
+    moyenne=str(moyenne)
     if len(moyenne)>=4:
         moyenne=moyenne[:3]
     
