@@ -41,7 +41,7 @@ def trace_histo(user,mdj):              #ET CALCULE MOYENNE
         moyenne=moyenne+u
     if len(x)!=0:
         moyenne=str(moyenne/len(x))
-    if len(x)>=4:
+    if len(moyenne)>=4:
         moyenne=moyenne[:3]
     
     if x==[]:
@@ -53,12 +53,12 @@ def trace_histo(user,mdj):              #ET CALCULE MOYENNE
 
     plt.clf()
     plt.hist(x, range=(0, 10), bins=10, rwidth = 0.6, align='left')
-    plt.xlabel('Nombre de parties')
+    plt.ylabel('Nombre de parties')
     if mdj=="Classique":
-        plt.ylabel('Nombres X de coups')
+        plt.xlabel('Nombres X de coups')
         plt.title("Nombres de parties gagnées en X coups")
     else:
-        plt.ylabel('Score')
+        plt.xlabel('Score')
         plt.title("Scores des différentes parties")
     plt.savefig('static/image.png',transparent=True)
     return(moyenne,meilleur_classique,meilleur_score,nb_partie)

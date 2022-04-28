@@ -427,7 +427,7 @@ def stat():
     #Tracer histogramme
     moyenne,meilleur,inutile,inutile=trace_histo(user,"Classique")
     histo_histo(user,"Classique")
-
+    print(moyenne)
     return render_template("statistiques.html", liste=[nb_parties,nb_vict,taux_vict,xp,moyenne,meilleur])
 
 
