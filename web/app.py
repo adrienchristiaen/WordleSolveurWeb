@@ -174,7 +174,11 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
 
     #________________Si le joueur vient de proposer un mot_________________#
     if request.method == "POST":
-        liste_mot_propose = place_premiere_lettre(nb_lettres,liste_mot_propose,mot_cherche,point)       #On place la première lettre dans le mot a deviné
+        if mode_de_jeu != 'clm':
+            liste_mot_propose = place_premiere_lettre(nb_lettres,liste_mot_propose,mot_cherche,point)       #On place la première lettre dans le mot a deviné
+        else:
+            if chrono(depart_clm)[0] != '00:00' or nb_essais[0]!=6:
+                liste_mot_propose = place_premiere_lettre(nb_lettres,liste_mot_propose,mot_cherche,point)       #On place la première lettre dans le mot a deviné
         print("Le mot à trouver est : ",mot_cherche)
         mot_propose=request.form.get("mot_propose")
         mot_propose = mot_propose.upper()
@@ -309,6 +313,7 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
         
         #La distrubution d'expérience/succès pour les modes avec timer doit se faire en dehors de la vérification des mots
         if current_user.is_authenticated and mode_de_jeu == 'clm' and chrono(depart_clm)[0] == '00:00':
+            #print('oui')
             user=session["username"]
             experience=cur.execute("SELECT Experience FROM Utilisateur WHERE Nom_utilisateur=(?) ",([user]))
             experience=experience.fetchall()[0][0]
@@ -335,9 +340,16 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
         print("Le mot à trouver est : ",mot_cherche)
         if len(etat_lettres)!=0:
             etat_lettres = etat_lettres[0][0]
-
-        if etat_lettres != '2'*nb_lettres:
-            liste_mot_propose = place_premiere_lettre(nb_lettres,liste_mot_propose,mot_cherche,point) #On place la première lettre dans le mot a deviné
+        
+        if mode_de_jeu == 'classique' or 'survie':
+            if etat_lettres != '2'*nb_lettres:
+                liste_mot_propose = place_premiere_lettre(nb_lettres,liste_mot_propose,mot_cherche,point) #On place la première lettre dans le mot a deviné
+        if mode_de_jeu == 'big50' and nb_essais_big50 !=0:
+            if etat_lettres != '2'*nb_lettres:
+                liste_mot_propose = place_premiere_lettre(nb_lettres,liste_mot_propose,mot_cherche,point) #On place la première lettre dans le mot a deviné
+        if mode_de_jeu == 'clm' and chrono(depart_clm)[0] == '00:00':
+            if etat_lettres != '2'*nb_lettres:
+                liste_mot_propose = place_premiere_lettre(nb_lettres,liste_mot_propose,mot_cherche,point) #On place la première lettre dans le mot a deviné
         return render_template("accueil.html",nb_lettres=nb_lettres, nb_essais=nb_essais,mode_de_jeu=mode_de_jeu,mot_cherche=mot_cherche, liste_mot_propose=liste_mot_propose,liste_etat_lettres=liste_etat_lettres,vie=vie,score_survie=score_survie,nb_essais_big50=nb_essais_big50,score_big50=score_big50,timer1=timer,timer2=json.dumps(timer_dyn),score_clm=score_clm, lvl=lvl, L_info_xp=L_info_xp, progress=progress, xp=xp)
 
 
@@ -393,15 +405,15 @@ def rejouer():
         cur.execute("INSERT INTO Modes VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",(nb_essais,nb_lettres,'','','',mode_de_jeu,3,0,50,0,'',0))
         connection.commit()
     if mode_de_jeu == 'survie' and vie !=0 :
-        nb_lettres = random.randint(5, 10)
+        nb_lettres = random.randint(5, 8)
         cur.execute("INSERT INTO Modes VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",(nb_essais,nb_lettres,'','','',mode_de_jeu,vie,score_survie,50,0,'',0))
         connection.commit()
     if mode_de_jeu == 'big50' and nb_essais_big50 !=0 :
-        nb_lettres = random.randint(5, 10)
+        nb_lettres = random.randint(5, 8)
         cur.execute("INSERT INTO Modes VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",(nb_essais,nb_lettres,'','','',mode_de_jeu,3,0,nb_essais_big50,score_big50,'',0))
         connection.commit()
     if mode_de_jeu == 'clm' and chrono(depart_clm)[0] != '00:00':
-        nb_lettres = random.randint(5, 10)
+        nb_lettres = random.randint(5, 8)
         cur.execute("INSERT INTO Modes VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",(nb_essais,nb_lettres,'','','',mode_de_jeu,3,0,50,0,depart_clm,score_clm))
         connection.commit()
     #______________________________________________________________________#
@@ -427,7 +439,7 @@ def stat():
     #Tracer histogramme
     moyenne,meilleur,inutile,inutile=trace_histo(user,"Classique")
     histo_histo(user,"Classique")
-    print(moyenne)
+
     return render_template("statistiques.html", liste=[nb_parties,nb_vict,taux_vict,xp,moyenne,meilleur])
 
 
@@ -544,8 +556,8 @@ def parametres():
             cur.execute("INSERT INTO Modes VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",(select_essais,select_lettres,'','','',select_mode_de_jeu,3,0,50,0,'',0))
             con.commit()
         else:
-            select_essais = 5
-            select_lettres = random.randint(5, 10)
+            select_essais = 6
+            select_lettres = random.randint(5, 8)
             cur.execute("INSERT INTO Modes VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",(select_essais,select_lettres,'','','',select_mode_de_jeu,3,0,50,0,'',0))
             con.commit()
         if not multi == None:
