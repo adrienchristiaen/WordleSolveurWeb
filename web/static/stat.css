@@ -13,10 +13,11 @@
 	font-size: 60px;
 }
 
-p
+.box-content
 {
 	text-align: center;
 	font-size: 30px;
+	margin: 0px;
 }
 
 
