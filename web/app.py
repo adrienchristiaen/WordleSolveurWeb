@@ -341,7 +341,7 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
         if len(etat_lettres)!=0:
             etat_lettres = etat_lettres[0][0]
         
-        if mode_de_jeu == 'classique' or 'survie':
+        if mode_de_jeu == 'classique' or mode_de_jeu =='survie':
             if etat_lettres != '2'*nb_lettres:
                 liste_mot_propose = place_premiere_lettre(nb_lettres,liste_mot_propose,mot_cherche,point) #On place la première lettre dans le mot a deviné
         if mode_de_jeu == 'big50' and nb_essais_big50 !=0:

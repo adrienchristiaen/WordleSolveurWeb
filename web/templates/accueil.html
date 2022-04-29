@@ -70,8 +70,40 @@
                 
                 {% else %}
                     <form method="POST" action="/accueil">
-                        <input class="input" type="mot_propose" name="mot_propose" placeholder="Votre Proposition" autofocus="">
-                        <button class="bouton">Valider</button>  
+                        <label>
+                            <input class="input" type="mot_propose" name="mot_propose" placeholder="Votre Proposition" autofocus="" maxlength="{{nb_lettres}}">
+                            <span></span>
+                            <script>
+                                const input = document.querySelector('input');
+                                const counter = document.querySelector('label span');
+                                const maxLength = input.getAttribute('maxlength');
+
+                                var test = false;
+                                input.addEventListener('input', event => {
+                                    test = true;
+                                    const valueLength = event.target.value.length;
+                                    const leftCharLength = maxLength - valueLength;
+
+                                    if (leftCharLength < 0) return;
+                                    
+                                    if (leftCharLength ==0){
+                                        counter.innerText = leftCharLength + ' lettre restante à saisir !';
+                                    }
+
+                                    else if (leftCharLength ==1){
+                                        counter.innerText = leftCharLength + ' lettre restante à saisir !';
+                                    }
+                                    else{
+                                        counter.innerText = leftCharLength + ' lettres restantes à saisir !';
+                                    }
+                                    
+                                });
+                                if (test == false){
+                                    counter.innerText = maxLength + ' lettres restantes à saisir !';
+                                }
+                            </script>
+                            <button class="bouton">Valider</button> 
+                        </label> 
                     </form>
                 {% endif %}
             {% endif %}
@@ -123,8 +155,40 @@
                     
                     {% else %}
                         <form method="POST" action="/accueil">
-                            <input class="input" type="mot_propose" name="mot_propose" placeholder="Votre Proposition" autofocus="">
-                            <button class="bouton">Valider</button>  
+                            <label>
+                                <input class="input" type="mot_propose" name="mot_propose" placeholder="Votre Proposition" autofocus="" maxlength="{{nb_lettres}}">
+                                <span></span>
+                                <script>
+                                    const input = document.querySelector('input');
+                                    const counter = document.querySelector('label span');
+                                    const maxLength = input.getAttribute('maxlength');
+
+                                    var test = false;
+                                    input.addEventListener('input', event => {
+                                        test = true;
+                                        const valueLength = event.target.value.length;
+                                        const leftCharLength = maxLength - valueLength;
+
+                                        if (leftCharLength < 0) return;
+                                        
+                                        if (leftCharLength ==0){
+                                            counter.innerText = leftCharLength + ' lettre restante à saisir !';
+                                        }
+
+                                        else if (leftCharLength ==1){
+                                            counter.innerText = leftCharLength + ' lettre restante à saisir !';
+                                        }
+                                        else{
+                                            counter.innerText = leftCharLength + ' lettres restantes à saisir !';
+                                        }
+                                        
+                                    });
+                                    if (test == false){
+                                        counter.innerText = maxLength + ' lettres restantes à saisir !';
+                                    }
+                                </script>
+                                <button class="bouton">Valider</button> 
+                            </label> 
                         </form>
                     {% endif %}
                 {% endif %}
@@ -180,8 +244,40 @@
                     
                     {% else %}
                         <form method="POST" action="/accueil">
-                            <input class="input" type="mot_propose" name="mot_propose" placeholder="Votre Proposition" autofocus="">
-                            <button class="bouton">Valider</button>  
+                            <label>
+                                <input class="input" type="mot_propose" name="mot_propose" placeholder="Votre Proposition" autofocus="" maxlength="{{nb_lettres}}">
+                                <span></span>
+                                <script>
+                                    const input = document.querySelector('input');
+                                    const counter = document.querySelector('label span');
+                                    const maxLength = input.getAttribute('maxlength');
+
+                                    var test = false;
+                                    input.addEventListener('input', event => {
+                                        test = true;
+                                        const valueLength = event.target.value.length;
+                                        const leftCharLength = maxLength - valueLength;
+
+                                        if (leftCharLength < 0) return;
+                                        
+                                        if (leftCharLength ==0){
+                                            counter.innerText = leftCharLength + ' lettre restante à saisir !';
+                                        }
+
+                                        else if (leftCharLength ==1){
+                                            counter.innerText = leftCharLength + ' lettre restante à saisir !';
+                                        }
+                                        else{
+                                            counter.innerText = leftCharLength + ' lettres restantes à saisir !';
+                                        }
+                                        
+                                    });
+                                    if (test == false){
+                                        counter.innerText = maxLength + ' lettres restantes à saisir !';
+                                    }
+                                </script>
+                                <button class="bouton">Valider</button> 
+                            </label> 
                         </form>
                     {% endif %}
                 {% endif %}
@@ -257,8 +353,40 @@
                     
                     {% else %}
                         <form method="POST" action="/accueil">
-                            <input class="input" type="mot_propose" name="mot_propose" placeholder="Votre Proposition" autofocus="">
-                            <button class="bouton">Valider</button>  
+                            <label>
+                                <input class="input" type="mot_propose" name="mot_propose" placeholder="Votre Proposition" autofocus="" maxlength="{{nb_lettres}}">
+                                <span></span>
+                                <script>
+                                    const input = document.querySelector('input');
+                                    const counter = document.querySelector('label span');
+                                    const maxLength = input.getAttribute('maxlength');
+
+                                    var test = false;
+                                    input.addEventListener('input', event => {
+                                        test = true;
+                                        const valueLength = event.target.value.length;
+                                        const leftCharLength = maxLength - valueLength;
+
+                                        if (leftCharLength < 0) return;
+                                        
+                                        if (leftCharLength ==0){
+                                            counter.innerText = leftCharLength + ' lettre restante à saisir !';
+                                        }
+
+                                        else if (leftCharLength ==1){
+                                            counter.innerText = leftCharLength + ' lettre restante à saisir !';
+                                        }
+                                        else{
+                                            counter.innerText = leftCharLength + ' lettres restantes à saisir !';
+                                        }
+                                        
+                                    });
+                                    if (test == false){
+                                        counter.innerText = maxLength + ' lettres restantes à saisir !';
+                                    }
+                                </script>
+                                <button class="bouton">Valider</button> 
+                            </label> 
                         </form>
                     {% endif %}
                 {% endif %}
