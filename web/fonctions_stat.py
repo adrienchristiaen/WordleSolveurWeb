@@ -42,8 +42,12 @@ def trace_histo(user,mdj):              #ET CALCULE MOYENNE
     if len(x)!=0:
         moyenne=(moyenne/len(x))
     moyenne=str(moyenne)
-    if len(moyenne)>=4:
-        moyenne=moyenne[:3]
+    dash = 0#Indice du point
+    for k in range(len(moyenne)):
+        if moyenne[k] == ".":
+            dash = k
+    if dash != 0:
+        moyenne = moyenne[0:dash+2]
     
     if x==[]:
         meilleur_classique=0
