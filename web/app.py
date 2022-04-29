@@ -111,10 +111,10 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
 
     #______________Initialisation des listes pour le tableau_______________#
     liste_mot_propose = creation_liste_mots_proposes(nb_lettres,nb_essais,mots_proposes,point)
-    print('liste_mot_propose :',liste_mot_propose)
+    #print('liste_mot_propose :',liste_mot_propose)
 
     liste_etat_lettres = creation_liste_etat_lettres(nb_lettres,nb_essais,etat_lettres,zero)
-    print('liste_etat_lettres :',liste_etat_lettres)
+    #print('liste_etat_lettres :',liste_etat_lettres)
     #______________________________________________________________________#
 
     #_________________Actualisation de la barre d'expérience_______________#
@@ -179,6 +179,7 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
         else:
             if chrono(depart_clm)[0] != '00:00' or nb_essais[0]!=6:
                 liste_mot_propose = place_premiere_lettre(nb_lettres,liste_mot_propose,mot_cherche,point)       #On place la première lettre dans le mot a deviné
+        print("\n##############################")
         print("Le mot à trouver est : ",mot_cherche)
         mot_propose=request.form.get("mot_propose")
         mot_propose = mot_propose.upper()
@@ -195,7 +196,9 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
             etat_lettres = calcul_etat_lettres(mot_cherche, mot_propose)        #Calcul de l'état des lettres
             
             liste_etat_lettres[nb_essais[0]-nb_essais[-1]] = etat_lettres       #On ajoute l'état des lettres du mot dans la liste liste_etat_lettres
-            print(liste_etat_lettres)
+            #print(liste_etat_lettres)
+            print("Placement des lettres :", etat_lettres)
+            print("##############################\n")
             nb_essais.append(nb_essais[-1]-1)                                   #On décrémente le nombre d'essai restant
             #print(liste_etat_lettres[nb_essais[0]-nb_essais[-1]-1])
             
@@ -231,9 +234,9 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
                         nb_victoires+=1
                         experience=cur.execute("SELECT Experience FROM Utilisateur WHERE Nom_utilisateur=(?) ",([user]))
                         experience=experience.fetchall()[0][0]
-                        print("experience",experience)
+                        #print("experience",experience)
                         experience+=250*(nb_lettres/5)
-                        print("experience",experience)
+                        #print("experience",experience)
                         cur.execute("UPDATE Utilisateur SET Nb_victoires_classique = (?), Experience = (?) WHERE Nom_utilisateur=(?)",(nb_victoires,experience,user))
                         id_partie=cur.execute("SELECT COUNT(*) FROM Historique")
                         id_partie=id_partie.fetchall()[0][0]
@@ -270,9 +273,9 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
                     if vie == 0:
                         experience=cur.execute("SELECT Experience FROM Utilisateur WHERE Nom_utilisateur=(?) ",([user]))
                         experience=experience.fetchall()[0][0]
-                        print("experience",experience)
+                        #print("experience",experience)
                         experience+=75*score_survie[-1]
-                        print("experience",experience)
+                        #print("experience",experience)
                         cur.execute("UPDATE Utilisateur SET Experience = (?) WHERE Nom_utilisateur=(?)",(experience,user))                       
                         id_partie=cur.execute("SELECT COUNT(*) FROM Historique")
                         id_partie=id_partie.fetchall()[0][0]
@@ -289,9 +292,9 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
                     if nb_essais_big50[-1] == 0:
                         experience=cur.execute("SELECT Experience FROM Utilisateur WHERE Nom_utilisateur=(?) ",([user]))
                         experience=experience.fetchall()[0][0]
-                        print("experience",experience)
+                        #print("experience",experience)
                         experience+=250*score_big50
-                        print("experience",experience)
+                        #print("experience",experience)
                         cur.execute("UPDATE Utilisateur SET Experience = (?) WHERE Nom_utilisateur=(?)",(experience,user))
                         id_partie=cur.execute("SELECT COUNT(*) FROM Historique")
                         id_partie=id_partie.fetchall()[0][0]
@@ -317,9 +320,9 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
             user=session["username"]
             experience=cur.execute("SELECT Experience FROM Utilisateur WHERE Nom_utilisateur=(?) ",([user]))
             experience=experience.fetchall()[0][0]
-            print("experience",experience)
+            #print("experience",experience)
             experience+=250*score_clm
-            print("experience",experience)
+            #print("experience",experience)
             cur.execute("UPDATE Utilisateur SET Experience = (?) WHERE Nom_utilisateur=(?)",(experience,user))
             con.commit()
             #Mise à jour des succès clm
@@ -333,11 +336,13 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
 
         else:
             #print("mot non valide")
-            print(mot_propose)
+            print("Le mot proposé est : ", mot_propose)
+            print("##############################\n")
             return render_template("accueil_fail.html",nb_lettres=nb_lettres, nb_essais=nb_essais,mode_de_jeu=mode_de_jeu,mot_cherche=mot_cherche, liste_mot_propose=liste_mot_propose,liste_etat_lettres=liste_etat_lettres,vie=vie,score_survie=score_survie,nb_essais_big50=nb_essais_big50,score_big50=score_big50,timer1=timer,timer2=json.dumps(timer_dyn),score_clm=score_clm, lvl=lvl, L_info_xp=L_info_xp, progress=progress, xp=xp)
         
     else:
         print("Le mot à trouver est : ",mot_cherche)
+        print("##############################\n")
         if len(etat_lettres)!=0:
             etat_lettres = etat_lettres[0][0]
         

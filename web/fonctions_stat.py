@@ -1,14 +1,7 @@
-from pydoc import visiblename
-from flask import Flask, render_template, redirect, request, url_for, flash, session, g
-from flask_login import LoginManager, UserMixin, login_required, logout_user, current_user, login_user
-import sqlite3, hashlib
+import sqlite3
 from fonctions_wordle_flask import *
 from fonctions_experience import *
 import matplotlib.pyplot as plt
-app = Flask(__name__)
-from datetime import date
-
-
 
 
 def recup_data(user):
@@ -17,7 +10,7 @@ def recup_data(user):
     cur = con.cursor()
     data = cur.execute("SELECT * FROM Utilisateur WHERE Nom_utilisateur = (?)", ([user]))
     data = list(data.fetchall()[0])
-    print(data)
+    #print(data)
     con.commit()
     con.close()
     return(data)
@@ -98,8 +91,8 @@ def histo_histo(user,mdj):
         x.append(u[4])
 
     x_test=[i for i in range(1,len(x)+1)]
-    print(x)
-    print(y)
+    #print(x)
+    #print(y)
 
     plt.clf()
     plt.plot(x_test,y,marker="o")
