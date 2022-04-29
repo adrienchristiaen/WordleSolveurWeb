@@ -145,8 +145,8 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
         etat_lettres = ''
         #print("etat_lettres",etat_lettres)
         mot_cherche=choisir_mot(nb_lettres)
-        cur.execute("DELETE FROM Modes WHERE mot_cherche=('') ")
-        cur.execute("INSERT INTO Modes VALUES (?,?,?,?,?,?,?,?,?,?,?,?) ",(nb_essais[-1],nb_lettres,mot_cherche,mot_propose,etat_lettres,mode_de_jeu,vie,score_survie[-1],nb_essais_big50[-1],score_big50,depart_clm,score_clm)) 
+        cur.execute("DELETE FROM Partie WHERE mot_cherche=('') ")
+        cur.execute("INSERT INTO Partie VALUES (?,?,?,?,?,?,?,?,?,?,?,?) ",(nb_essais[-1],nb_lettres,mot_cherche,mot_propose,etat_lettres,mode_de_jeu,vie,score_survie[-1],nb_essais_big50[-1],score_big50,depart_clm,score_clm)) 
         con.commit()
     #______________________________________________________________________#
 
@@ -155,8 +155,8 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
     #______________On sauvegarde le temps du début de partie_______________#
     if depart_clm == '' and mode_de_jeu =='clm':
         depart_clm = depart()
-        cur.execute("DELETE FROM Modes WHERE Clm_depart=('') ")
-        cur.execute("INSERT INTO Modes VALUES (?,?,?,?,?,?,?,?,?,?,?,?) ",(nb_essais[-1],nb_lettres,mot_cherche,mot_propose,etat_lettres,mode_de_jeu,vie,score_survie[-1],nb_essais_big50[-1],score_big50,depart_clm,score_clm)) 
+        cur.execute("DELETE FROM Partie WHERE Clm_depart=('') ")
+        cur.execute("INSERT INTO Partie VALUES (?,?,?,?,?,?,?,?,?,?,?,?) ",(nb_essais[-1],nb_lettres,mot_cherche,mot_propose,etat_lettres,mode_de_jeu,vie,score_survie[-1],nb_essais_big50[-1],score_big50,depart_clm,score_clm)) 
         con.commit()
     #______________________________________________________________________#
 
@@ -219,7 +219,7 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
             if nb_essais[-1]==0:
                 if mode_de_jeu == 'survie':
                     vie-=1
-            cur.execute("INSERT INTO Modes VALUES (?,?,?,?,?,?,?,?,?,?,?,?) ",(nb_essais[-1],nb_lettres,mot_cherche,mot_propose,etat_lettres,mode_de_jeu,vie,score_survie[-1],nb_essais_big50[-1],score_big50,depart_clm,score_clm)) 
+            cur.execute("INSERT INTO Partie VALUES (?,?,?,?,?,?,?,?,?,?,?,?) ",(nb_essais[-1],nb_lettres,mot_cherche,mot_propose,etat_lettres,mode_de_jeu,vie,score_survie[-1],nb_essais_big50[-1],score_big50,depart_clm,score_clm)) 
             con.commit()
             #_______________________________________________________________________#
 
@@ -314,7 +314,7 @@ def accueil(nb_lettres=None, nb_essais=None,mode_de_jeu=None,mot_cherche=None, l
                 liste_mot_propose = place_premiere_lettre(nb_lettres,liste_mot_propose,mot_cherche,point) #On place la première lettre dans le mot a deviné
                 return render_template("accueil.html",nb_lettres=nb_lettres, nb_essais=nb_essais,mode_de_jeu=mode_de_jeu,mot_cherche=mot_cherche, liste_mot_propose=liste_mot_propose,liste_etat_lettres=liste_etat_lettres,vie=vie,score_survie=score_survie,nb_essais_big50=nb_essais_big50,score_big50=score_big50,timer1=timer,timer2=json.dumps(timer_dyn),score_clm=score_clm, lvl=lvl, L_info_xp=L_info_xp, progress=progress, xp=xp)
         
-        #La distrubution d'expérience/succès pour les modes avec timer doit se faire en dehors de la vérification des mots
+        #La distrubution d'expérience/succès pour les Partie avec timer doit se faire en dehors de la vérification des mots
         if current_user.is_authenticated and mode_de_jeu == 'clm' and chrono(depart_clm)[0] == '00:00':
             #print('oui')
             user=session["username"]
@@ -402,24 +402,24 @@ def rejouer():
     #______________________________________________________________________#
 
     #_____________________On supprime la table de Jeu______________________#
-    cur.execute('''DELETE FROM Modes;''')
+    cur.execute('''DELETE FROM Partie;''')
     #______________________________________________________________________#
 
     #_____________On actualise la table selon le mode de jeu_______________#
     if mode_de_jeu == 'classique' or (mode_de_jeu == 'survie' and vie == 0) or (mode_de_jeu == 'big50' and nb_essais_big50 == 0) or (mode_de_jeu == 'clm' and chrono(depart_clm)[0]) == '00:00':
-        cur.execute("INSERT INTO Modes VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",(nb_essais,nb_lettres,'','','',mode_de_jeu,3,0,50,0,'',0))
+        cur.execute("INSERT INTO Partie VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",(nb_essais,nb_lettres,'','','',mode_de_jeu,3,0,50,0,'',0))
         connection.commit()
     if mode_de_jeu == 'survie' and vie !=0 :
         nb_lettres = random.randint(5, 8)
-        cur.execute("INSERT INTO Modes VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",(nb_essais,nb_lettres,'','','',mode_de_jeu,vie,score_survie,50,0,'',0))
+        cur.execute("INSERT INTO Partie VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",(nb_essais,nb_lettres,'','','',mode_de_jeu,vie,score_survie,50,0,'',0))
         connection.commit()
     if mode_de_jeu == 'big50' and nb_essais_big50 !=0 :
         nb_lettres = random.randint(5, 8)
-        cur.execute("INSERT INTO Modes VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",(nb_essais,nb_lettres,'','','',mode_de_jeu,3,0,nb_essais_big50,score_big50,'',0))
+        cur.execute("INSERT INTO Partie VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",(nb_essais,nb_lettres,'','','',mode_de_jeu,3,0,nb_essais_big50,score_big50,'',0))
         connection.commit()
     if mode_de_jeu == 'clm' and chrono(depart_clm)[0] != '00:00':
         nb_lettres = random.randint(5, 8)
-        cur.execute("INSERT INTO Modes VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",(nb_essais,nb_lettres,'','','',mode_de_jeu,3,0,50,0,depart_clm,score_clm))
+        cur.execute("INSERT INTO Partie VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",(nb_essais,nb_lettres,'','','',mode_de_jeu,3,0,50,0,depart_clm,score_clm))
         connection.commit()
     #______________________________________________________________________#
 
@@ -555,15 +555,15 @@ def parametres():
         #Connexion base de données
         con=sqlite3.connect('wordle.sql')
         cur = con.cursor()
-        cur.execute('''DELETE FROM Modes;''')
+        cur.execute('''DELETE FROM Partie;''')
         #print(nb_essais,nb_lettres,mode_de_jeu)
         if select_mode_de_jeu == 'classique':
-            cur.execute("INSERT INTO Modes VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",(select_essais,select_lettres,'','','',select_mode_de_jeu,3,0,50,0,'',0))
+            cur.execute("INSERT INTO Partie VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",(select_essais,select_lettres,'','','',select_mode_de_jeu,3,0,50,0,'',0))
             con.commit()
         else:
             select_essais = 6
             select_lettres = random.randint(5, 8)
-            cur.execute("INSERT INTO Modes VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",(select_essais,select_lettres,'','','',select_mode_de_jeu,3,0,50,0,'',0))
+            cur.execute("INSERT INTO Partie VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",(select_essais,select_lettres,'','','',select_mode_de_jeu,3,0,50,0,'',0))
             con.commit()
         if not multi == None:
             return render_template("construction.html")

@@ -3,11 +3,13 @@ connection = sqlite3.connect('wordle.sql')
 cursor = connection.cursor()
 
 #Delete table
+
 cursor.execute('''DROP TABLE Utilisateur;''')
 cursor.execute('''DROP TABLE Historique;''')
 cursor.execute('''DROP TABLE Quetes;''')
 cursor.execute('''DROP TABLE Quetes_rea;''')
-cursor.execute('''DROP TABLE Modes;''')
+cursor.execute('''DROP TABLE Partie;''')
+
 
 
 #Table Utilisateur
@@ -53,8 +55,8 @@ cursor.execute("""create table Quetes_rea(
     PRIMARY KEY(Id_quete_rea))""")
 
 
-#Table Modes
-cursor.execute("""create table Modes(
+#Table Partie
+cursor.execute("""create table Partie(
     Nb_essais integer,
     Nb_caracteres integer,
     mot_cherche varchar,
@@ -147,7 +149,7 @@ cursor.execute("INSERT INTO Quetes VALUES(30,'La lumière','Obtenir un score de 
 for k in range(31):
     cursor.execute("INSERT INTO Quetes_rea VALUES("+str(k)+", "+str(k)+", 'Adrien',FALSE)")
 
-cursor.execute("INSERT INTO Modes VALUES(6,6,'','','','classique',3,0,50,0,'',0)")
+cursor.execute("INSERT INTO Partie VALUES(6,6,'','','','classique',3,0,50,0,'',0)")
 
 #Afficher les différentes tables pour test
 for util in cursor.execute("select * from Utilisateur"):
@@ -158,7 +160,7 @@ for quet in cursor.execute("select * from Quetes"):
     print(quet)
 for quet_rea in cursor.execute("select * from Quetes_rea"):
     print(quet_rea)
-for mod in cursor.execute("select * from Modes"):
+for mod in cursor.execute("select * from Partie"):
     print(mod)
 
 connection.commit()

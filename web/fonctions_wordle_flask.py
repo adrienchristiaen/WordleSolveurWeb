@@ -9,51 +9,51 @@ def recup_table():
     con=sqlite3.connect('wordle.sql')
     cur = con.cursor()
     #________________Récupération depuis la base de données________________#
-    nb_essais=cur.execute("SELECT Nb_essais FROM Modes ")
+    nb_essais=cur.execute("SELECT Nb_essais FROM Partie ")
     nb_essais=nb_essais.fetchall()
     #print("nb_essais :",nb_essais)
 
-    nb_lettres=cur.execute("SELECT Nb_caracteres FROM Modes ")
+    nb_lettres=cur.execute("SELECT Nb_caracteres FROM Partie ")
     nb_lettres=nb_lettres.fetchall()
     #print(nb_lettres)
 
-    mot_cherche=cur.execute("SELECT mot_cherche FROM Modes ")
+    mot_cherche=cur.execute("SELECT mot_cherche FROM Partie ")
     mot_cherche=mot_cherche.fetchall()
     #print(mot_cherche)
 
-    mots_proposes=cur.execute("SELECT mots_proposes FROM Modes ")
+    mots_proposes=cur.execute("SELECT mots_proposes FROM Partie ")
     mots_proposes=mots_proposes.fetchall()
     #print(mots_proposes)
 
-    etat_lettres=cur.execute("SELECT etat_lettres FROM Modes ")
+    etat_lettres=cur.execute("SELECT etat_lettres FROM Partie ")
     etat_lettres=etat_lettres.fetchall()
     #print(etat_lettres)
 
-    mode_de_jeu=cur.execute("SELECT Mode_de_jeu FROM Modes ")
+    mode_de_jeu=cur.execute("SELECT Mode_de_jeu FROM Partie ")
     mode_de_jeu=mode_de_jeu.fetchall()
     #print(mode_de_jeu)
 
-    vie=cur.execute("SELECT Survie_vie FROM Modes ")
+    vie=cur.execute("SELECT Survie_vie FROM Partie ")
     vie=vie.fetchall()
     #print(vie)
 
-    score_survie=cur.execute("SELECT Survie_score FROM Modes ")
+    score_survie=cur.execute("SELECT Survie_score FROM Partie ")
     score_survie=score_survie.fetchall()
     #print(score)
 
-    nb_essais_big50=cur.execute("SELECT Big50_nb_essais FROM Modes ")
+    nb_essais_big50=cur.execute("SELECT Big50_nb_essais FROM Partie ")
     nb_essais_big50=nb_essais_big50.fetchall()
     #print(nb_essais_big50)
 
-    score_big50=cur.execute("SELECT Big50_score FROM Modes ")
+    score_big50=cur.execute("SELECT Big50_score FROM Partie ")
     score_big50=score_big50.fetchall()
     #print(score_big50)
 
-    depart_clm=cur.execute("SELECT Clm_depart FROM Modes ")
+    depart_clm=cur.execute("SELECT Clm_depart FROM Partie ")
     depart_clm=depart_clm.fetchall()
     #print(depart_clm)
 
-    score_clm=cur.execute("SELECT Clm_score FROM Modes ")
+    score_clm=cur.execute("SELECT Clm_score FROM Partie ")
     score_clm=score_clm.fetchall()
     #print(score_clm)
     #______________________________________________________________________#
