@@ -10,7 +10,6 @@ cursor.execute('''DROP TABLE Quetes_rea;''')
 cursor.execute('''DROP TABLE Modes;''')
 
 
-
 #Table Utilisateur
 cursor.execute("""create table Utilisateur(
     Id integer, 
@@ -71,15 +70,47 @@ cursor.execute("""create table Modes(
     PRIMARY KEY(Nb_essais))""")
 
 
-
 #Encodage du mot de passe
 password = hashlib.sha224(bytes('test12',encoding='utf-8')).hexdigest()
 
-cursor.execute("INSERT INTO Utilisateur VALUES(0,'Adrien',?,'christiaen.adrien@gmail.com',0,0,0,'profil3')", ([password]))
+cursor.execute("INSERT INTO Utilisateur VALUES(0,'Adrien',?,'christiaen.adrien@gmail.com',7,3,0,'profil3')", ([password]))
 
-cursor.execute("INSERT INTO Historique VALUES(0,'Adrien','Vrai',6,'10/03/2022','Classique','muret')")
-cursor.execute("INSERT INTO Historique VALUES(1,'Adrien','Faux',0,'10/03/2022','Classique','table')")
+#Historique
+cursor.execute("INSERT INTO Historique VALUES(0, 'Adrien', 'Vrai', 6, '10-03-2022', 'Classique', 'muret')")
+cursor.execute("INSERT INTO Historique VALUES(1, 'Adrien', 'Faux', 0, '10-03-2022', 'Classique', 'table')")
+cursor.execute("INSERT INTO Historique VALUES(2, 'Adrien', 'Faux', 6, '21-04-2022', 'Classique', 'flute')")
+cursor.execute("INSERT INTO Historique VALUES(3, 'Adrien', 'Vrai', 4, '21-04-2022', 'Classique', 'carte')")
+cursor.execute("INSERT INTO Historique VALUES(4, 'Adrien', 'Vrai', 4, '21-04-2022', 'Classique', 'roues')")
+cursor.execute("INSERT INTO Historique VALUES(5, 'Adrien', 'Faux', 6, '22-04-2022', 'Classique', 'bouee')")
+cursor.execute("INSERT INTO Historique VALUES(6, 'Adrien', 'Vrai', 3, '22-04-2022', 'Classique', 'jouets')")
+cursor.execute("INSERT INTO Historique VALUES(7, 'Adrien', 'Vrai', 2, '22-04-2022', 'Classique', 'rares')")
+cursor.execute("INSERT INTO Historique VALUES(8, 'Adrien', 'Vrai', 2, '22-04-2022', 'Classique', 'lapin')")
+cursor.execute("INSERT INTO Historique VALUES(9, 'Adrien', 'Vrai', 5, '22-04-2022', 'Classique', 'rires')")
+cursor.execute("INSERT INTO Historique VALUES(10, 'Adrien', 'Vrai', 14, '23-04-2022', 'Survie', 'rosee')")
+cursor.execute("INSERT INTO Historique VALUES(11, 'Adrien', 'Vrai', 23, '23-04-2022', 'Survie', 'pizza')")
+cursor.execute("INSERT INTO Historique VALUES(12, 'Adrien', 'Vrai', 12, '23-04-2022', 'Survie', 'loupe')")
+cursor.execute("INSERT INTO Historique VALUES(13, 'Adrien', 'Vrai', 27, '23-04-2022', 'Survie', 'chats')")
+cursor.execute("INSERT INTO Historique VALUES(14, 'Adrien', 'Vrai', 11, '23-04-2022', 'Survie', 'tarif')")
+cursor.execute("INSERT INTO Historique VALUES(15, 'Adrien', 'Vrai', 18, '23-04-2022', 'Survie', 'trauma')")
+cursor.execute("INSERT INTO Historique VALUES(16, 'Adrien', 'Vrai', 31, '23-04-2022', 'Survie', 'panda')")
+cursor.execute("INSERT INTO Historique VALUES(17, 'Adrien', 'Vrai', 14, '23-04-2022', 'Survie', 'rateau')")
+cursor.execute("INSERT INTO Historique VALUES(18, 'Adrien', 'Vrai', 37, '23-04-2022', 'Survie', 'pelle')")
+cursor.execute("INSERT INTO Historique VALUES(19, 'Adrien', 'Vrai', 8, '23-04-2022', 'Big50', 'joues')")
+cursor.execute("INSERT INTO Historique VALUES(20, 'Adrien', 'Vrai', 11, '23-04-2022', 'Big50', 'travail')")
+cursor.execute("INSERT INTO Historique VALUES(21, 'Adrien', 'Vrai', 6, '23-04-2022', 'Big50', 'tenue')")
+cursor.execute("INSERT INTO Historique VALUES(22, 'Adrien', 'Vrai', 13, '23-04-2022', 'Big50', 'lamas')")
+cursor.execute("INSERT INTO Historique VALUES(23, 'Adrien', 'Vrai', 12, '24-04-2022', 'Big50', 'trouve')")
+cursor.execute("INSERT INTO Historique VALUES(24, 'Adrien', 'Vrai', 7, '24-04-2022', 'Big50', 'loups')")
+cursor.execute("INSERT INTO Historique VALUES(25, 'Adrien', 'Vrai', 11, '24-04-2022', 'CLM', 'rager')")
+cursor.execute("INSERT INTO Historique VALUES(26, 'Adrien', 'Vrai', 4, '24-04-2022', 'CLM', 'crier')")
+cursor.execute("INSERT INTO Historique VALUES(27, 'Adrien', 'Vrai', 21, '24-04-2022', 'CLM', 'nulle')")
+cursor.execute("INSERT INTO Historique VALUES(28, 'Adrien', 'Vrai', 14, '24-04-2022', 'CLM', 'boules')")
+cursor.execute("INSERT INTO Historique VALUES(29, 'Adrien', 'Vrai', 14, '24-04-2022', 'CLM', 'rouge')")
+cursor.execute("INSERT INTO Historique VALUES(30, 'Adrien', 'Vrai', 12, '24-04-2022', 'CLM', 'hates')")
+cursor.execute("INSERT INTO Historique VALUES(31, 'Adrien', 'Vrai', 18, '24-04-2022', 'CLM', 'mousse')")
 
+
+#Quêtes
 cursor.execute("INSERT INTO Quetes VALUES(0,'Stratège','Trouver le mot cherché en 4 coups ou moins',1000)")
 cursor.execute("INSERT INTO Quetes VALUES(1,'Mentaliste','Trouver le mot cherché en 3 coups ou moins',5000)")
 cursor.execute("INSERT INTO Quetes VALUES(2,'Bingo','Trouver le mot cherché en 2 coups ou moins',10000)")
@@ -117,9 +148,6 @@ for k in range(31):
     cursor.execute("INSERT INTO Quetes_rea VALUES("+str(k)+", "+str(k)+", 'Adrien',FALSE)")
 
 cursor.execute("INSERT INTO Modes VALUES(6,6,'','','','classique',3,0,50,0,'',0)")
-
-
-
 
 #Afficher les différentes tables pour test
 for util in cursor.execute("select * from Utilisateur"):
