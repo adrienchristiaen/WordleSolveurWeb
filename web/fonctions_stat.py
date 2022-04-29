@@ -53,11 +53,12 @@ def trace_histo(user,mdj):              #ET CALCULE MOYENNE
         meilleur_score=max(x)
 
     plt.clf()
-    plt.hist(x, range=(0, 10), bins=10, rwidth = 0.6, align='left')
+    plt.hist(x, bins=10, rwidth = 0.6, align='left')
     plt.ylabel('Nombre de parties')
+    plt.gca().set_xlim(left=0)
     if mdj=="Classique":
-        plt.xlabel('Nombres X de coups')
-        plt.title("Nombres de parties gagnées en X coups")
+        plt.xlabel('Nombres de coups')
+        plt.title("Nombre de parties gagnées en fonction du nombre de coups")
     else:
         plt.xlabel('Score')
         plt.title("Scores des différentes parties")
