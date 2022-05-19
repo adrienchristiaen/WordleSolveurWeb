@@ -7,8 +7,8 @@ typedef struct element_t element_t;
 
 struct element_t
 {
-	int nombre;
-    char* chaine;
+    double freqScore;
+    char* mot;
     element_t *suivant;
 };
 
