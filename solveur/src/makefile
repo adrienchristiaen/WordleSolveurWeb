@@ -12,7 +12,7 @@ LDFLAGS+=-fsanitize=address
 ############################
 
 # Program:
-solveur: solveur.o frequency.o
+solveur_test: solveur.o solveur_test.o frequency.o
 
 # Format is:
 ## program_name: file_name1.o file_name2.o
@@ -20,6 +20,7 @@ solveur: solveur.o frequency.o
 
 # Object files
 solveur.o: solveur.h solveur.c
+solveur_test.o: solveur_test.c
 frequency.o: frequency.h frequency.c
 
 # Format is:
@@ -34,7 +35,7 @@ clean:
 	rm -f *.o *_test
 
 # For the test, replace `linked_list_int_test` with your program name.
-test: solveur
-	./solveur
+test: solveur_test
+	./solveur_test
 
 .SILENT: clean

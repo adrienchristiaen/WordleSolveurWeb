@@ -13,19 +13,31 @@ list_t *list_create()
 
 void ajout_mots(list_t* list_vide)
 {
-    char word[6];
-    
-    FILE *in_file = fopen("../data/wsolf.txt", "r");
+    FILE *in_file = fopen("wsolf.txt", "r");
     if (!in_file)
     {
         perror("fopen");
         exit(EXIT_FAILURE);
     }
-    while(!feof(in_file))
+
+    struct stat sb; 
+    char *file_contents = malloc(sb.st_size);
+    int i=0;
+    int j=0;
+    while (fscanf(in_file, "%[^\n ] ", file_contents) != EOF) 
     {
-        fscanf(in_file, "%s", word);
-        //printf("%s\n",word);
-        list_append(list_vide, word, 0);
+        i+=1;
+    }
+    char* tableau[i];
+    while (fscanf(in_file, "%[^\n ] ", file_contents) != EOF) 
+    {
+        tableau[j]=file_contents;
+        j+=1;
+    }
+    for(int k=0; k<i;k++)
+    {
+        printf("%s",tableau[k]);
+        //list_append(list_vide,tableau[k],0.0);
     }
 
     fclose(in_file);
@@ -76,15 +88,15 @@ void list_destroy(list_t *liste_mots)
 void list_print(list_t *liste_mots)
 {
     element_t *actuel = liste_mots->premier;
+    printf("%s",liste_mots->premier->suivant->mot);
     printf("[");
-    printf("%s",actuel->mot);
     while (actuel->suivant != NULL)
     {
 		actuel = actuel->suivant;
-        printf(", %s",actuel->mot);
-        //char* key = actuel -> mot;
-        //double value = actuel -> freqScore;
-        //printf("%s : %lf, ", key, value);  
+        //printf("%s",actuel->mot);
+        char* key = actuel -> mot;
+        double value = actuel -> freqScore;
+        printf("%s : %lf, ", key, value);  
     }
     printf("] \n");
 }
@@ -93,17 +105,15 @@ void list_print(list_t *liste_mots)
 void list_append(list_t *one_list, char *one_key, double one_value)
 {
     element_t* actuel = one_list -> premier;
-    //printf("LIST APPEND: %s\n",one_key);
     while (actuel -> suivant != NULL)
     {
-        //printf("%s\n",actuel->mot);
         actuel = actuel -> suivant;
     }
     element_t* nouveau_element = malloc(sizeof(*nouveau_element));
 
     actuel -> suivant = nouveau_element;
+
     nouveau_element -> mot = one_key;
-    //printf("LIST APPEND CHECK: %s\n",nouveau_element -> mot);
     nouveau_element -> freqScore = one_value;
     nouveau_element -> suivant = NULL; 
 }
