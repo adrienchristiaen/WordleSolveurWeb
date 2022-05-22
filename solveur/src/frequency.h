@@ -1,6 +1,6 @@
 #ifndef __FREQUENCY_H__
 #define __FREQUENCY_H__
-#define SIZE 4
+#define SIZE 5
 
 #include "solveur.h"
 
@@ -8,6 +8,7 @@ typedef struct info_t info_t;
 
 struct info_t
 {
+    int match;
     char result[20];
     info_t *suivant;
 };
@@ -17,6 +18,7 @@ typedef struct listinfo_t listinfo_t;
 struct listinfo_t
 {
     info_t *premier;
+    char word[20];
 };
 
 void freqScore(list_t *oneList, char *freqList, char *alphabet);

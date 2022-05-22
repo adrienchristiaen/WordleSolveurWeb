@@ -136,5 +136,3 @@ void list_append(list_t *one_list, char *one_key, double one_value)
     }
     actuel -> suivant = nouveau_element;
 }
-
-

@@ -181,3 +181,36 @@ int lengthListInfo(listinfo_t *oneList)
 
     return length;
 }
+
+
+void getMatches(listinfo_t *infoList, list_t *wordList, char oneWord[20])
+{
+    //Sauvegarde du mot
+    strcpy(infoList->word, oneWord);
+
+    //Pour chaque possibilité de pattern
+    info_t *currentInfo = infoList->premier;
+
+    while (currentInfo->suivant != NULL)
+    {
+        //Pour chaque mot
+        element_t *currentElement = wordList->premier;
+
+        while (currentElement->suivant != NULL)
+        {
+            for (int i=0; i<SIZE; i++)
+            {
+                if (strcmp(oneWord[i], currentElement->mot[i]) == 0)
+                {
+                    
+                }
+            }
+            
+            //Incrémentation
+            currentElement = currentElement->suivant;
+        }
+        
+        //Incrémentation
+        currentInfo = currentInfo->suivant;
+    }
+}
