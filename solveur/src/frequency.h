@@ -1,5 +1,6 @@
 #ifndef __FREQUENCY_H__
 #define __FREQUENCY_H__
+#define SIZE 4
 
 #include "solveur.h"
 
@@ -7,7 +8,7 @@ typedef struct info_t info_t;
 
 struct info_t
 {
-    char* result;
+    char result[20];
     info_t *suivant;
 };
 
@@ -30,8 +31,10 @@ void listInfo_append(listinfo_t *one_list, char *one_result);
 
 void listInfo_destroy(listinfo_t *one_list);
 
-void initListInfo(listinfo_t *oneList, int size);
+void initListInfo(listinfo_t *oneList);
 
 void allResults(listinfo_t *oneList, char* table, int i, int size);
+
+int lengthListInfo(listinfo_t *oneList);
 
 #endif /*__FREQUENCY_H__*/

@@ -25,13 +25,13 @@ void freqScore(list_t *oneList, char *freqList, char *alphabet) //Possibilité d
 
 listinfo_t* createListInfo()
 {
-    info_t *myInfo = malloc(sizeof(*myInfo));
     listinfo_t *myList = malloc(sizeof(*myList));
+    myList->premier = NULL;
 
-    myList->premier = myInfo;
-
-    myInfo->result = "_FIRST_ELEM_";
-    myInfo->suivant = NULL;
+    if (myList == NULL)
+    {
+        perror("no memory enough for listinfo");
+    }
 
     return myList;
 }
@@ -50,6 +50,12 @@ void listInfo_print(listinfo_t *one_list)
     printf("(");
     info_print(info);
 
+    if (info == NULL)
+    {
+        printf(")\n");
+        return;
+    }
+
     while (info->suivant != NULL)
     {
         infoSuivant = info->suivant;
@@ -66,14 +72,37 @@ void listInfo_append(listinfo_t *one_list, char *one_result)
 {
     info_t *info = one_list->premier;
     
-    while (info->suivant != NULL)
-    {
-        info = info->suivant;
-    }
-
     info_t *newInfo = malloc(sizeof(*newInfo));
     newInfo->suivant = NULL;
-    newInfo->result = one_result;
+    strcpy(newInfo->result,one_result);
+
+    if (info == NULL)
+    {
+        one_list->premier = newInfo;
+        return;
+    }
+
+    if (info->suivant == NULL)
+    {
+        if (strcmp(info->result, one_result) == 0 || strcmp(one_list->premier->result, one_result) == 0)
+        {
+            //printf("EXIT\n");
+            free(newInfo);
+            return;
+        }
+    }
+
+    while (info->suivant != NULL)
+    {
+        //printf("%s : %s\n", info->result, one_result);
+        if (strcmp(info->result, one_result) == 0 || strcmp(one_list->premier->result, one_result) == 0)
+        {
+            //printf("EXIT\n");
+            free(newInfo);
+            return;
+        }
+        info = info->suivant;
+    }
 
     info->suivant = newInfo;
 }
@@ -83,6 +112,12 @@ void listInfo_destroy(listinfo_t *one_list)
 {
     info_t *info = one_list->premier;
     info_t *infoSuivant;
+
+    if(info == NULL)
+    {
+        free(one_list);
+        return;
+    }
 
     while (info->suivant != NULL)
     {
@@ -96,20 +131,26 @@ void listInfo_destroy(listinfo_t *one_list)
 }
 
 
-void initListInfo(listinfo_t *oneList, int size)
+void initListInfo(listinfo_t *oneList)
 {
-    char tab[6] = "00000\0";
+    char tab[SIZE+1];
+
+    for (int i=0; i<SIZE; i++)
+    {
+        tab[i] = '0';
+    }
+    tab[SIZE] = '\0';
 
     //printf("\nMY TEST: %s\n", tab);
 
-    allResults(oneList, tab, 0, size);
+    allResults(oneList, tab, 0, SIZE);
 }
 
 
 void allResults(listinfo_t *oneList, char* table, int i, int size)
 {
     listInfo_append(oneList, table);
-    printf("%d",i);
+    //printf("%d",i);
     if (i<size)
     {
         table[i] = '0';
@@ -119,4 +160,24 @@ void allResults(listinfo_t *oneList, char* table, int i, int size)
         table[i] = '2';
         allResults(oneList, table, i+1, size);
     }
+}
+
+
+int lengthListInfo(listinfo_t *oneList)
+{
+    info_t *info = oneList->premier;
+    int length = 1;
+
+    if (info == NULL)
+    {
+        return 0;
+    }
+
+    while (info->suivant != NULL)
+    {
+        length++;
+        info = info->suivant;
+    }
+
+    return length;
 }
