@@ -5,6 +5,6 @@
 #include <stdlib.h>
 #include "solveur.h"
 
-void getResult(chat *text);
+void getResult(char *text);
 
 #endif /*__GETRESULT_H__*/
