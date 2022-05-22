@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
+#include <assert.h>
 
 
 typedef struct element_t element_t;
@@ -12,7 +13,7 @@ typedef struct element_t element_t;
 struct element_t
 {
     double freqScore;
-    char* mot;
+    char mot[20];
     element_t *suivant;
 };
 
