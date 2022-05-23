@@ -39,7 +39,7 @@ listinfo_t* createListInfo()
 
 void info_print(info_t *one_info)
 {
-    printf("%s", one_info->result);
+    printf("%s: %d", one_info->result, one_info->match);
 }
 
 
@@ -74,6 +74,7 @@ void listInfo_append(listinfo_t *one_list, char *one_result)
     
     info_t *newInfo = malloc(sizeof(*newInfo));
     newInfo->suivant = NULL;
+    newInfo->match = 0;
     strcpy(newInfo->result,one_result);
 
     if (info == NULL)
@@ -191,26 +192,101 @@ void getMatches(listinfo_t *infoList, list_t *wordList, char oneWord[20])
     //Pour chaque possibilité de pattern
     info_t *currentInfo = infoList->premier;
 
-    while (currentInfo->suivant != NULL)
+    while (currentInfo != NULL)
     {
+        //On initialise le nombre de match pour ce pattern
+        int nbMatches = 0;
+        
         //Pour chaque mot
         element_t *currentElement = wordList->premier;
 
-        while (currentElement->suivant != NULL)
+        while (currentElement != NULL)
         {
-            for (int i=0; i<SIZE; i++)
+            int i = 0;
+            int wrong = 0;
+            char possibleMatch[20];
+            strcpy(possibleMatch, currentElement->mot);
+            while (i<SIZE && wrong == 0)
             {
-                if (strcmp(oneWord[i], currentElement->mot[i]) == 0)
+                //printf("%d: ", i);
+                //printf("%c - %c: ", oneWord[i], possibleMatch[i]);
+                //Si les caractères sont identiques
+                if (oneWord[i] == possibleMatch[i])
                 {
-                    
+                    //printf("SAME\n");
+                    //Si le pattern montre que les caractères ne sont pas identiques
+                    if (currentInfo->result[i] == '0')
+                    {
+                        //printf("\tPATTERN NOT CORRESPOND\n");
+                        //On peut passer au mot suivant
+                        wrong = 1;
+                    }
+                    //Si le pattern montre que le caractère est mal placé
+                    else if (currentInfo->result[i] == '1')
+                    {
+                        //printf("\tPATTERN NOT CORRESPOND\n");
+                        //On peut passer au mot suivant
+                        wrong = 1;
+                    }
+                    else
+                    {
+                        //printf("\tPATTERN CORRESPOND\n");
+                    }
                 }
+                //Si les caractères sont différents
+                if (oneWord[i] != possibleMatch[i])
+                {
+                    //printf("DIFFERENT\n");
+                    //Si le pattern montre que les caractères sont identiques
+                    if (currentInfo->result[i] == '2')
+                    {
+                        //On peut passer au mot suivant
+                        wrong = 1;
+                    }
+                    //Si le pattern montre que les caractères sont mal placés
+                    if (currentInfo->result[i] == '1')
+                    {
+                        //Si le caractère n'appartient pas au mot
+                        if (strchr(possibleMatch, oneWord[i]) == NULL)
+                        {
+                            //On peut passer au mot suivant
+                            wrong = 1;
+                        }
+                        //Sinon
+                        else
+                        { 
+                            //On regarde à quel endroit apparait la lettre dans le mot possible
+                            int indOcc = indiceOccurence(possibleMatch, oneWord[i]);
+                            //On le remplace par un chiffre
+                            possibleMatch[indOcc] = '8';
+                            //On passe aux lettres suivantes
+                        }
+                    }
+                }
+                i++;
+            }
+            if (wrong == 0)
+            {
+                nbMatches++;
+                //printf("%s: %s - %s\n\n", currentInfo->result, oneWord, currentElement->mot);
             }
             
-            //Incrémentation
+            //On passe au mot suivant
             currentElement = currentElement->suivant;
         }
-        
-        //Incrémentation
+        //On ajoute à la liste chaînée le nombre de matchs pour le pattern
+        currentInfo->match = nbMatches;
+        //On passe au pattern suivant
         currentInfo = currentInfo->suivant;
     }
+}
+
+int indiceOccurence(char *word, char caractere)
+{
+    int i = 0;
+    while (word[i] != caractere)
+    {
+        i++;
+    }
+    return i;
 }

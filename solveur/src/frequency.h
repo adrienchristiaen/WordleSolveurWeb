@@ -39,4 +39,8 @@ void allResults(listinfo_t *oneList, char* table, int i, int size);
 
 int lengthListInfo(listinfo_t *oneList);
 
+void getMatches(listinfo_t *infoList, list_t *wordList, char oneWord[20]);
+
+int indiceOccurence(char *word, char caractere);
+
 #endif /*__FREQUENCY_H__*/
