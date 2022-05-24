@@ -6,5 +6,6 @@
 #include "solveur.h"
 
 void updateList(char *mot,list_t *oneList);
+int presentXfois(char *tab, int x, char lettre);
 
 #endif /*__UPDATELIST_H__*/
