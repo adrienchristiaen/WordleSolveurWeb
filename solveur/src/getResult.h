@@ -5,6 +5,6 @@
 #include <stdlib.h>
 #include "solveur.h"
 
-void getResult(char *text);
+int getResult(char *text);
 
 #endif /*__GETRESULT_H__*/

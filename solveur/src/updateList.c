@@ -4,31 +4,37 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void updateList(char *mot,list_t *oneList){
+void updateList(char *mot_prop,list_t *oneList){
     char text[10];
-    getResult(&text);
+    int inutile = getResult(&text);
     int i;
-    int k;
-    size_t n = sizeof(oneList);
     for(i=0 ; i<10 ; i++) {
 	    if (text[i]==2){
-            for(k=0 ; k<n ; k++){
-                if (oneList[k][i] != mot[i]) {
-                    supr(oneList,oneList[k])
+            element_t *actuel = oneList->premier;
+            while (actuel != NULL) {   
+                if (actuel->mot[i]!=mot_prop[i]){
+                    supr(actuel->mot,oneList)
                 }
+                actuel = actuel->suivant;
             }
         }
         else if (text[i]==0){
-            for(k=0 ; k<n ; k++){
-                if (Array.Exists(oneList[k], x => x == mot[i])) {
-                    supr(oneList,oneList[k])
+            element_t *actuel = oneList->premier;
+            while (actuel != NULL) {   
+                if (strchr(actuel->mot,mot_prop[i] != NULL)){
+                    supr(actuel->mot,oneList)
                 }
+                actuel = actuel->suivant;
             }
         }
         else if (text[i]==1){
-            for(k=0 ; k<n ; k++){
-                if (!(Array.Exists(oneList[k], x => x == mot[i]))) {
-                    supr(oneList,oneList[k])
+            element_t *actuel = oneList->premier;
+            while (actuel != NULL) {   
+                if (strchr(actuel->mot,mot_prop[i] == NULL)){
+                    supr(actuel->mot,oneList)
+                }
+                actuel = actuel->suivant;
+            }  
         }
     }
 }
