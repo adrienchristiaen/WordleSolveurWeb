@@ -22,8 +22,12 @@ int main()
     getMatches(infoList, liste_mots, "POULE");
     listInfo_print(infoList);
 
+    //Information
+    getBits(3,7645);
+    
     //Suppression des listes
     listInfo_destroy(infoList);
     list_destroy(liste_mots);
+
     return 0;
 }

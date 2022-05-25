@@ -1,8 +1,10 @@
 #ifndef __FREQUENCY_H__
 #define __FREQUENCY_H__
 #define SIZE 5
+#define NBMOTS 7645
 
 #include "solveur.h"
+#include <math.h>
 
 typedef struct info_t info_t;
 
@@ -42,5 +44,7 @@ int lengthListInfo(listinfo_t *oneList);
 void getMatches(listinfo_t *infoList, list_t *wordList, char oneWord[20]);
 
 int indiceOccurence(char *word, char caractere);
+
+double getBits(int nbMatches, int nbWords);
 
 #endif /*__FREQUENCY_H__*/

@@ -290,3 +290,17 @@ int indiceOccurence(char *word, char caractere)
     }
     return i;
 }
+
+double getBits(int nbMatches, int nbWords)
+{
+    double probability;
+    //Calcul de la probabilité qu'un mot soit "accepté" par un pattern donné
+    probability = (double) nbMatches/nbWords;
+    //printf("%f probability\n", probability);
+
+    double bits;
+    //Calcul de l'information obtenue (autre écriture de la proba)
+    bits = log2(1/probability);
+
+    return bits;
+}
