@@ -7,11 +7,17 @@ int main()
     //printf("AJOUT MOT\n");
     ajout_mots(liste_mots);
     //printf("LIST PRINT\n");
-    //list_print(liste_mots);
+    list_print(liste_mots);
+    freqScore(liste_mots);
+    char* mot = giveProposition(liste_mots);
+    printf("%s\n",mot);
     int combinaison = getResult(strlen(liste_mots->premier->mot));
     while (combinaison != -1)
     {
-        printf("%d  \n",combinaison);
+        updateList(liste_mots,mot,combinaison);
+        list_print(liste_mots);
+        freqScore(liste_mots);
+        printf("Score premier mot %lf",liste_mots->premier->freqScore);
         combinaison = getResult(strlen(liste_mots->premier->mot));
     }
 

@@ -27,9 +27,8 @@ void ajout_mots(list_t* list_vide)
         exit(EXIT_FAILURE);
     }
     //list_print(list_vide);
-    while(!feof(in_file))
+    while(fscanf(in_file, "%s", word)!= EOF)
     {
-        fscanf(in_file, "%s", word);
         //printf("%s\n",word);
         list_append(list_vide, word, 0);
         //list_print(list_vide);
@@ -39,32 +38,42 @@ void ajout_mots(list_t* list_vide)
 }
 
 
-
-
-double freq_letters(list_t *liste_mots, char lettre)
+void list_append(list_t *one_list, char *one_key, double one_value)
 {
-    assert(liste_mots != NULL);
+    assert(one_list != NULL);
     
-    element_t* actuel = liste_mots -> premier;
-    int total_lettres=0;
-    int total_lettre=0;
-    double result;
-    while (actuel -> mot != NULL)
+    //printf("LIST APPEND: %s\n",one_key);
+
+    element_t* nouveau_element = malloc(sizeof(*nouveau_element));
+
+    if (nouveau_element == NULL)
     {
-        char* mot = actuel->mot;
-        for (unsigned long i=0;i<strlen(mot);i++)
-        {
-            if(mot[i]==lettre)
-            {
-                total_lettre+=1;
-            }
-            total_lettres+=1;
-        }
-        actuel = actuel -> suivant;
+        perror("can't allocate a new element");
     }
-    result=total_lettre/total_lettres;
-    return result;
+
+    strcpy(nouveau_element->mot, one_key);
+    //printf("LIST APPEND CHECK: %s\n",nouveau_element -> mot);
+    nouveau_element -> freqScore = one_value;
+    nouveau_element -> suivant = NULL; 
+
+    element_t* actuel = one_list -> premier;
+
+    if (actuel == NULL)
+    {
+        one_list->premier = nouveau_element;
+    }
+    else
+    {
+        while (actuel -> suivant != NULL)
+        {
+            //printf("%s\n",actuel->mot);
+            actuel = actuel -> suivant;
+        }
+        actuel -> suivant = nouveau_element;
+    }
 }
+
+
 
 
 
@@ -103,42 +112,9 @@ void list_print(list_t *liste_mots)
 }
 
 
-void list_append(list_t *one_list, char *one_key, double one_value)
+
+int getResult(unsigned int longueur_mot) 
 {
-    assert(one_list != NULL);
-    
-    //printf("LIST APPEND: %s\n",one_key);
-
-    element_t* nouveau_element = malloc(sizeof(*nouveau_element));
-
-    if (nouveau_element == NULL)
-    {
-        perror("can't allocate a new element");
-    }
-
-    strcpy(nouveau_element->mot, one_key);
-    //printf("LIST APPEND CHECK: %s\n",nouveau_element -> mot);
-    nouveau_element -> freqScore = one_value;
-    nouveau_element -> suivant = NULL; 
-
-    element_t* actuel = one_list -> premier;
-
-    if (actuel == NULL)
-    {
-        one_list->premier = nouveau_element;
-        return;
-    }
-
-    while (actuel -> suivant != NULL)
-    {
-        //printf("%s\n",actuel->mot);
-        actuel = actuel -> suivant;
-    }
-    actuel -> suivant = nouveau_element;
-}
-
-
-int getResult(unsigned int longueur_mot) {
     char nombreEntre[longueur_mot+1];
 
     printf("Entrez la réponse : ");
@@ -160,7 +136,6 @@ int getResult(unsigned int longueur_mot) {
 		int combinaison=0;
 		for(unsigned int i=0;i<longueur_mot;i++)
 		{
-			printf("oui\n");
 			char c = nombreEntre[longueur_mot-1-i];
 			if (c == '2' || c == '1' || c == '0')
 			{
@@ -179,4 +154,19 @@ int getResult(unsigned int longueur_mot) {
     }
 }
 
-
+char* giveProposition(list_t* one_list)
+{
+    element_t *depart = one_list->premier;
+    double best = 0;
+    char* best_mot;
+    while (depart!=NULL)
+    {
+        if (depart->freqScore>best)
+        {
+            best = depart->freqScore;
+            best_mot = depart->mot;
+        }
+        depart = depart->suivant;
+    }
+    return best_mot;
+}

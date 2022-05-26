@@ -47,7 +47,6 @@ struct listinfo_t
     char word[20];
 };
 
-
 /*_______________Création liste mots__________________*/
 list_t *list_create();
 
@@ -62,7 +61,7 @@ void list_print(list_t *liste_mots);
 void list_append(list_t *one_list, char *one_key, double one_value);
 
 /*_______________Fréquences__________________*/
-void freqScore(list_t *oneList, char *freqList, char *alphabet);
+void freqScore(list_t *oneList);
 
 listinfo_t* createListInfo();
 
@@ -89,10 +88,13 @@ int indiceOccurence(char *word, char caractere);
 /*_______________Récupère le résultat__________________*/
 int getResult(unsigned int longueur_mot);
 
+char* giveProposition(list_t *oneList);
 
 
 /*_______________Met à jour la liste__________________*/
-void updateList(char *mot,list_t *oneList);
+void supprimeMot(list_t *oneList, char*mot);
+
+void updateList(list_t *oneList,char *mot_prop,int combinaison);
 
 int presentXfois(char *tab, int x, char lettre);
 
