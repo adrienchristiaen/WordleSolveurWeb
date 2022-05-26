@@ -86,7 +86,7 @@ int indiceOccurence(char *word, char caractere);
 
 
 /*_______________Récupère le résultat__________________*/
-int getResult(unsigned int longueur_mot);
+char* getResult(unsigned int longueur_mot);
 
 char* giveProposition(list_t *oneList);
 
@@ -94,7 +94,7 @@ char* giveProposition(list_t *oneList);
 /*_______________Met à jour la liste__________________*/
 void supprimeMot(list_t *oneList, char*mot);
 
-void updateList(list_t *oneList,char *mot_prop,int combinaison);
+void updateList(list_t *oneList,char *mot_prop,char *combinaison);
 
 int presentXfois(char *tab, int x, char lettre);
 

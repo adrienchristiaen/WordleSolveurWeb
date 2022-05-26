@@ -113,44 +113,41 @@ void list_print(list_t *liste_mots)
 
 
 
-int getResult(unsigned int longueur_mot) 
+char* getResult(unsigned int longueur_mot) 
 {
-    char nombreEntre[longueur_mot+1];
+    //char nombreEntre[longueur_mot+1];
+    char* nombreEntre=malloc(sizeof(char)*longueur_mot+1);
+    //printf("%d",longueur_mot);
 
     printf("Entrez la réponse : ");
     scanf("%s", nombreEntre);
-
+    //printf("%ld",strlen(nombreEntre));
+    //printf("%s",nombreEntre);
     if (strcmp(nombreEntre,"-1")==0) 
 	{
         printf ("La partie s'arrete\n");
-        return(-1);
+        return"-1";
     }
     else if (strlen(nombreEntre)!=longueur_mot)
 	{
 		printf("Proposition non valide\n");
-		return 0;
+		return "0";
 	}
 	else
 	{
         printf("La partie continue\n");
-		int combinaison=0;
 		for(unsigned int i=0;i<longueur_mot;i++)
 		{
 			char c = nombreEntre[longueur_mot-1-i];
-			if (c == '2' || c == '1' || c == '0')
+			if (c != '2' && c != '1' && c != '0')
 			{
-				c = c - '0';
-				combinaison+= (int)c*pow(10,i);
-			}
-			else
-			{
+                //printf("%c",c);
 				printf("Proposition non valide\n");
-				return 0;
-			}
-			
+				return "0";
+			}		
 		}
-        printf("La réponse entrée est %d\n", combinaison);
-        return combinaison;
+        printf("La réponse entrée est %s\n", nombreEntre);
+        return nombreEntre;
     }
 }
 

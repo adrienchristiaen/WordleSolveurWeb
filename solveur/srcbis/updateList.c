@@ -2,7 +2,7 @@
 
 
 
-void updateList(list_t *oneList,char *mot_prop,int combinaison)
+void updateListV2(list_t *oneList,char *mot_prop,int combinaison)
 {
     char text[20];
     sprintf(text, "%d", combinaison);
@@ -14,7 +14,7 @@ void updateList(list_t *oneList,char *mot_prop,int combinaison)
             {   
                 if (actuel->mot[i]!=mot_prop[i])
                 {
-                    supprimeMot(oneList, actuel->mot);
+                    deleteWord(oneList, actuel->mot);
                 }
                 actuel = actuel->suivant;
             }
@@ -25,7 +25,7 @@ void updateList(list_t *oneList,char *mot_prop,int combinaison)
             {   
                 if (strchr(actuel->mot,mot_prop[i]) != NULL)
                 {
-                    supprimeMot(oneList, actuel->mot);
+                    deleteWord(oneList, actuel->mot);
                 }
                 actuel = actuel->suivant;
             }
@@ -36,7 +36,7 @@ void updateList(list_t *oneList,char *mot_prop,int combinaison)
             {   
                 if (strchr(actuel->mot,mot_prop[i]) == NULL)
                 {
-                    supprimeMot(oneList, actuel->mot);
+                    deleteWord(oneList, actuel->mot);
                 }
                 actuel = actuel->suivant;
             }  
@@ -79,6 +79,55 @@ int presentXfois(char *tab, int x, char lettre) {
     }
     else {
         return(0);
+    }
+}
+
+void updateList(list_t *oneList,char *mot_prop,char* combinaison)
+{
+    unsigned int taille_mot = strlen(mot_prop);
+    //printf("%d",taille_mot);
+    char text[taille_mot+1];
+    strcpy(text,combinaison);
+    for(unsigned int i=0 ; i<taille_mot ; i++) 
+    {
+        //printf("%c\n",text[i]);
+        if (text[i]=='2')
+        {
+            element_t *actuel = oneList->premier;
+            while (actuel != NULL) 
+            {   
+                //printf("%c,%c\n",actuel->mot[i],mot_prop[i]);
+                if (actuel->mot[i]!=mot_prop[i])
+                {
+                    //printf("ca passe\n");
+                    element_t* temp=actuel;
+                    actuel = actuel->suivant;
+                    supprimeMot(oneList, temp->mot);
+                }
+                else
+                {
+                    actuel = actuel->suivant;
+                }
+            }
+        }
+        else if (text[i]=='0')
+        {
+            element_t *actuel = oneList->premier;
+            while (actuel != NULL) 
+            {   
+                if (actuel->mot[i]==mot_prop[i])
+                {
+                    //printf("ca passe\n");
+                    element_t* temp=actuel;
+                    actuel = actuel->suivant;
+                    supprimeMot(oneList, temp->mot);
+                }
+                else
+                {
+                    actuel = actuel->suivant;
+                }
+            }
+        }
     }
 }
 
