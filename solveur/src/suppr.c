@@ -6,25 +6,25 @@ void suppr_tout_critere(t_elem**prem,int val)
 {
 t_elem*n,*sup,*prec;
     // supprimer au début
-    while(*prem!=NULL && (*prem)->val==val){
+    while(*prem!=NULL && (*prem)->valeur==val){
         sup=*prem;
-        *prem=(*prem)->suiv;
+        *prem=(*prem)->suivant;
         free(sup);
     }
     // les suivants
     if (*prem!=NULL){
         prec=*prem;
-        n=prec->suiv;
+        n=prec->suivant;
         while (n!=NULL){
-            while(n!=NULL && n->val==val){
+            while(n!=NULL && n->valeur==val){
                 sup=n;
-                n=n->suiv;
-                prec->suiv=n;
+                n=n->suivant;
+                prec->suivant=n;
                 free(sup);
             }
             if (n!=NULL){
                 prec=n;
-                n=n->suiv;
+                n=n->suivant;
             }
         }
     }
