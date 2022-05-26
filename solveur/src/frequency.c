@@ -39,7 +39,7 @@ listinfo_t* createListInfo()
 
 void info_print(info_t *one_info)
 {
-    printf("%s: %d", one_info->result, one_info->match);
+    printf("%s: %d: %lf", one_info->result, one_info->match, one_info->bits);
 }
 
 
@@ -64,7 +64,7 @@ void listInfo_print(listinfo_t *one_list)
         info_print(info);
     }
 
-    printf(")\n");
+    printf(")\n\n");
 }
 
 
@@ -75,6 +75,7 @@ void listInfo_append(listinfo_t *one_list, char *one_result)
     info_t *newInfo = malloc(sizeof(*newInfo));
     newInfo->suivant = NULL;
     newInfo->match = 0;
+    newInfo->bits = 0;
     strcpy(newInfo->result,one_result);
 
     if (info == NULL)
@@ -298,9 +299,87 @@ double getBits(int nbMatches, int nbWords)
     probability = (double) nbMatches/nbWords;
     //printf("%f probability\n", probability);
 
-    double bits;
+    double bits = 0;
     //Calcul de l'information obtenue (autre écriture de la proba)
-    bits = log2(1/probability);
+    if (probability != 0)
+    {
+        bits = log2(1/probability);
+    }
 
     return bits;
+}
+
+allinfo_t *getAllInfoForAllWords(list_t *wordList)
+{
+    //Création de la liste chaînée contenant les informations de tous les mots
+    allinfo_t *allInfo = createAllInfoList();
+    //Initialisation au premier mot
+    element_t *currentElem = wordList->premier;
+
+    while (currentElem != NULL)
+    {
+        //Initialisation liste info associée au mot
+        listinfo_t *newListInfo = createListInfo();
+        newListInfo->next = NULL;
+        newListInfo->meanBits = 0.0;
+
+        if (newListInfo == NULL)
+        {
+            perror("No memory enough.");
+        }
+
+        strcpy(newListInfo->word,currentElem->mot);
+        //Remplissage de la liste info
+        getAllInfoForOneWord(newListInfo, wordList, currentElem->mot);
+        //Ajout à la liste allinfo
+        if (allInfo->first == NULL)
+        {
+            allInfo->first = newListInfo;
+        }
+        else
+        {
+            listinfo_t *currentListInfo = allInfo->first;
+            while (currentListInfo->next != NULL)
+            {
+                currentListInfo = currentListInfo->next;
+            }
+            currentListInfo->next = newListInfo;
+        }
+        //Itération élément suivant
+        currentElem = currentElem->suivant;
+    }
+}
+
+allinfo_t *createAllInfoList()
+{
+    allinfo_t *newAllInfoList = malloc(sizeof(*newAllInfoList));
+
+    if (newAllInfoList == NULL)
+    {
+        perror("no memory enough for allinfo");
+    }
+
+    newAllInfoList->first = NULL;
+
+    return newAllInfoList;
+}
+
+void getAllInfoForOneWord(listinfo_t *oneListInfo, list_t *oneWorldList, char* word)
+{
+    //Calcul des patterns
+    initListInfo(oneListInfo);
+    //Calcul des matchs
+    getMatches(oneListInfo, oneWorldList, word);
+    //Calcul des bits
+    info_t *currentInfo = oneListInfo->premier;
+    while (currentInfo != NULL)
+    {
+        currentInfo->bits = getBits(currentInfo->match, NBMOTS);
+        currentInfo = currentInfo->suivant;
+    }
+    //Calcul de la moyenne des bits
+    
+    //Affichage
+    printf("Mot: %s\n", oneListInfo->word);
+    //listInfo_print(oneListInfo);
 }

@@ -16,14 +16,16 @@ int main()
     listinfo_t *infoList = createListInfo();
     initListInfo(infoList);
     //listInfo_print(infoList);
-    int len = lengthListInfo(infoList);
-    printf("My length is: %d\n",len);
+    //int len = lengthListInfo(infoList);
+    //printf("My length is: %d\n",len);
 
-    getMatches(infoList, liste_mots, "POULE");
-    listInfo_print(infoList);
+    //getMatches(infoList, liste_mots, "POULE");
+    //listInfo_print(infoList);
 
     //Information
-    getBits(3,7645);
+    printf("\nINFORMATION:\n\n");
+    //getBits(3,7645);
+    getAllInfoForAllWords(liste_mots);
     
     //Suppression des listes
     listInfo_destroy(infoList);
