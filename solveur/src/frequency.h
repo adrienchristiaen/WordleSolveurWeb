@@ -63,4 +63,8 @@ allinfo_t *createAllInfoList();
 
 void getAllInfoForOneWord(listinfo_t *oneListInfo, list_t *oneWorldList, char* word);
 
+double getMeanBits(listinfo_t *oneListInfo);
+
+void destroyAllInfo(allinfo_t *oneAllInfo);
+
 #endif /*__FREQUENCY_H__*/

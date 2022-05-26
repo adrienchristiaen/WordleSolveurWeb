@@ -299,7 +299,7 @@ double getBits(int nbMatches, int nbWords)
     probability = (double) nbMatches/nbWords;
     //printf("%f probability\n", probability);
 
-    double bits = 0;
+    double bits = 0.0;
     //Calcul de l'information obtenue (autre écriture de la proba)
     if (probability != 0)
     {
@@ -348,6 +348,7 @@ allinfo_t *getAllInfoForAllWords(list_t *wordList)
         //Itération élément suivant
         currentElem = currentElem->suivant;
     }
+    return allInfo;
 }
 
 allinfo_t *createAllInfoList()
@@ -378,8 +379,44 @@ void getAllInfoForOneWord(listinfo_t *oneListInfo, list_t *oneWorldList, char* w
         currentInfo = currentInfo->suivant;
     }
     //Calcul de la moyenne des bits
-    
+    double meanBits = getMeanBits(oneListInfo);
     //Affichage
-    printf("Mot: %s\n", oneListInfo->word);
+    printf("Mot: %s. Bits: %lf\n", oneListInfo->word, meanBits);
     //listInfo_print(oneListInfo);
+}
+
+double getMeanBits(listinfo_t *oneListInfo)
+{
+    info_t *currentInfo = oneListInfo->premier;
+    double meanBits = 0;
+    int nbBits = 0;
+    //int nbPatterns = 0;
+
+    while (currentInfo != NULL)
+    {
+        if (currentInfo->bits != 0)
+        {
+            nbBits += currentInfo->bits;
+            //nbPatterns++;
+        }
+        currentInfo = currentInfo->suivant;
+    }
+    meanBits = (double) nbBits/243;
+
+    return meanBits;
+}
+
+void destroyAllInfo(allinfo_t *oneAllInfo)
+{
+    listinfo_t *currentInfoList = oneAllInfo->first;
+    listinfo_t *nextInfoList;
+
+    while (currentInfoList->next != NULL)
+    {
+        nextInfoList = currentInfoList->next;
+        listInfo_destroy(currentInfoList);
+        currentInfoList = nextInfoList;
+    }
+    listInfo_destroy(currentInfoList);
+    free(oneAllInfo);
 }
