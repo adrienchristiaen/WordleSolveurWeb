@@ -1,4 +1,4 @@
-#include "suppr.h"
+#include "delword.h"
 #include <stdio.h>
 #include <stdlib.h>
 
