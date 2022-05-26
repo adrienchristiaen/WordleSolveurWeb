@@ -12,7 +12,7 @@ LDFLAGS+=-fsanitize=address
 ############################
 
 # Program:
-solveur_test: solveur.o solveur_test.o frequency.o -lm
+solveur_test: solveur.o solveur_test.o frequency.o updateList.o delword.o -lm
 
 # Format is:
 ## program_name: file_name1.o file_name2.o
@@ -22,6 +22,8 @@ solveur_test: solveur.o solveur_test.o frequency.o -lm
 solveur.o: solveur.h solveur.c
 solveur_test.o: solveur.h solveur_test.c
 frequency.o: solveur.h frequency.c
+updateList.o: solveur.h updateList.c
+delword.o : solveur.h delword.c
 
 # Format is:
 ## file_name.o: <dependency.o> <header_file.h> file_name.c

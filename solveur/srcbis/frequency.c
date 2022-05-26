@@ -1,24 +1,68 @@
 #include "solveur.h"
 
-void freqScore(list_t *oneList, char *freqList, char *alphabet) //Possibilité de créer alphabet dans la fonction directement
+double freq_letters(list_t *liste_mots, char lettre)
+{
+    assert(liste_mots != NULL);
+    
+    element_t* actuel = liste_mots -> premier;
+    int total_lettres=0;
+    int total_lettre=0;
+    double result;
+    while (actuel != NULL)
+    {
+        char* mot = actuel->mot;
+        for (unsigned long i=0;i<strlen(mot);i++)
+        {
+            //printf("%d,%d\n",mot[i],lettre);
+            if(mot[i]==lettre)
+            {
+                total_lettre+=1;
+                //printf("%d\n",total_lettre);
+            }
+            total_lettres+=1;
+            //printf("%d\n",total_lettres);
+        }
+
+        //printf("%s\n",actuel->mot);
+        actuel = actuel -> suivant;
+    }
+    result=(double)total_lettre/total_lettres;
+    return result;
+}
+
+
+
+void freqScore(list_t *oneList) //Possibilité de créer alphabet dans la fonction directement
 {
     element_t *myElem = oneList->premier; //Initialisation au premier élément de la liste
 
-    while (myElem->suivant != NULL) //Le dernier élément pointe vers NULL
+    double freq_alphabet[26];
+    char alphabet[26];
+    int i=0;
+    for (char c='A'; c<='Z' ; c++)
+    {
+        alphabet[i]=c;
+        freq_alphabet[i]=freq_letters(oneList,(char)c);
+        //printf("%lf",freq_alphabet[i]);
+        i+=1;
+    }
+
+    while (myElem!= NULL) //Le dernier élément pointe vers NULL
     {
         char* myWord = myElem->mot;
-        int length = 5; //A changer par une variable globale
-
+        int length = strlen(myWord); 
         for (int i=0; i<length; i++) //Parcours toutes les lettres du mot
         {
             for (int j=0; j<26; j++) //Parcours les lettres de l'alphabet
             {
                 if (myWord[i] == alphabet[j]) //Même lettres
                 {
-                    myElem->freqScore += freqList[j]; //Ajout de la fréquence au score de l'élément
+                    myElem->freqScore += freq_alphabet[j]; //Ajout de la fréquence au score de l'élément
                 }
             }
         }
+        myElem = myElem -> suivant;
+
     }
 }
 
