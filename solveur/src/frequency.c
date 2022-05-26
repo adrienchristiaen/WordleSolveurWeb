@@ -380,6 +380,7 @@ void getAllInfoForOneWord(listinfo_t *oneListInfo, list_t *oneWorldList, char* w
     }
     //Calcul de la moyenne des bits
     double meanBits = getMeanBits(oneListInfo);
+    oneListInfo->meanBits = meanBits;
     //Affichage
     printf("Mot: %s. Bits: %lf\n", oneListInfo->word, meanBits);
     //listInfo_print(oneListInfo);
@@ -390,18 +391,18 @@ double getMeanBits(listinfo_t *oneListInfo)
     info_t *currentInfo = oneListInfo->premier;
     double meanBits = 0;
     int nbBits = 0;
-    //int nbPatterns = 0;
+    int nbPatterns = 0;
 
     while (currentInfo != NULL)
     {
         if (currentInfo->bits != 0)
         {
             nbBits += currentInfo->bits;
-            //nbPatterns++;
         }
+        nbPatterns++;
         currentInfo = currentInfo->suivant;
     }
-    meanBits = (double) nbBits/243;
+    meanBits = (double) nbBits/nbPatterns;
 
     return meanBits;
 }
@@ -419,4 +420,25 @@ void destroyAllInfo(allinfo_t *oneAllInfo)
     }
     listInfo_destroy(currentInfoList);
     free(oneAllInfo);
+}
+
+char *getBestWord(allinfo_t *oneAllInfo)
+{
+    listinfo_t *currentInfoList = oneAllInfo->first;
+    double bestMeanBits = 0;
+    char *bestWord = malloc(sizeof(char)*20);
+
+    while (currentInfoList != NULL)
+    {
+        //printf("%lf : %lf\n", currentInfoList->meanBits, bestMeanBits);
+        if (currentInfoList->meanBits > bestMeanBits)
+        {
+            strcpy(bestWord, currentInfoList->word);
+            bestMeanBits = currentInfoList->meanBits;
+        }
+        currentInfoList = currentInfoList->next;
+    }
+    printf("Best bits: %lf.\n", bestMeanBits);
+    //printf("Best word: %s\n", bestWord);
+    return bestWord;
 }

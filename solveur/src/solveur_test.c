@@ -32,7 +32,10 @@ int main()
     printf("\nINFORMATION:\n\n");
     //getBits(3,7645);
     allinfo_t *myAllInfo = getAllInfoForAllWords(liste_mots);
-    
+    char *myBestWord = getBestWord(myAllInfo);
+    printf("The best word is: %s.\n", myBestWord);
+    free(myBestWord);
+
     //Suppression des listes
     destroyAllInfo(myAllInfo);
     //listInfo_destroy(infoList);

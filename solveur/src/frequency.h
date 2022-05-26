@@ -67,4 +67,6 @@ double getMeanBits(listinfo_t *oneListInfo);
 
 void destroyAllInfo(allinfo_t *oneAllInfo);
 
+char *getBestWord(allinfo_t *oneAllInfo);
+
 #endif /*__FREQUENCY_H__*/
