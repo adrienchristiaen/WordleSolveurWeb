@@ -13,19 +13,27 @@ int main()
     char* mot = giveProposition(liste_mots);
     printf("%s\n",mot);
     char* combinaison = getResult(taille_mot);
-    while (strcmp(combinaison,"-1")!=0)
+    while (strcmp(combinaison,"-1")!=0 && strcmp(liste_mots->premier->mot,"")!=0)
     {
         while (strcmp(combinaison,"0")==0)
         {
             combinaison = getResult(taille_mot);
         }
         updateList(liste_mots,mot,combinaison);
+        if (strcmp(liste_mots->premier->mot,"")!=0)
+        {
+            list_print(liste_mots);
+            freqScore(liste_mots);
+            mot = giveProposition(liste_mots);
+            printf("%s\n",mot);
+            printf("Score premier mot %lf\n",liste_mots->premier->freqScore);
+            combinaison = getResult(taille_mot);
+        }
+        else
+        printf("Aucun mot n'est possible : ");
         list_print(liste_mots);
-        freqScore(liste_mots);
-        printf("Score premier mot %lf\n",liste_mots->premier->freqScore);
-        combinaison = getResult(taille_mot);
+        printf("\n");
     }
-
     /* TEST FREQUENCE */
     listinfo_t *infoList = createListInfo();
     initListInfo(infoList);
@@ -33,7 +41,7 @@ int main()
     int len = lengthListInfo(infoList);
     printf("My length is: %d\n",len);
 
-    getMatches(infoList, liste_mots, "POULE");
+    //getMatches(infoList, liste_mots, "POULE");
     //listInfo_print(infoList);
 
     //Suppression des listes

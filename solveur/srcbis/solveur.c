@@ -165,5 +165,6 @@ char* giveProposition(list_t* one_list)
         }
         depart = depart->suivant;
     }
+    supprimeMot(one_list,best_mot);
     return best_mot;
 }

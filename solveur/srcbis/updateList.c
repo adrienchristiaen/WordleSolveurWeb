@@ -90,49 +90,52 @@ void updateList(list_t *oneList,char *mot_prop,char* combinaison)
     strcpy(text,combinaison);
     for(unsigned int i=0 ; i<taille_mot ; i++) 
     {
-        printf("Etude de l'élément: %d du pattern: %s.\n", i, text);
-        //printf("%c\n",text[i]);
-        if (text[i]=='2')
+        if (oneList->premier->mot != "")
         {
-            element_t *actuel = oneList->premier;
-            while (actuel != NULL) 
-            {   
-                //printf("%c,%c\n",actuel->mot[i],mot_prop[i]);
-                if (actuel->mot[i]!=mot_prop[i])
-                {
-                    //printf("ca passe\n");
-                    element_t* temp=actuel;
-                    actuel = actuel->suivant;
-                    supprimeMot(oneList, temp->mot);
-                }
-                else
-                {
-                    actuel = actuel->suivant;
+            printf("Etude de l'élément: %d du pattern: %s.\n", i, text);
+            //printf("%c\n",text[i]);
+            if (text[i]=='2')
+            {
+                element_t *actuel = oneList->premier;
+                while (actuel != NULL) 
+                {   
+                    //printf("%c,%c\n",actuel->mot[i],mot_prop[i]);
+                    if (actuel->mot[i]!=mot_prop[i])
+                    {
+                        //printf("ca passe\n");
+                        element_t* temp=actuel;
+                        actuel = actuel->suivant;
+                        supprimeMot(oneList, temp->mot);
+                    }
+                    else
+                    {
+                        actuel = actuel->suivant;
+                    }
                 }
             }
-        }
-        else if (text[i]=='0')
-        {
-            printf("Elem of pattern is 0.\n");
-            element_t *actuel = oneList->premier;
-            while (actuel != NULL) 
-            {   
-                printf("Current word: %s.\n", actuel->mot);
-                printf("Lettre indice %d du mot actuel %s comparé: %c.\n", i, actuel->mot, actuel->mot[i]);
-                printf("Lettre indice: %d.\n", i);
-                printf("Mot proposé: %s.\n", mot_prop);
-                printf("Indice mot proposé: %c.\n", mot_prop[i]);
-                printf("Lettre indice %d du mot proposé %s comparé: %c.\n", i, mot_prop, mot_prop[i]);
-                if (actuel->mot[i] == mot_prop[i])
-                {
-                    //printf("ca passe\n");
-                    element_t* temp=actuel;
-                    actuel = actuel->suivant;
-                    supprimeMot(oneList, temp->mot);
-                }
-                else
-                {
-                    actuel = actuel->suivant;
+            else if (text[i]=='0')
+            {
+                printf("Elem of pattern is 0.\n");
+                element_t *actuel = oneList->premier;
+                while (actuel != NULL) 
+                {   
+                    printf("Current word: %s.\n", actuel->mot);
+                    printf("Lettre indice %d du mot actuel %s comparé: %c.\n", i, actuel->mot, actuel->mot[i]);
+                    // printf("Lettre indice: %d.\n", i);
+                    // printf("Mot proposé: %s.\n", mot_prop);
+                    // printf("Indice mot proposé: %c.\n", mot_prop[i]);
+                    printf("Lettre indice %d du mot proposé %s comparé: %c.\n\n", i, mot_prop, mot_prop[i]);
+                    if (actuel->mot[i] == mot_prop[i])
+                    {
+                        //printf("ca passe\n");
+                        element_t* temp=actuel;
+                        actuel = actuel->suivant;
+                        supprimeMot(oneList, temp->mot);
+                    }
+                    else
+                    {
+                        actuel = actuel->suivant;
+                    }
                 }
             }
         }
