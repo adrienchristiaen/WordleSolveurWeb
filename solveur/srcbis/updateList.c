@@ -14,7 +14,7 @@ void updateListV2(list_t *oneList,char *mot_prop,int combinaison)
             {   
                 if (actuel->mot[i]!=mot_prop[i])
                 {
-                    deleteWord(oneList, actuel->mot);
+                    supprimeMot(oneList, actuel->mot);
                 }
                 actuel = actuel->suivant;
             }
@@ -25,7 +25,7 @@ void updateListV2(list_t *oneList,char *mot_prop,int combinaison)
             {   
                 if (strchr(actuel->mot,mot_prop[i]) != NULL)
                 {
-                    deleteWord(oneList, actuel->mot);
+                    supprimeMot(oneList, actuel->mot);
                 }
                 actuel = actuel->suivant;
             }
@@ -36,7 +36,7 @@ void updateListV2(list_t *oneList,char *mot_prop,int combinaison)
             {   
                 if (strchr(actuel->mot,mot_prop[i]) == NULL)
                 {
-                    deleteWord(oneList, actuel->mot);
+                    supprimeMot(oneList, actuel->mot);
                 }
                 actuel = actuel->suivant;
             }  
@@ -48,17 +48,22 @@ void updateListV2(list_t *oneList,char *mot_prop,int combinaison)
     }
     for (i = 0; i < 20; i++) {
         for (j = i + 1; j < 20;) {
-            if (mot_prop[j] == mot_prop[i] && text[j]!=0 && text[i]!=0) {
+            if (mot_prop[j] == mot_prop[i] && text[j]!=0 && text[i]!=0) 
+            {
                 doublons[i]++;
             }
         }
     }
-    for (i = 0 ; i < 20 ; i++) {
-        if (doublons[i]>=2) {
+    for (i = 0 ; i < 20 ; i++) 
+    {
+        if (doublons[i]>=2) 
+        {
             element_t *actuel = oneList->premier;
-            while (actuel != NULL) {   
-                if (presentXfois(actuel->mot, doublons[i], mot_prop[i])==0){
-                    
+            while (actuel != NULL) 
+            {   
+                if (presentXfois(actuel->mot, doublons[i], mot_prop[i])==0)
+                {
+                    supprimeMot(oneList, actuel->mot);
                 }
                 actuel = actuel->suivant;
             }
@@ -66,21 +71,7 @@ void updateListV2(list_t *oneList,char *mot_prop,int combinaison)
     }
 }
 
-int presentXfois(char *tab, int x, char lettre) {
-    int i;
-    int y = 0;
-    for (i = 0 ; i < 20 ; i++) {
-        if (tab[i]==lettre) {
-            y++;
-        }
-    }
-    if (x==y) {
-        return(1);
-    }
-    else {
-        return(0);
-    }
-}
+
 
 void updateList(list_t *oneList,char *mot_prop,char* combinaison)
 {
@@ -90,7 +81,7 @@ void updateList(list_t *oneList,char *mot_prop,char* combinaison)
     strcpy(text,combinaison);
     for(unsigned int i=0 ; i<taille_mot ; i++) 
     {
-        if (oneList->premier->mot != "")
+        if (strcmp(oneList->premier->mot, "")!=0)
         {
             printf("Etude de l'élément: %d du pattern: %s.\n", i, text);
             //printf("%c\n",text[i]);
@@ -139,42 +130,68 @@ void updateList(list_t *oneList,char *mot_prop,char* combinaison)
                 }
             }
             //Cas où l'élément du pattern vaut 1
-        else
-        {
-            element_t *actuel = oneList->premier;
-            while (actuel != NULL) 
-            {   
-                //Si le pattern montre que les caractères sont identiques
-                if (actuel->mot[i]==mot_prop[i])
-                {
-                    //Suppression du mot de la liste
-                    element_t* temp=actuel;
-                    actuel = actuel->suivant;
-                    supprimeMot(oneList, temp->mot);
-                }
-                //Si le pattern montre que les mots sont différents
-                else
-                {
-                    //Si le caractère n'appartient pas au mot
-                    if (strchr(actuel->mot, mot_prop[i]) == NULL)
+            else
+            {
+                element_t *actuel = oneList->premier;
+                while (actuel != NULL) 
+                {   
+                    //Si le pattern montre que les caractères sont identiques
+                    if (actuel->mot[i]==mot_prop[i])
                     {
-                        //On peut passer au mot suivant
+                        //Suppression du mot de la liste
+                        element_t* temp=actuel;
                         actuel = actuel->suivant;
+                        supprimeMot(oneList, temp->mot);
                     }
-                    //Sinon
+                    //Si le pattern montre que les mots sont différents
                     else
-                    { 
-                        /*
-                        //On regarde à quel endroit apparait la lettre dans le mot possible
-                        int indOcc = indiceOccurence(possibleMatch, oneWord[i]);
-                        //On le remplace par un chiffre
-                        possibleMatch[indOcc] = '8';
-                        //On passe aux lettres suivantes*/
+                    {
+                        //Si le caractère n'appartient pas au mot
+                        if (strchr(actuel->mot, mot_prop[i]) == NULL)
+                        {
+                            //Suppression du mot de la liste
+                            element_t* temp=actuel;
+                            actuel = actuel->suivant;
+                            supprimeMot(oneList, temp->mot);
+                        }
+                        //Sinon
+                        else
+                        { 
+                            /*
+                            //On regarde à quel endroit apparait la lettre dans le mot possible
+                            int indOcc = indiceOccurence(possibleMatch, oneWord[i]);
+                            //On le remplace par un chiffre
+                            possibleMatch[indOcc] = '8';
+                            //On passe aux lettres suivantes*/
+                        }
                     }
                 }
             }
         }
-        }
     }
 }
+
+
+
+int presentXfois(char *tab, int x, char lettre) 
+{
+    int i;
+    int y = 0;
+    for (i = 0 ; i < 20 ; i++) 
+    {
+        if (tab[i]==lettre) 
+        {
+            y++;
+        }
+    }
+    if (x==y) 
+    {
+        return(1);
+    }
+    else 
+    {
+        return(0);
+    }
+}
+
 

@@ -28,7 +28,7 @@ void supprimeMot(list_t *oneList, char* one_mot)
         {
             if (strcmp(actuel->mot,oneList->premier->mot)==0)
                 {
-                    printf("%s\n",actuel->mot);
+                    //printf("%s\n",actuel->mot);
                     free(actuel);
                     element_t* fin = malloc(sizeof(*fin));
                     strcpy(fin->mot, "");
@@ -64,57 +64,4 @@ void supprimeMot(list_t *oneList, char* one_mot)
         } 
     }
 }
-
-void suppr(struct list_t *oneList, struct element_t *elem)
-{
-    struct element_t *cur;
-    struct element_t *prev;
- 
-    // Si la liste est vide il n'y a rien à effacer
-    if (oneList->premier == NULL) 
-    {
-        return;
-    }
-    // Positionnement des deux éléments "prev" et "cur" sur l'élément juste avant et sur l'élément à effacer
-    for (cur=oneList->premier, prev=NULL; cur != elem; prev=cur, cur=cur->suivant)
-    {
-        // Si l'élément précédent existe
-        if (prev)
-            // L'élément précédent prend l'adresse du suivant
-            prev->suivant=cur->suivant;
-        else
-            // L'élément à supprimer était le premier => celui-ci change
-            oneList->premier=cur->suivant;
-    }
- 
-    /* // Si l'élément à effacer était le dernier
-    if (cur->suivant == NULL)
-    {
-        // Le dernier élément de la liste change
-        oneList->dernier=cur;
-    } */
-    // L'élément à effacer est supprimé
-   free(elem);
-}
-
-
-// Fonction qui efface un mot de la liste
-void deleteWord(char *word, list_t *oneList)
-{
-    element_t *cur;
-    printf("%s",oneList->premier->mot);
-    // Recherche du mot dans la liste
-    for (cur=oneList->premier; cur->suivant != NULL; cur=cur->suivant)
-    {
-        printf("test");
-          if (strcmp(cur->mot, word) == 0)
-             break;
-    }
- 
-    // Si l'élément contenant le mot a été trouvé
-    if (cur)
-        // Il est supprimé de la liste
-       suppr(oneList, cur);
-}
-
 
