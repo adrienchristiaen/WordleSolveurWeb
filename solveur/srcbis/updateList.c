@@ -1,78 +1,6 @@
 #include "solveur.h"
 
 
-
-void updateListV2(list_t *oneList,char *mot_prop,int combinaison)
-{
-    char text[20];
-    sprintf(text, "%d", combinaison);
-    int i, j;
-    for(i=0 ; i<20 ; i++) {
-	    if (text[i]==2){
-            element_t *actuel = oneList->premier;
-            while (actuel != NULL) 
-            {   
-                if (actuel->mot[i]!=mot_prop[i])
-                {
-                    supprimeMot(oneList, actuel->mot);
-                }
-                actuel = actuel->suivant;
-            }
-        }
-        else if (text[i]==0){
-            element_t *actuel = oneList->premier;
-            while (actuel != NULL) 
-            {   
-                if (strchr(actuel->mot,mot_prop[i]) != NULL)
-                {
-                    supprimeMot(oneList, actuel->mot);
-                }
-                actuel = actuel->suivant;
-            }
-        }
-        else if (text[i]==1){
-            element_t *actuel = oneList->premier;
-            while (actuel != NULL) 
-            {   
-                if (strchr(actuel->mot,mot_prop[i]) == NULL)
-                {
-                    supprimeMot(oneList, actuel->mot);
-                }
-                actuel = actuel->suivant;
-            }  
-        }
-    }   
-    int doublons[20];
-    for (i = 0 ; i < 20 ; i++) {
-        doublons[i] = 0;
-    }
-    for (i = 0; i < 20; i++) {
-        for (j = i + 1; j < 20;) {
-            if (mot_prop[j] == mot_prop[i] && text[j]!=0 && text[i]!=0) 
-            {
-                doublons[i]++;
-            }
-        }
-    }
-    for (i = 0 ; i < 20 ; i++) 
-    {
-        if (doublons[i]>=2) 
-        {
-            element_t *actuel = oneList->premier;
-            while (actuel != NULL) 
-            {   
-                if (presentXfois(actuel->mot, doublons[i], mot_prop[i])==0)
-                {
-                    supprimeMot(oneList, actuel->mot);
-                }
-                actuel = actuel->suivant;
-            }
-        }
-    }
-}
-
-
-
 void updateList(list_t *oneList,char *mot_prop,char* combinaison)
 {
     unsigned int taille_mot = strlen(mot_prop);
@@ -136,7 +64,14 @@ void updateList(list_t *oneList,char *mot_prop,char* combinaison)
                 while (actuel != NULL) 
                 {   
                     //Si le pattern montre que les caractères sont identiques
-                    if (actuel->mot[i]==mot_prop[i])
+                    if (strchr(actuel->mot,mot_prop[i]) == NULL)
+                    {
+                        //Suppression du mot de la liste
+                        element_t* temp=actuel;
+                        actuel = actuel->suivant;
+                        supprimeMot(oneList, temp->mot);
+                    }
+                    else if (actuel->mot[i]==mot_prop[i])
                     {
                         //Suppression du mot de la liste
                         element_t* temp=actuel;
@@ -146,38 +81,51 @@ void updateList(list_t *oneList,char *mot_prop,char* combinaison)
                     //Si le pattern montre que les mots sont différents
                     else
                     {
-                        //Si le caractère n'appartient pas au mot
-                        if (strchr(actuel->mot, mot_prop[i]) == NULL)
-                        {
-                            //Suppression du mot de la liste
-                            element_t* temp=actuel;
-                            actuel = actuel->suivant;
-                            supprimeMot(oneList, temp->mot);
-                        }
-                        //Sinon
-                        else
-                        { 
-                            /*
-                            //On regarde à quel endroit apparait la lettre dans le mot possible
-                            int indOcc = indiceOccurence(possibleMatch, oneWord[i]);
-                            //On le remplace par un chiffre
-                            possibleMatch[indOcc] = '8';
-                            //On passe aux lettres suivantes*/
-                        }
+                        actuel = actuel->suivant; 
                     }
                 }
             }
         }
     }
-}
+    /* int doublons[taille_mot+1];
+    for (unsigned int i = 0 ; i < taille_mot+1 ; i++) 
+    {
+        doublons[i] = 0;
+    }
+    for (unsigned int i = 0; i < taille_mot+1; i++) 
+    {
+        for (unsigned int j = i + 1; j < taille_mot+1;) 
+        {
+            if (mot_prop[j] == mot_prop[i] && text[j]!=0 && text[i]!=0) 
+            {
+                doublons[i]++;
+            }
+        }
+    }
+    for (unsigned int i = 0 ; i < taille_mot+1 ; i++) 
+    {
+        if (doublons[i]>=2) 
+        {
+            element_t *actuel = oneList->premier;
+            while (actuel != NULL) 
+            {   
+                printf("%s\n",actuel->mot);
+                if (presentXfois(actuel->mot, doublons[i], mot_prop[i])==0)
+                {
+                    supprimeMot(oneList, actuel->mot);
+                }
+                actuel = actuel->suivant;
+            }
+        }
+    } */
+} 
 
 
 
 int presentXfois(char *tab, int x, char lettre) 
 {
-    int i;
     int y = 0;
-    for (i = 0 ; i < 20 ; i++) 
+    for (unsigned int i = 0 ; i < 20 ; i++) 
     {
         if (tab[i]==lettre) 
         {

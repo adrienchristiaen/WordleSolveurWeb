@@ -30,9 +30,11 @@ int main()
             combinaison = getResult(taille_mot);
         }
         else
-        printf("Aucun mot n'est possible : ");
-        list_print(liste_mots);
-        printf("\n");
+        {
+            printf("Aucun mot n'est possible : ");
+            list_print(liste_mots);
+            printf("\n");
+        }
     }
     /* TEST FREQUENCE */
     listinfo_t *infoList = createListInfo();
