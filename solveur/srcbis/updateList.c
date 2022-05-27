@@ -138,6 +138,42 @@ void updateList(list_t *oneList,char *mot_prop,char* combinaison)
                     }
                 }
             }
+            //Cas où l'élément du pattern vaut 1
+        else
+        {
+            element_t *actuel = oneList->premier;
+            while (actuel != NULL) 
+            {   
+                //Si le pattern montre que les caractères sont identiques
+                if (actuel->mot[i]==mot_prop[i])
+                {
+                    //Suppression du mot de la liste
+                    element_t* temp=actuel;
+                    actuel = actuel->suivant;
+                    supprimeMot(oneList, temp->mot);
+                }
+                //Si le pattern montre que les mots sont différents
+                else
+                {
+                    //Si le caractère n'appartient pas au mot
+                    if (strchr(actuel->mot, mot_prop[i]) == NULL)
+                    {
+                        //On peut passer au mot suivant
+                        actuel = actuel->suivant;
+                    }
+                    //Sinon
+                    else
+                    { 
+                        /*
+                        //On regarde à quel endroit apparait la lettre dans le mot possible
+                        int indOcc = indiceOccurence(possibleMatch, oneWord[i]);
+                        //On le remplace par un chiffre
+                        possibleMatch[indOcc] = '8';
+                        //On passe aux lettres suivantes*/
+                    }
+                }
+            }
+        }
         }
     }
 }
