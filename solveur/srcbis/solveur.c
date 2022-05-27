@@ -155,13 +155,13 @@ char* giveProposition(list_t* one_list)
 {
     element_t *depart = one_list->premier;
     double best = 0;
-    char* best_mot;
+    char* best_mot = malloc(sizeof(one_list->premier->mot)+1);
     while (depart!=NULL)
     {
         if (depart->freqScore>best)
         {
             best = depart->freqScore;
-            best_mot = depart->mot;
+            strcpy(best_mot,depart->mot);
         }
         depart = depart->suivant;
     }

@@ -6,14 +6,14 @@ void supprimeMot(list_t *oneList, char* one_mot)
 {
     element_t* actuel = oneList -> premier;
     element_t* precedent = NULL;
-    printf("%s\n",one_mot);
+    //printf("%s\n",one_mot);
     while (strcmp(actuel->mot, one_mot)!=0 && actuel->suivant!= NULL)
     {
         //printf("%s\n",actuel->suivant->mot);
         precedent=actuel;
         actuel = actuel -> suivant;
     }
-    printf("%s\n",actuel->mot);
+    //printf("%s\n",actuel->mot);
     //printf("%s\n",oneList->premier->mot);
     
     if (actuel->suivant == NULL)
@@ -38,7 +38,7 @@ void supprimeMot(list_t *oneList, char* one_mot)
         }
         else
         {   
-            printf("test2");
+            printf("Suppr :%s\n", actuel->mot);
             //printf("%s\n",actuel->suivant->mot);
             precedent->suivant=actuel->suivant;
             free(actuel);
