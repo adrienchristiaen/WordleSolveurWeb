@@ -12,6 +12,13 @@ int main()
     list_print(liste_mots);
     freqScore(liste_mots);
     char* mot = giveProposition(liste_mots);
+    char win[taille_mot+2];
+    for (unsigned int i = 0;i<taille_mot;i++)
+    {
+        win[i]='2'; 
+        //printf("%s\n",win);
+    } 
+    int nb_coups=1;
     printf("%s\n",mot);
     char* combinaison = getResult(taille_mot);
     while (strcmp(combinaison,"-1")!=0 && strcmp(liste_mots->premier->mot,"")!=0)
@@ -26,10 +33,16 @@ int main()
             list_print(liste_mots);
             freqScore(liste_mots);
             mot = giveProposition(liste_mots);
+            nb_coups+=1;
             printf("%s\n",mot);
-            printf("Score premier mot %lf\n",liste_mots->premier->freqScore);
+            //printf("Score premier mot %lf\n",liste_mots->premier->freqScore);
             combinaison = getResult(taille_mot);
-        }
+            //printf("%s,%s,%d\n",combinaison,win,strcmp(combinaison,win));
+            if (strcmp(combinaison,win)==-1) 
+            {
+                printf("Victoire du solveur en %d coups ! \n",nb_coups);
+            }
+        } 
         else
         {
             printf("Aucun mot n'est possible : ");

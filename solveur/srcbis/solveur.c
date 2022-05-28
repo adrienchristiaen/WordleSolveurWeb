@@ -153,7 +153,7 @@ char* getResult(unsigned int longueur_mot)
 	}
 	else
 	{
-        printf("La partie continue\n");
+        //printf("La partie continue\n");
 		for(unsigned int i=0;i<longueur_mot;i++)
 		{
 			char c = nombreEntre[longueur_mot-1-i];
@@ -164,7 +164,7 @@ char* getResult(unsigned int longueur_mot)
 				return "0";
 			}		
 		}
-        printf("La réponse entrée est %s\n", nombreEntre);
+        //printf("La réponse entrée est %s\n", nombreEntre);
         return nombreEntre;
     }
 }

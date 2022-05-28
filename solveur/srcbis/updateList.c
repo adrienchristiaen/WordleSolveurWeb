@@ -34,16 +34,16 @@ void updateList(list_t *oneList,char *mot_prop,char* combinaison)
             }
             else if (text[i]=='0')
             {
-                printf("Elem of pattern is 0.\n");
+                //printf("Elem of pattern is 0.\n");
                 element_t *actuel = oneList->premier;
                 while (actuel != NULL) 
                 {   
-                    printf("Current word: %s.\n", actuel->mot);
-                    printf("Lettre indice %d du mot actuel %s comparé: %c.\n", i, actuel->mot, actuel->mot[i]);
+                    //printf("Current word: %s.\n", actuel->mot);
+                    //printf("Lettre indice %d du mot actuel %s comparé: %c.\n", i, actuel->mot, actuel->mot[i]);
                     // printf("Lettre indice: %d.\n", i);
                     // printf("Mot proposé: %s.\n", mot_prop);
                     // printf("Indice mot proposé: %c.\n", mot_prop[i]);
-                    printf("Lettre indice %d du mot proposé %s comparé: %c.\n\n", i, mot_prop, mot_prop[i]);
+                    //printf("Lettre indice %d du mot proposé %s comparé: %c.\n\n", i, mot_prop, mot_prop[i]);
                     if (actuel->mot[i] == mot_prop[i])
                     {
                         //printf("ca passe\n");
@@ -94,7 +94,7 @@ void updateList(list_t *oneList,char *mot_prop,char* combinaison)
     }
     for (unsigned int i = 0; i < taille_mot+1; i++) 
     {
-        for (unsigned int j = i + 1; j < taille_mot+1;) 
+        for (unsigned int j = i + 1; j < taille_mot+1;j++) 
         {
             if (mot_prop[j] == mot_prop[i] && text[j]!=0 && text[i]!=0) 
             {
@@ -109,12 +109,17 @@ void updateList(list_t *oneList,char *mot_prop,char* combinaison)
             element_t *actuel = oneList->premier;
             while (actuel != NULL) 
             {   
-                printf("%s\n",actuel->mot);
+                //printf("%s\n",actuel->mot);
                 if (presentXfois(actuel->mot, doublons[i], mot_prop[i])==0)
                 {
-                    supprimeMot(oneList, actuel->mot);
+                    element_t* temp=actuel;
+                    actuel = actuel->suivant;
+                    supprimeMot(oneList, temp->mot);
                 }
-                actuel = actuel->suivant;
+                else
+                {
+                    actuel = actuel->suivant; 
+                }
             }
         }
     } */
