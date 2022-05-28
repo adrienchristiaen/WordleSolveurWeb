@@ -18,23 +18,41 @@ void ajout_mots(list_t* list_vide)
 {
     assert(list_vide != NULL);
     
-    char word[6];
-    
-    FILE *in_file = fopen("../data/wsolf.txt", "r");
-    if (!in_file)
+    char nombre[2];
+    FILE *in_file1 = fopen("../data/wsolf.txt", "r");
+    if (!in_file1)
     {
         perror("fopen");
         exit(EXIT_FAILURE);
     }
-    //list_print(list_vide);
-    while(fscanf(in_file, "%s", word)!= EOF)
-    {
-        //printf("%s\n",word);
-        list_append(list_vide, word, 0);
-        //list_print(list_vide);
-    }
+    fscanf(in_file1, "%s", nombre);
+    printf("%c\n",nombre[0]);
+    fclose(in_file1);
 
-    fclose(in_file);
+    char filename[28] = "../data/liste_taille_x.txt";
+    filename[21]=(char)nombre[0];
+
+    char word[(int)nombre[0]+1];
+    FILE *in_file2 = fopen(filename, "r");
+    if (!in_file2)
+    {
+        perror("fopen"); 
+        exit(EXIT_FAILURE);
+    }
+    //list_print(list_vide);
+    int passe=0;
+    while(fscanf(in_file2, "%s", word)!= EOF)
+    {
+        if (passe>0)
+        {
+            //printf("%s\n",word);
+            list_append(list_vide, word, 0);
+            //list_print(list_vide);
+        }
+        passe+=1;
+    }
+    
+    fclose(in_file2);
 }
 
 

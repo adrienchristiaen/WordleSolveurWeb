@@ -7,6 +7,7 @@ int main()
     //printf("AJOUT MOT\n");
     ajout_mots(liste_mots);
     unsigned int taille_mot=strlen(liste_mots->premier->mot);
+    //printf("%d taille mot \n",taille_mot);
     //printf("LIST PRINT\n");
     list_print(liste_mots);
     freqScore(liste_mots);
