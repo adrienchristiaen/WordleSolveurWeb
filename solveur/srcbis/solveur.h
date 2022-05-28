@@ -100,6 +100,6 @@ void updateListV2(list_t *oneList,char *mot_prop,char* combinaison);
 
 int presentXfois(char *tab, int x, char lettre);
 
-void supprimeTousMotsAvec(list_t *oneList, char caractereASupprimer, char *combinaison);
+void supprimeTousMotsAvec(list_t *oneList, char* caractereAVerifier, char *combinaison);
 
 #endif /*__SOLVEUR_H__*/

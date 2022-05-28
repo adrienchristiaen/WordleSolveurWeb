@@ -294,80 +294,87 @@ void updateListV2(list_t *oneList,char *mot_prop,char* combinaison)
             currentElement = currentElement->suivant;
         }
     }
+    supprimeTousMotsAvec(oneList, caracteresVerifies, combinaison);
 }
 
-void supprimeTousMotsAvec(list_t *oneList, char caractereASupprimer, char *combinaison)
+void supprimeTousMotsAvec(list_t *oneList, char* caractereAVerifier, char *combinaison)
 {
-    printf("Caractère à supprimer: %c\n", caractereASupprimer);
+    printf("Caractères à supprimer: %s\n", caractereAVerifier);
     //Taille du mot
     unsigned int taille_mot = strlen(oneList->premier->mot);
     
-    //Pour chaque mot
     element_t *currentElement = oneList->premier;
     element_t *beforeElement = NULL;
     element_t *nextElement = NULL;
 
-    //Pour chaque mot
-    while (currentElement != NULL)
+    //Pour chaque caractère à vérifier
+    int j = 0;
+    while (caractereAVerifier[j] != '0' && caractereAVerifier[j] != '\0')
     {
-        printf("Mot étudié: %s\n", currentElement->mot);
-        int i = 0;
-        int wrong = 0;
-        char possibleMatch[20];
-        strcpy(possibleMatch, currentElement->mot);
-        //Pour chaque caractère
-        while (i<taille_mot && wrong == 0)
+        printf("Caractère à vérifier: %c\n", caractereAVerifier[j]);
+        //Pour chaque mot
+        while (currentElement != NULL)
         {
-            //Si le mot contient un caractère à supprimer
-            if (possibleMatch[i] == caractereASupprimer)
+            printf("Mot étudié: %s\n", currentElement->mot);
+            int i = 0;
+            int wrong = 0;
+            char possibleMatch[20];
+            strcpy(possibleMatch, currentElement->mot);
+            //Pour chaque caractère
+            while (i<taille_mot && wrong == 0)
             {
-                //Si le caractère à supprimer n'a pas été déjà été validé
-                if (combinaison[i] == '0')
+                //Si le mot contient un caractère à supprimer
+                if (possibleMatch[i] == caractereAVerifier[j])
                 {
-                    //Supression du mot
-                    wrong = 1;
+                    //Si le caractère à supprimer n'a pas été déjà été validé
+                    if (combinaison[i] == '0')
+                    {
+                        //Supression du mot
+                        wrong = 1;
+                    }
                 }
+                i++;
             }
-            i++;
-        }
-        if (wrong == 1)
-        {
-            //Supression du mot en question
-            printf("Supression du mot: %s\n", currentElement->mot);
-            if (beforeElement == NULL)
+            if (wrong == 1)
             {
-                printf("C'est le premier mot de la liste.\n");
-                oneList->premier = currentElement->suivant;
-                nextElement = currentElement->suivant;
-                free(currentElement);
-                currentElement = nextElement;
-            }
-            else
-            {
-                if (currentElement->suivant == NULL)
+                //Supression du mot en question
+                printf("Supression du mot: %s\n", currentElement->mot);
+                if (beforeElement == NULL)
                 {
-                    printf("C'est le dernier mot de la liste.\n");
+                    printf("C'est le premier mot de la liste.\n");
+                    oneList->premier = currentElement->suivant;
+                    nextElement = currentElement->suivant;
                     free(currentElement);
-                    beforeElement->suivant = NULL;
-                    currentElement = NULL;
+                    currentElement = nextElement;
                 }
                 else
                 {
-                    nextElement = currentElement->suivant;
-                    free(currentElement);
-                    beforeElement->suivant = nextElement;
-                    currentElement = nextElement;
+                    if (currentElement->suivant == NULL)
+                    {
+                        printf("C'est le dernier mot de la liste.\n");
+                        free(currentElement);
+                        beforeElement->suivant = NULL;
+                        currentElement = NULL;
+                    }
+                    else
+                    {
+                        nextElement = currentElement->suivant;
+                        free(currentElement);
+                        beforeElement->suivant = nextElement;
+                        currentElement = nextElement;
+                    }
                 }
-            }
-            //printf("%s: %s - %s\n\n", currentInfo->result, oneWord, currentElement->mot);
+                //printf("%s: %s - %s\n\n", currentInfo->result, oneWord, currentElement->mot);
 
+            }
+            else
+            {
+                printf("Non supression.\n");
+                //On passe au mot suivant
+                beforeElement = currentElement;
+                currentElement = currentElement->suivant;
+            }
         }
-        else
-        {
-            printf("Non supression.\n");
-            //On passe au mot suivant
-            beforeElement = currentElement;
-            currentElement = currentElement->suivant;
-        }
+        j++;
     }
 }
