@@ -98,7 +98,7 @@ void updateList(list_t *oneList,char *mot_prop,char* combinaison)
         {
             if (mot_prop[j] == mot_prop[i])
             {
-                if ((text[i]!='0') && (text[j]!='1'))
+                if ((text[i]!='0') && (text[j]!='0'))
                 {
                     doublons[i]++;
                 }
@@ -107,7 +107,7 @@ void updateList(list_t *oneList,char *mot_prop,char* combinaison)
     }
     for (unsigned int i = 0 ; i < taille_mot+1 ; i++) 
     {
-        if (doublons[i]>=2) 
+        if (doublons[i]>=1) 
         {
             element_t *actuel = oneList->premier;
             while (actuel != NULL) 
