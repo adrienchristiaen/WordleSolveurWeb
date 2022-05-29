@@ -35,6 +35,7 @@ typedef struct info_t info_t;
 struct info_t
 {
     int match;
+    double bits;
     char result[20];
     info_t *suivant;
 };
@@ -44,7 +45,16 @@ typedef struct listinfo_t listinfo_t;
 struct listinfo_t
 {
     info_t *premier;
+    listinfo_t *next;
     char word[20];
+    double meanBits;
+};
+
+typedef struct allinfo_t allinfo_t;
+
+struct allinfo_t
+{
+    listinfo_t *first;
 };
 
 /*_______________Création liste mots__________________*/
@@ -82,6 +92,20 @@ int lengthListInfo(listinfo_t *oneList);
 void getMatches(listinfo_t *infoList, list_t *wordList, char oneWord[20]);
 
 int indiceOccurence(char *word, char caractere);
+
+double getBits(int nbMatches, int nbWords);
+
+allinfo_t *getAllInfoForAllWords(list_t *wordList);
+
+allinfo_t *createAllInfoList();
+
+void getAllInfoForOneWord(listinfo_t *oneListInfo, list_t *oneWorldList, char* word);
+
+double getMeanBits(listinfo_t *oneListInfo);
+
+void destroyAllInfo(allinfo_t *oneAllInfo);
+
+char *getBestWord(allinfo_t *oneAllInfo);
 
 
 

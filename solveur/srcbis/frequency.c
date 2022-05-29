@@ -334,3 +334,162 @@ int indiceOccurence(char *word, char caractere)
     }
     return i;
 }
+
+double getBits(int nbMatches, int nbWords)
+{
+    double probability;
+    //Calcul de la probabilité qu'un mot soit "accepté" par un pattern donné
+    probability = (double) nbMatches/nbWords;
+    //printf("%f probability\n", probability);
+
+    double bits = 0.0;
+    //Calcul de l'information obtenue (autre écriture de la proba)
+    if (probability != 0)
+    {
+        bits = log2(1/probability);
+    }
+
+    return bits;
+}
+
+allinfo_t *getAllInfoForAllWords(list_t *wordList)
+{
+    //Création de la liste chaînée contenant les informations de tous les mots
+    allinfo_t *allInfo = createAllInfoList();
+    //Initialisation au premier mot
+    element_t *currentElem = wordList->premier;
+
+    while (currentElem != NULL)
+    {
+        //Initialisation liste info associée au mot
+        listinfo_t *newListInfo = createListInfo();
+        newListInfo->next = NULL;
+        newListInfo->meanBits = 0.0;
+
+        if (newListInfo == NULL)
+        {
+            perror("No memory enough.");
+        }
+
+        strcpy(newListInfo->word,currentElem->mot);
+        //Remplissage de la liste info
+        getAllInfoForOneWord(newListInfo, wordList, currentElem->mot);
+        //Ajout à la liste allinfo
+        if (allInfo->first == NULL)
+        {
+            allInfo->first = newListInfo;
+        }
+        else
+        {
+            listinfo_t *currentListInfo = allInfo->first;
+            while (currentListInfo->next != NULL)
+            {
+                currentListInfo = currentListInfo->next;
+            }
+            currentListInfo->next = newListInfo;
+        }
+        //Itération élément suivant
+        currentElem = currentElem->suivant;
+    }
+    return allInfo;
+}
+
+allinfo_t *createAllInfoList()
+{
+    allinfo_t *newAllInfoList = malloc(sizeof(*newAllInfoList));
+
+    if (newAllInfoList == NULL)
+    {
+        perror("no memory enough for allinfo");
+    }
+
+    newAllInfoList->first = NULL;
+
+    return newAllInfoList;
+}
+
+void getAllInfoForOneWord(listinfo_t *oneListInfo, list_t *oneWorldList, char* word)
+{
+    //Calcul des patterns
+    initListInfo(oneListInfo);
+    //Calcul des matchs
+    getMatches(oneListInfo, oneWorldList, word);
+    //Calcul de la longueur de la liste mots
+    element_t *currentElem = oneWorldList->premier;
+    int nbMots = 0;
+    while (currentElem != NULL)
+    {
+        currentElem = currentElem->suivant;
+        nbMots++;
+    }
+    //Calcul des bits
+    info_t *currentInfo = oneListInfo->premier;
+    while (currentInfo != NULL)
+    {
+        currentInfo->bits = getBits(currentInfo->match, nbMots);
+        currentInfo = currentInfo->suivant;
+    }
+    //Calcul de la moyenne des bits
+    double meanBits = getMeanBits(oneListInfo);
+    oneListInfo->meanBits = meanBits;
+    //Affichage
+    printf("Mot: %s. Bits: %lf\n", oneListInfo->word, meanBits);
+    //listInfo_print(oneListInfo);
+}
+
+double getMeanBits(listinfo_t *oneListInfo)
+{
+    info_t *currentInfo = oneListInfo->premier;
+    double meanBits = 0;
+    int nbBits = 0;
+    int nbPatterns = 0;
+
+    while (currentInfo != NULL)
+    {
+        if (currentInfo->bits != 0)
+        {
+            nbBits += currentInfo->bits;
+        }
+        nbPatterns++;
+        currentInfo = currentInfo->suivant;
+    }
+    meanBits = (double) nbBits/nbPatterns;
+
+    return meanBits;
+}
+
+void destroyAllInfo(allinfo_t *oneAllInfo)
+{
+    listinfo_t *currentInfoList = oneAllInfo->first;
+    listinfo_t *nextInfoList;
+
+    while (currentInfoList->next != NULL)
+    {
+        nextInfoList = currentInfoList->next;
+        listInfo_destroy(currentInfoList);
+        currentInfoList = nextInfoList;
+    }
+    listInfo_destroy(currentInfoList);
+    free(oneAllInfo);
+}
+
+char *getBestWord(allinfo_t *oneAllInfo)
+{
+    listinfo_t *currentInfoList = oneAllInfo->first;
+    double bestMeanBits = 0;
+    char *bestWord = malloc(sizeof(char)*20);
+
+    while (currentInfoList != NULL)
+    {
+        //printf("%lf : %lf\n", currentInfoList->meanBits, bestMeanBits);
+        if (currentInfoList->meanBits > bestMeanBits)
+        {
+            strcpy(bestWord, currentInfoList->word);
+            bestMeanBits = currentInfoList->meanBits;
+        }
+        currentInfoList = currentInfoList->next;
+    }
+    printf("Best bits: %lf.\n", bestMeanBits);
+    //printf("Best word: %s\n", bestWord);
+    return bestWord;
+}
