@@ -27,8 +27,8 @@ int main()
         {
             combinaison = getResult(taille_mot);
         }
-        //updateList(liste_mots,mot,combinaison);
-        updateListV2(liste_mots,mot,combinaison);
+        updateList(liste_mots,mot,combinaison);
+        //updateListV2(liste_mots,mot,combinaison);
         if (strcmp(liste_mots->premier->mot,"")!=0)
         {
             list_print(liste_mots);

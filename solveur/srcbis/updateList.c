@@ -87,7 +87,7 @@ void updateList(list_t *oneList,char *mot_prop,char* combinaison)
             }
         }
     }
-    /* int doublons[taille_mot+1];
+    int doublons[taille_mot+1];
     for (unsigned int i = 0 ; i < taille_mot+1 ; i++) 
     {
         doublons[i] = 0;
@@ -96,9 +96,12 @@ void updateList(list_t *oneList,char *mot_prop,char* combinaison)
     {
         for (unsigned int j = i + 1; j < taille_mot+1;j++) 
         {
-            if (mot_prop[j] == mot_prop[i] && text[j]!=0 && text[i]!=0) 
+            if (mot_prop[j] == mot_prop[i])
             {
-                doublons[i]++;
+                if ((text[i]!='0') && (text[j]!='1'))
+                {
+                    doublons[i]++;
+                }
             }
         }
     }
@@ -112,6 +115,9 @@ void updateList(list_t *oneList,char *mot_prop,char* combinaison)
                 //printf("%s\n",actuel->mot);
                 if (presentXfois(actuel->mot, doublons[i], mot_prop[i])==0)
                 {
+                    //printf("mot : %s\n",actuel->mot);
+                    //printf("nbr : %d\n",doublons[i]);
+                    //printf("lettre : %c\n",mot_prop[i]);
                     element_t* temp=actuel;
                     actuel = actuel->suivant;
                     supprimeMot(oneList, temp->mot);
@@ -122,7 +128,7 @@ void updateList(list_t *oneList,char *mot_prop,char* combinaison)
                 }
             }
         }
-    } */
+    }
 } 
 
 
