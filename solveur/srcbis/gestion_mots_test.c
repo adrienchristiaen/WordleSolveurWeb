@@ -30,4 +30,40 @@ int main()
     //Caractère présent pas assez de fois
     assert(presentXfois(infinitif, 3, 'F') == 0);
     assert(presentXfois(infinitif, 6, 'I') == 0);
+
+    /* Test fonction supprimeMot : */
+
+    //Initialisation de la liste
+    list_t* listeMots = list_create();
+    list_append(listeMots, croix, 0.0);
+    list_append(listeMots, serrure, 0.0);
+    list_append(listeMots, infinitif, 0.0);
+    list_append(listeMots, lamas, 0.0);
+    list_append(listeMots, clics, 0.0);
+
+    //Affichage de la liste initiale
+    printf("Liste initiale:\n");
+    list_print(listeMots);
+
+    //Supression premier élément
+    supprimeMot(listeMots, croix);
+    printf("\nSupression du mot CROIX:\n");
+    list_print(listeMots);
+
+    //Supression dernier élément
+    supprimeMot(listeMots, "CLICS");
+    printf("\nSupression du mot CLICS:\n");
+    list_print(listeMots);
+
+    //Supression élément quelconque
+    supprimeMot(listeMots, "INFINITIF");
+    printf("\nSupression du mot INFINITIF:\n");
+    list_print(listeMots);
+
+    /* Libération mémoire */
+
+    //Supression liste de mots
+    list_destroy(listeMots);
+
+    return EXIT_SUCCESS;
 }
