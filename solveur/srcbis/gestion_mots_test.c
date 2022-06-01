@@ -60,6 +60,47 @@ int main()
     printf("\nSupression du mot INFINITIF:\n");
     list_print(listeMots);
 
+    /* Test fonction getResult : */
+
+    printf("\nTest fonction getResult:\n");
+
+    //Test réponse correcte
+    printf("\nOn appelle getResult(5).\nRéponse à donner: 20012\n");
+    char *resultat = getResult(5);
+    assert(strcmp(resultat,"20012") == 0);
+    free(resultat);
+
+    /*
+    Impossible de libérer la mémoire après retour de "0"
+
+    //Test réponse incorrecte, caractères non acceptés
+    printf("\nOn appelle getResult(5).\nRéponse à donner: 15648\n");
+    char *resultat2 = getResult(5);
+    assert(strcmp(resultat2,"0") == 0);
+    free(resultat2);
+
+    //Test réponse incorrecte, réponse trop courte
+    printf("\nOn appelle getResult(5).\nRéponse à donner: 1202\n");
+    char *resultat3 = getResult(5);
+    assert(strcmp(resultat3,"0") == 0);
+    free(resultat3);
+
+    //Test sortie de fonction
+    printf("\nOn appelle getResult(5).\nRéponse à donner: -1\n");
+    char *resultat4 = getResult(5);
+    assert(strcmp(resultat4,"-1") == 0);
+    free(resultat4);
+    */
+
+    /* 
+    Attention, une réponse trop longue renvoie une erreur mémoire !!
+
+    //Test réponse incorrecte, réponse trop longue
+    printf("On appelle getResult(5).\nRéponse à donner: 1202012\n");
+    char *resultat = getResult(5);
+    assert(resultat == "0");
+    */
+
     /* Libération mémoire */
 
     //Supression liste de mots
