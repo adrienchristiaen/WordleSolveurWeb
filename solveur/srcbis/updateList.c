@@ -167,7 +167,7 @@ void updateListV2(list_t *oneList,char *mot_prop,char* combinaison)
 
     while (currentElement != NULL)
     {
-        int i = 0;
+        unsigned int i = 0;
         int wrong = 0;
         char possibleMatch[20];
         printf("TEST\n");
@@ -322,7 +322,7 @@ void supprimeTousMotsAvec(list_t *oneList, char* caractereAVerifier, char *combi
         while (currentElement != NULL)
         {
             printf("Mot étudié: %s\n", currentElement->mot);
-            int i = 0;
+            unsigned int i = 0;
             int wrong = 0;
             char possibleMatch[20];
             strcpy(possibleMatch, currentElement->mot);
