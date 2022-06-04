@@ -170,8 +170,8 @@ void updateListV2(list_t *oneList,char *mot_prop,char* combinaison)
         unsigned int i = 0;
         int wrong = 0;
         char possibleMatch[20];
-        printf("TEST\n");
-        printf("Mot: %s\n", currentElement->mot);
+        //printf("TEST\n");
+        //printf("Mot: %s\n", currentElement->mot);
         strcpy(possibleMatch, currentElement->mot);
         while (i<taille_mot && wrong == 0)
         {
@@ -264,20 +264,34 @@ void updateListV2(list_t *oneList,char *mot_prop,char* combinaison)
         if (wrong == 1)
         {
             //Supression du mot en question
-            printf("Supression du mot: %s\n", currentElement->mot);
+            //printf("Supression du mot: %s\n", currentElement->mot);
             if (beforeElement == NULL)
             {
-                printf("C'est le premier mot de la liste.\n");
-                oneList->premier = currentElement->suivant;
-                nextElement = currentElement->suivant;
-                free(currentElement);
-                currentElement = nextElement;
+                if (strcmp(currentElement->mot,oneList->premier->mot)==0 && currentElement->suivant == NULL)
+                {
+                    //printf("%s\n",currentElement->mot);
+                    free(currentElement);
+                    element_t* fin = malloc(sizeof(*fin));
+                    strcpy(fin->mot, "");
+                    fin -> freqScore = 0.0;
+                    fin -> suivant = NULL;
+                    currentElement = NULL;
+                    oneList->premier = fin;
+                }
+                else
+                {
+                    //printf("C'est le premier mot de la liste.\n");
+                    oneList->premier = currentElement->suivant;
+                    nextElement = currentElement->suivant;
+                    free(currentElement);
+                    currentElement = nextElement;
+                }
             }
             else
             {
                 if (currentElement->suivant == NULL)
                 {
-                    printf("C'est le dernier mot de la liste.\n");
+                    //printf("C'est le dernier mot de la liste.\n");
                     free(currentElement);
                     beforeElement->suivant = NULL;
                     currentElement = NULL;
@@ -300,7 +314,10 @@ void updateListV2(list_t *oneList,char *mot_prop,char* combinaison)
             currentElement = currentElement->suivant;
         }
     }
-    supprimeTousMotsAvec(oneList, caracteresVerifies, combinaison);
+    if (strcmp(oneList->premier->mot, "")!=0)
+    {
+        supprimeTousMotsAvec(oneList, caracteresVerifies, combinaison);
+    }
 }
 
 void supprimeTousMotsAvec(list_t *oneList, char* caractereAVerifier, char *combinaison)
@@ -341,7 +358,7 @@ void supprimeTousMotsAvec(list_t *oneList, char* caractereAVerifier, char *combi
                 }
                 i++;
             }
-            if (wrong == 1)
+            if (wrong == 1 && strcmp(oneList->premier->mot, "")!=0)
             {
                 //Supression du mot en question
                 printf("Supression du mot: %s\n", currentElement->mot);
@@ -357,10 +374,24 @@ void supprimeTousMotsAvec(list_t *oneList, char* caractereAVerifier, char *combi
                 {
                     if (currentElement->suivant == NULL)
                     {
-                        printf("C'est le dernier mot de la liste.\n");
-                        free(currentElement);
-                        beforeElement->suivant = NULL;
-                        currentElement = NULL;
+                        if (strcmp(currentElement->mot,oneList->premier->mot)==0)
+                        {
+                            //printf("%s\n",currentElement->mot);
+                            free(currentElement);
+                            element_t* fin = malloc(sizeof(*fin));
+                            strcpy(fin->mot, "");
+                            fin -> freqScore = 0.0;
+                            fin -> suivant = NULL;
+
+                            oneList->premier = fin;
+                        }
+                        else
+                        {
+                            printf("C'est le dernier mot de la liste.\n");
+                            free(currentElement);
+                            beforeElement->suivant = NULL;
+                            currentElement = NULL;
+                        }
                     }
                     else
                     {
