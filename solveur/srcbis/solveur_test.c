@@ -77,7 +77,8 @@ int main()
     int nb_coups=1;
     printf("%s\n",mot);
     char* combinaison = getResult(taille_mot);
-    while (strcmp(combinaison,"-1")!=0 && strcmp(liste_mots->premier->mot,"")!=0)
+    int end = 0;
+    while (strcmp(combinaison,"-1")!=0 && strcmp(liste_mots->premier->mot,"")!=0 && end==0 && liste_mots->premier->suivant != NULL)
     {
         while (strcmp(combinaison,"0")==0)
         {
@@ -94,10 +95,11 @@ int main()
             printf("%s\n",mot);
             //printf("Score premier mot %lf\n",liste_mots->premier->freqScore);
             combinaison = getResult(taille_mot);
-            //printf("%s,%s,%d\n",combinaison,win,strcmp(combinaison,win));
+            printf("%s,%s,%d\n",combinaison,win,strcmp(combinaison,win));
             if (strcmp(combinaison,win)==-1) 
             {
                 printf("Victoire du solveur en %d coups ! \n",nb_coups);
+                end = 1;
             }
         } 
         else
@@ -107,20 +109,9 @@ int main()
             printf("\n");
         }
     }
-    
-    /* TEST FREQUENCE */
-    listinfo_t *infoList = createListInfo();
-    initListInfo(infoList);
-    //listInfo_print(infoList);
-    int len = lengthListInfo(infoList);
-    printf("My length is: %d\n",len);
-
-    //getMatches(infoList, liste_mots, "POULE");
-    //listInfo_print(infoList);
 
     //Suppression des listes
     destroyAllInfo(myAllInfo);
-    listInfo_destroy(infoList);
     list_destroy(liste_mots);
     return 0;
 }

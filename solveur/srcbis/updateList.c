@@ -300,7 +300,18 @@ void updateListV2(list_t *oneList,char *mot_prop,char* combinaison)
             currentElement = currentElement->suivant;
         }
     }
-    supprimeTousMotsAvec(oneList, caracteresVerifies, combinaison);
+    if (oneList->premier == NULL)
+    {
+        element_t *newElement;
+        oneList->premier = newElement;
+        strcpy(newElement->mot,"");
+        newElement->freqScore = 0;
+        newElement->suivant = NULL;
+    }
+    else
+    {
+        supprimeTousMotsAvec(oneList, caracteresVerifies, combinaison);
+    }
 }
 
 void supprimeTousMotsAvec(list_t *oneList, char* caractereAVerifier, char *combinaison)
