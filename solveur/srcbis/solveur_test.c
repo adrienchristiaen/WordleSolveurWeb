@@ -28,7 +28,7 @@ int main()
             combinaison = getResult(taille_mot);
         }
         //updateList(liste_mots,mot,combinaison);
-        //updateListV2(liste_mots,mot,combinaison);
+        updateListV2(liste_mots,mot,combinaison);
         if (strcmp(liste_mots->premier->mot,"")!=0)
         {
             list_print(liste_mots);
@@ -50,7 +50,10 @@ int main()
             list_print(liste_mots);
             printf("\n");
         }
-    }*/
+    }
+    //Suppression des listes
+    list_destroy(liste_mots);
+    */
 
     /* SOLVEUR BITS */
     list_t* liste_mots = list_create();
@@ -85,8 +88,8 @@ int main()
         {
             combinaison = getResult(taille_mot);
         }
-        //updateList(liste_mots,mot,combinaison);
-        updateListV2(liste_mots,mot,combinaison);
+        updateList(liste_mots,mot,combinaison);
+        //updateListV2(liste_mots,mot,combinaison);
         if (strcmp(liste_mots->premier->mot,"")!=0)
         {
             list_print(liste_mots);
@@ -111,10 +114,9 @@ int main()
         }
     }
     printf("Victoire du solveur en %d coups ! \n",nb_coups);
-
     //Suppression des listes
     destroyAllInfo(myAllInfo);
-    list_destroy(liste_mots);
+
     return 0;
 }
 
