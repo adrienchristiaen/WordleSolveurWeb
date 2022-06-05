@@ -97,11 +97,11 @@ int main()
             //printf("Score premier mot %lf\n",liste_mots->premier->freqScore);
             combinaison = getResult(taille_mot);
             printf("%s,%s,%d\n",combinaison,win,strcmp(combinaison,win));
-            /*if (strcmp(combinaison,win)==-1) 
+            if (strcmp(combinaison,win)==0) 
             {
-                printf("Victoire du solveur en %d coups ! \n",nb_coups);
+                //printf("Victoire du solveur en %d coups ! \n",nb_coups);
                 end = 1;
-            }*/
+            }
         } 
         else
         {
