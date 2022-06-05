@@ -394,4 +394,12 @@ void supprimeTousMotsAvec(list_t *oneList, char* caractereAVerifier, char *combi
         }
         j++;
     }
+    if (oneList->premier == NULL)
+    {
+        element_t *newElement;
+        oneList->premier = newElement;
+        strcpy(newElement->mot,"");
+        newElement->freqScore = 0;
+        newElement->suivant = NULL;
+    }
 }

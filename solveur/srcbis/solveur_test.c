@@ -80,6 +80,7 @@ int main()
     int end = 0;
     while (strcmp(combinaison,"-1")!=0 && strcmp(liste_mots->premier->mot,"")!=0 && end==0 && liste_mots->premier->suivant != NULL)
     {
+        printf("Liste->premier->suivant->mot: %s", liste_mots->premier->suivant->mot);
         while (strcmp(combinaison,"0")==0)
         {
             combinaison = getResult(taille_mot);
@@ -96,11 +97,11 @@ int main()
             //printf("Score premier mot %lf\n",liste_mots->premier->freqScore);
             combinaison = getResult(taille_mot);
             printf("%s,%s,%d\n",combinaison,win,strcmp(combinaison,win));
-            if (strcmp(combinaison,win)==-1) 
+            /*if (strcmp(combinaison,win)==-1) 
             {
                 printf("Victoire du solveur en %d coups ! \n",nb_coups);
                 end = 1;
-            }
+            }*/
         } 
         else
         {
@@ -109,6 +110,7 @@ int main()
             printf("\n");
         }
     }
+    printf("Victoire du solveur en %d coups ! \n",nb_coups);
 
     //Suppression des listes
     destroyAllInfo(myAllInfo);
