@@ -51,7 +51,7 @@ int main()
     */
     info_print(ListePaterns->premier);
     printf("\n");
-    info_print(ListePaterns->premier->suivant->suivant);
+    info_print(ListePaterns->premier->suivant->suivant->suivant->suivant->suivant->suivant->suivant->suivant);
     printf("\n");
     //info_print(ListeVide->premier);   erreur !
 
@@ -66,10 +66,26 @@ int main()
     La fonction calcule le nombre de "match" possibles avec un mot donné pour chaque pattern
     */
     list_t* listeMots = list_create();
-    strcpy(ListePaterns->word, "TESTS");
-    getMatches(ListePaterns, listeMots, listeMots->premier->mot);
-    
+    info_t* actuel = ListePaterns->premier;
+    ajout_mots(listeMots);
+    getMatches(ListePaterns, listeMots, "ZLOTY");
+    while (actuel->suivant!=NULL && (actuel->match>40 || actuel->match<0))
+    {
+        actuel = actuel->suivant;
+    }
+    // MOTS POSSIBLES pour le patern 00012 : tokay, tommy, torcy, zloty
+    assert(actuel->match == 4);
+    //printf("%s %d\n",actuel->result,actuel->match);
 
+    actuel = ListePaterns->premier;
+    getMatches(ListePaterns, listeMots, "YUZUS");
+    while (actuel->suivant!=NULL && (actuel->match>20 || actuel->match<0))
+    {
+        actuel = actuel->suivant;
+    }
+    // MOTS POSSIBLES pour le patern 00122 : yuzus
+    assert(actuel->match == 1);
+    //printf("%s %d\n",actuel->result,actuel->match);
 
     /* Test fonction listInfo_destroy :
     La fonction détruit une liste chainée contenant les bits des différents mots
