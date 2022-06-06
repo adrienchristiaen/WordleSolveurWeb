@@ -77,7 +77,7 @@ int main()
     //char *mot = getBestWord(myAllInfo);
 
     //Pour éviter la première boucle dont on connait le résultat, mettre en commentaire les deux lignes d'au-dessus et enlver les commentaires des deux lignes d'en dessous
-    allinfo_t *myAllInfo;
+    //allinfo_t *myAllInfo;
     char mot[6] = {'P','O','R','E','S'};
     //char mot[7] = {'C','O','T','A','N','T'};
 
@@ -98,13 +98,15 @@ int main()
         {
             combinaison = getResult(taille_mot);
         }
-        updateList(liste_mots,mot,combinaison);
-        //updateListV2(liste_mots,mot,combinaison);
+        //updateList(liste_mots,mot,combinaison);
+        updateListV2(liste_mots,mot,combinaison);
         if (strcmp(liste_mots->premier->mot,"")!=0)
         {
             list_print(liste_mots);
-            myAllInfo = getAllInfoForAllWords(liste_mots);
+            allinfo_t *myAllInfo = getAllInfoForAllWords(liste_mots);
             strcpy(mot,getBestWord(myAllInfo));
+            //Suppression des listes
+            destroyAllInfo(myAllInfo);
             nb_coups+=1;
             printf("%s\n",mot);
             //printf("Score premier mot %lf\n",liste_mots->premier->freqScore);
@@ -124,8 +126,6 @@ int main()
         }
     }
     printf("Victoire du solveur en %d coups ! \n",nb_coups);
-    //Suppression des listes
-    destroyAllInfo(myAllInfo);
 
     //Gestionnaire de temps
     clock_t endClock = clock();
