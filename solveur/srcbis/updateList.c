@@ -314,7 +314,19 @@ void updateListV2(list_t *oneList,char *mot_prop,char* combinaison)
             currentElement = currentElement->suivant;
         }
     }
+<<<<<<< HEAD
     if (strcmp(oneList->premier->mot, "")!=0)
+=======
+    if (oneList->premier == NULL)
+    {
+        element_t *newElement;
+        oneList->premier = newElement;
+        strcpy(newElement->mot,"");
+        newElement->freqScore = 0;
+        newElement->suivant = NULL;
+    }
+    else
+>>>>>>> origin/solveur-test
     {
         supprimeTousMotsAvec(oneList, caracteresVerifies, combinaison);
     }
@@ -413,5 +425,13 @@ void supprimeTousMotsAvec(list_t *oneList, char* caractereAVerifier, char *combi
             }
         }
         j++;
+    }
+    if (oneList->premier == NULL)
+    {
+        element_t *newElement;
+        oneList->premier = newElement;
+        strcpy(newElement->mot,"");
+        newElement->freqScore = 0;
+        newElement->suivant = NULL;
     }
 }

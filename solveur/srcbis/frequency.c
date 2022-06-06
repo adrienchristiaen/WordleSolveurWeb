@@ -482,14 +482,15 @@ char *getBestWord(allinfo_t *oneAllInfo)
     while (currentInfoList != NULL)
     {
         //printf("%lf : %lf\n", currentInfoList->meanBits, bestMeanBits);
-        if (currentInfoList->meanBits > bestMeanBits)
+        if (currentInfoList->meanBits >= bestMeanBits)
         {
             strcpy(bestWord, currentInfoList->word);
             bestMeanBits = currentInfoList->meanBits;
         }
+        //printf("Current word: %s\n", currentInfoList->word);
         currentInfoList = currentInfoList->next;
     }
     printf("Best bits: %lf.\n", bestMeanBits);
-    //printf("Best word: %s\n", bestWord);
+    printf("Best word: %s\n", bestWord);
     return bestWord;
 }
