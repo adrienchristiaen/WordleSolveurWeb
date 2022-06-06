@@ -1,7 +1,12 @@
 #include "solveur.h"
+#include "time.h"
 
 int main()
 {
+    //Gestionnaire de temps
+    double time_spent = 0.0;
+    clock_t begin = clock();
+    
     /* //SOLVEUR FREQUENCE
     list_t* liste_mots = list_create();
     //printf("AJOUT MOT\n");
@@ -56,8 +61,8 @@ int main()
         }
     }
     //Suppression des listes
-    list_destroy(liste_mots);
-    */
+    list_destroy(liste_mots); */
+   
 
     //SOLVEUR BITS 
     list_t* liste_mots = list_create();
@@ -74,6 +79,7 @@ int main()
     //Pour éviter la première boucle dont on connait le résultat, mettre en commentaire les deux lignes d'au-dessus et enlver les commentaires des deux lignes d'en dessous
     allinfo_t *myAllInfo;
     char mot[6] = {'P','O','R','E','S'};
+    //char mot[7] = {'C','O','T','A','N','T'};
 
     char win[taille_mot+2];
     for (unsigned int i = 0;i<taille_mot;i++)
@@ -120,6 +126,11 @@ int main()
     printf("Victoire du solveur en %d coups ! \n",nb_coups);
     //Suppression des listes
     destroyAllInfo(myAllInfo);
+
+    //Gestionnaire de temps
+    clock_t endClock = clock();
+    time_spent = (double)(endClock - begin) / CLOCKS_PER_SEC;
+    printf("Temps de résolution : %lf secondes.\n", time_spent);
 
     return 0;
 }
