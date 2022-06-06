@@ -7,8 +7,6 @@
 #include <assert.h>
 #include <math.h>
 
-#define SIZE 5
-
 
 typedef struct element_t element_t;
 
@@ -83,7 +81,7 @@ void listInfo_append(listinfo_t *one_list, char *one_result);
 
 void listInfo_destroy(listinfo_t *one_list);
 
-void initListInfo(listinfo_t *oneList);
+void initListInfo(listinfo_t *oneList, list_t *oneWordList);
 
 void allResults(listinfo_t *oneList, char* table, int i, int size);
 

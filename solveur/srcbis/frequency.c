@@ -176,19 +176,21 @@ void listInfo_destroy(listinfo_t *one_list)
 }
 
 
-void initListInfo(listinfo_t *oneList)
+void initListInfo(listinfo_t *oneList, list_t *oneListWord)
 {
-    char tab[SIZE+1];
+    int size = strlen(oneListWord->premier->mot);
+    
+    char tab[size+1];
 
-    for (int i=0; i<SIZE; i++)
+    for (int i=0; i<size; i++)
     {
         tab[i] = '0';
     }
-    tab[SIZE] = '\0';
+    tab[size] = '\0';
 
     //printf("\nMY TEST: %s\n", tab);
 
-    allResults(oneList, tab, 0, SIZE);
+    allResults(oneList, tab, 0, size);
 }
 
 
@@ -233,6 +235,9 @@ void getMatches(listinfo_t *infoList, list_t *wordList, char oneWord[20])
     //Sauvegarde du mot
     strcpy(infoList->word, oneWord);
 
+    //Taille du mot
+    int size = strlen(wordList->premier->mot);
+
     //Pour chaque possibilité de pattern
     info_t *currentInfo = infoList->premier;
 
@@ -250,7 +255,7 @@ void getMatches(listinfo_t *infoList, list_t *wordList, char oneWord[20])
             int wrong = 0;
             char possibleMatch[20];
             strcpy(possibleMatch, currentElement->mot);
-            while (i<SIZE && wrong == 0)
+            while (i<size && wrong == 0)
             {
                 //printf("%d: ", i);
                 //printf("%c - %c: ", oneWord[i], possibleMatch[i]);
@@ -411,7 +416,7 @@ allinfo_t *createAllInfoList()
 void getAllInfoForOneWord(listinfo_t *oneListInfo, list_t *oneWorldList, char* word)
 {
     //Calcul des patterns
-    initListInfo(oneListInfo);
+    initListInfo(oneListInfo, oneWorldList);
     //Calcul des matchs
     getMatches(oneListInfo, oneWorldList, word);
     //Calcul de la longueur de la liste mots
