@@ -29,11 +29,8 @@ int main()
         {
             combinaison = getResult(taille_mot);
         }
-<<<<<<< HEAD
-=======
         //updateList(liste_mots,mot,combinaison);
         updateListV2(liste_mots,mot,combinaison);
->>>>>>> origin/solveur-test
         if (strcmp(liste_mots->premier->mot,"")!=0)
         {
             list_print(liste_mots);
@@ -57,14 +54,10 @@ int main()
             list_print(liste_mots);
             printf("\n");
         }
-<<<<<<< HEAD
-    } */
-=======
     }
     //Suppression des listes
     list_destroy(liste_mots);
     */
->>>>>>> origin/solveur-test
 
     //SOLVEUR BITS 
     list_t* liste_mots = list_create();
@@ -91,25 +84,16 @@ int main()
     int nb_coups=1;
     printf("%s\n",mot);
     char* combinaison = getResult(taille_mot);
-<<<<<<< HEAD
-    //updateList(liste_mots,mot,combinaison);
-    updateListV2(liste_mots,mot,combinaison);
-    while (strcmp(combinaison,"-1")!=0 && strcmp(liste_mots->premier->mot,"")!=0)
-=======
     int end = 0;
     while (strcmp(combinaison,"-1")!=0 && strcmp(liste_mots->premier->mot,"")!=0 && end==0 && liste_mots->premier->suivant != NULL)
->>>>>>> origin/solveur-test
     {
         printf("Liste->premier->suivant->mot: %s", liste_mots->premier->suivant->mot);
         while (strcmp(combinaison,"0")==0)
         {
             combinaison = getResult(taille_mot);
         }
-<<<<<<< HEAD
-=======
         updateList(liste_mots,mot,combinaison);
         //updateListV2(liste_mots,mot,combinaison);
->>>>>>> origin/solveur-test
         if (strcmp(liste_mots->premier->mot,"")!=0)
         {
             list_print(liste_mots);
@@ -119,16 +103,8 @@ int main()
             printf("%s\n",mot);
             //printf("Score premier mot %lf\n",liste_mots->premier->freqScore);
             combinaison = getResult(taille_mot);
-<<<<<<< HEAD
-            //printf("%s,%s,%d\n",combinaison,win,strcmp(combinaison,win));
-            //updateList(liste_mots,mot,combinaison);
-            updateListV2(liste_mots,mot,combinaison);
-            supprimeMot(liste_mots,mot);
-            if (strcmp(combinaison,win)==-1) 
-=======
             printf("%s,%s,%d\n",combinaison,win,strcmp(combinaison,win));
             if (strcmp(combinaison,win)==0) 
->>>>>>> origin/solveur-test
             {
                 //printf("Victoire du solveur en %d coups ! \n",nb_coups);
                 end = 1;
@@ -140,19 +116,10 @@ int main()
             list_print(liste_mots);
             printf("\n");
         }
-<<<<<<< HEAD
-    } 
-
-    //Suppression des listes
-    destroyAllInfo(myAllInfo);
-    //list_destroy(liste_mots);
-=======
     }
     printf("Victoire du solveur en %d coups ! \n",nb_coups);
     //Suppression des listes
     destroyAllInfo(myAllInfo);
 
->>>>>>> origin/solveur-test
     return 0;
 }
-

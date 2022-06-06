@@ -314,9 +314,6 @@ void updateListV2(list_t *oneList,char *mot_prop,char* combinaison)
             currentElement = currentElement->suivant;
         }
     }
-<<<<<<< HEAD
-    if (strcmp(oneList->premier->mot, "")!=0)
-=======
     if (oneList->premier == NULL)
     {
         element_t *newElement;
@@ -326,7 +323,6 @@ void updateListV2(list_t *oneList,char *mot_prop,char* combinaison)
         newElement->suivant = NULL;
     }
     else
->>>>>>> origin/solveur-test
     {
         supprimeTousMotsAvec(oneList, caracteresVerifies, combinaison);
     }
