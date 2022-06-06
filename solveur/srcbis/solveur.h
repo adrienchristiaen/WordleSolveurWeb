@@ -81,7 +81,7 @@ void listInfo_append(listinfo_t *one_list, char *one_result);
 
 void listInfo_destroy(listinfo_t *one_list);
 
-void initListInfo(listinfo_t *oneList, list_t *oneWordList);
+void initListInfo(listinfo_t *oneList, int size);
 
 void allResults(listinfo_t *oneList, char* table, int i, int size);
 

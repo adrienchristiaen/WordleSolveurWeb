@@ -176,10 +176,8 @@ void listInfo_destroy(listinfo_t *one_list)
 }
 
 
-void initListInfo(listinfo_t *oneList, list_t *oneListWord)
+void initListInfo(listinfo_t *oneList, int size)
 {
-    int size = strlen(oneListWord->premier->mot);
-    
     char tab[size+1];
 
     for (int i=0; i<size; i++)
@@ -415,8 +413,10 @@ allinfo_t *createAllInfoList()
 
 void getAllInfoForOneWord(listinfo_t *oneListInfo, list_t *oneWorldList, char* word)
 {
+    //Calcul de la taille des mots
+    int size = strlen(oneWorldList->premier->mot);
     //Calcul des patterns
-    initListInfo(oneListInfo, oneWorldList);
+    initListInfo(oneListInfo, size);
     //Calcul des matchs
     getMatches(oneListInfo, oneWorldList, word);
     //Calcul de la longueur de la liste mots
