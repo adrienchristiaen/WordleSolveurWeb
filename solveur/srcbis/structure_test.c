@@ -39,22 +39,6 @@ int main() {
     assert(list_get_freq(one_list, 3) == 3.45);
     assert(list_get_freq(one_list, 4) == 4.3);
     assert(list_get_freq(one_list, 5) == 5.14);
-/* 
-    assert(strcmp(list_get_mot(one_list, 0),"arbre") == 0);
-    assert(strcmp(list_get_mot(one_list, 1),"table") == 0);
-    assert(strcmp(list_get_mot(one_list, 2),"loupe") == 0);
-    assert(strcmp(list_get_mot(one_list, 3),"tiges") == 0);
-    assert(strcmp(list_get_mot(one_list, 4),"tigre") == 0);
-    assert(strcmp(list_get_mot(one_list, 5),"hache") == 0);
-
-
-    assert(list_get_freq(one_list, 0) == 0.2);
-    assert(list_get_freq(one_list, 1) == 1.6);
-    assert(list_get_freq(one_list, 2) == 2.98);
-    assert(list_get_freq(one_list, 3) == 3.45);
-    assert(list_get_freq(one_list, 4) == 4.3);
-    assert(list_get_freq(one_list, 5) == 5.14); */
-
 
     list_print(one_list);
 
@@ -62,6 +46,8 @@ int main() {
     assert((indiceOccurence(list_get_mot(one_list, 0),'e'))==4);
     assert(indiceOccurence(list_get_mot(one_list, 0),'r')==1);
     assert(indiceOccurence(list_get_mot(one_list, 1),'l')==3);
+    assert(indiceOccurence(list_get_mot(one_list, 2),'o')==2);
+    assert(indiceOccurence(list_get_mot(one_list, 5),'h')==0);
         
 
     printf("getBits : %f\n",getBits(5,200));
@@ -77,15 +63,15 @@ int main() {
 
     char *BestWord = getBestWord(oneAllInfo);
     assert(strcmp(BestWord,"table")==0);
+    free(BestWord);
     
 
     char* prop = giveProposition(one_list);
     assert(strcmp(prop,"tiges")==0);
     assert(strcmp(prop,"tigre")!=0);
-
-
     free(prop);
-    free(BestWord);
+
+
     list_destroy(one_list);
     destroyAllInfo(oneAllInfo);
 
