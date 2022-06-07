@@ -1,7 +1,4 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include "solveur.c"
-#include "frequency.c"
+#include "solveur.h"
 #include "assert.h"
 
 int list_is_empty(list_t *one_list);
@@ -34,10 +31,10 @@ int main() {
 
 
     assert(list_get_freq(one_list, 0) == 0.2);
-    assert(list_get_freq(one_list, 1) == 1.6);
+    assert(list_get_freq(one_list, 1) == 1.56);
     assert(list_get_freq(one_list, 2) == 2.98);
     assert(list_get_freq(one_list, 3) == 3.45);
-    assert(list_get_freq(one_list, 4) == 4.3);
+    assert(list_get_freq(one_list, 4) == 4.53);
     assert(list_get_freq(one_list, 5) == 5.14);
 
     list_print(one_list);
@@ -46,7 +43,7 @@ int main() {
     assert((indiceOccurence(list_get_mot(one_list, 0),'e'))==4);
     assert(indiceOccurence(list_get_mot(one_list, 0),'r')==1);
     assert(indiceOccurence(list_get_mot(one_list, 1),'l')==3);
-    assert(indiceOccurence(list_get_mot(one_list, 2),'o')==2);
+    assert(indiceOccurence(list_get_mot(one_list, 2),'o')==1);
     assert(indiceOccurence(list_get_mot(one_list, 5),'h')==0);
         
 
@@ -67,7 +64,7 @@ int main() {
     
 
     char* prop = giveProposition(one_list);
-    assert(strcmp(prop,"tiges")==0);
+    assert(strcmp(prop,"hache")==0);
     assert(strcmp(prop,"tigre")!=0);
     free(prop);
 
