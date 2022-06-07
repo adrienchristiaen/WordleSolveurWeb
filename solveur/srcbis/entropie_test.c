@@ -43,6 +43,7 @@ int main()
     */
     initListInfo(ListeTests,5);
     initListInfo(ListePaterns,5);
+    listInfo_print(ListePaterns);
     //assert(strcmp(ListeTests->premier->result,"00000")==0); erreur si la liste n'est pas vide
     assert(strcmp(ListePaterns->premier->result,"00000")==0);
     
@@ -73,7 +74,7 @@ int main()
     {
         actuel = actuel->suivant;
     }
-    // MOTS POSSIBLES pour le patern 00012 : tokay, tommy, torcy, zloty
+    // MOTS POSSIBLES pour le patern 00012 : satay, tokay, tommy, torcy
     assert(actuel->match == 4);
     //printf("%s %d\n",actuel->result,actuel->match);
 
@@ -83,8 +84,18 @@ int main()
     {
         actuel = actuel->suivant;
     }
-    // MOTS POSSIBLES pour le patern 00122 : yuzus
-    assert(actuel->match == 1);
+    // MOTS POSSIBLES pour le patern 00122 : zebus, zamus
+    assert(actuel->match == 2);
+    //printf("%s %d\n",actuel->result,actuel->match);
+
+    actuel = ListePaterns->premier;
+    getMatches(ListePaterns, listeMots, "EQUIN");
+    while (actuel->suivant!=NULL && (actuel->match>15 || actuel->match<0))
+    {
+        actuel = actuel->suivant;
+    }
+    // MOTS POSSIBLES pour le patern 00112 : union, immun
+    assert(actuel->match == 2);
     //printf("%s %d\n",actuel->result,actuel->match);
 
     /* Test fonction listInfo_destroy :
