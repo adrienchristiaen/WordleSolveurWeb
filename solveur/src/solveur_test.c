@@ -78,6 +78,7 @@ int main()
     list_print(liste_mots);
     //allinfo_t *myAllInfo = getAllInfoForAllWords(liste_mots);
     //char *mot = getBestWord(myAllInfo);
+    //destroy(myAllInfo);
 
     //Pour éviter la première boucle dont on connait le résultat, mettre en commentaire les deux lignes d'au-dessus et enlver les commentaires des deux lignes d'en dessous
     char mot[6] = {'P','O','R','E','S'};
