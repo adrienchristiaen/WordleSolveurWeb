@@ -144,12 +144,13 @@ char* getResult(unsigned int longueur_mot)
     if (strcmp(nombreEntre,"-1")==0) 
 	{
         printf ("La partie s'arrete\n");
-        return"-1";
+        return nombreEntre;
     }
     else if (strlen(nombreEntre)!=longueur_mot)
 	{
 		printf("Proposition non valide\n");
-		return "0";
+        strcpy(nombreEntre,"0");
+		return nombreEntre;
 	}
 	else
 	{

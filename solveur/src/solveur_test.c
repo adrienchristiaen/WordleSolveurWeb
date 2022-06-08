@@ -7,7 +7,7 @@ int main()
     double time_spent = 0.0;
     clock_t begin = clock();
     
-    /* //SOLVEUR FREQUENCE
+    /*//SOLVEUR FREQUENCE
     list_t* liste_mots = list_create();
     //printf("AJOUT MOT\n");
     ajout_mots(liste_mots);
@@ -26,16 +26,19 @@ int main()
     int nb_coups=1;
     printf("%s\n",mot); 
     char* combinaison = getResult(taille_mot);
-    updateList(liste_mots,mot,combinaison);          //Penser également à commenter la fonction dans la boucle
-    //updateListV2(liste_mots,mot,combinaison);   
+    if (strcmp(combinaison,"-1")!=0)
+    {
+        //updateList(liste_mots,mot,combinaison);          //Penser également à commenter la fonction dans la boucle
+        updateListV2(liste_mots,mot,combinaison);   
+    }
     while (strcmp(combinaison,"-1")!=0 && strcmp(liste_mots->premier->mot,"")!=0)
     {
         while (strcmp(combinaison,"0")==0)
         {
             combinaison = getResult(taille_mot);
         }
-        //updateList(liste_mots,mot,combinaison);
-        updateListV2(liste_mots,mot,combinaison);
+		free(mot);
+		free(combinaison);
         if (strcmp(liste_mots->premier->mot,"")!=0)
         {
             list_print(liste_mots);
@@ -45,13 +48,13 @@ int main()
             printf("%s\n",mot);
             //printf("Score premier mot %lf\n",liste_mots->premier->freqScore);
             combinaison = getResult(taille_mot);
-            //printf("%s,%s,%d\n",combinaison,win,strcmp(combinaison,win));
-            updateList(liste_mots,mot,combinaison);
-            //updateListV2(liste_mots,mot,combinaison);
-            if (strcmp(combinaison,win)==-1) 
-            {
-                printf("Victoire du solveur en %d coups ! \n",nb_coups);
-            }
+            //updateList(liste_mots,mot,combinaison);
+			printf("%s,%s,%d\n",combinaison,win,strcmp(combinaison,win));
+            updateListV2(liste_mots,mot,combinaison);
+            // if (strcmp(combinaison,win)==0) 
+            // {
+            //     printf("Victoire du solveur en %d coups ! \n",nb_coups);
+            // }
         } 
         else
         {
@@ -61,7 +64,8 @@ int main()
         }
     }
     //Suppression des listes
-    list_destroy(liste_mots); */
+    list_destroy(liste_mots);
+	free(mot);*/
    
 
     //SOLVEUR BITS 
@@ -72,34 +76,32 @@ int main()
     //printf("%d taille mot \n",taille_mot);
     //printf("LIST PRINT\n");
     list_print(liste_mots);
-
     //allinfo_t *myAllInfo = getAllInfoForAllWords(liste_mots);
     //char *mot = getBestWord(myAllInfo);
 
     //Pour éviter la première boucle dont on connait le résultat, mettre en commentaire les deux lignes d'au-dessus et enlver les commentaires des deux lignes d'en dessous
-    //allinfo_t *myAllInfo;
     char mot[6] = {'P','O','R','E','S'};
     //char mot[7] = {'C','O','T','A','N','T'};
 
     char win[taille_mot+2];
     for (unsigned int i = 0;i<taille_mot;i++)
-    {
+    { 
         win[i]='2'; 
         //printf("%s\n",win);
     } 
     int nb_coups=1;
     printf("%s\n",mot);
     char* combinaison = getResult(taille_mot);
-    int end = 0;
-    while (strcmp(combinaison,"-1")!=0 && strcmp(liste_mots->premier->mot,"")!=0 && end==0 && liste_mots->premier->suivant != NULL)
+    while (strcmp(combinaison,"-1")!=0 && strcmp(liste_mots->premier->mot,"")!=0 && liste_mots->premier->suivant != NULL)
     {
-        printf("Liste->premier->suivant->mot: %s", liste_mots->premier->suivant->mot);
+        //printf("Liste->premier->suivant->mot: %s \n", liste_mots->premier->suivant->mot);
         while (strcmp(combinaison,"0")==0)
         {
             combinaison = getResult(taille_mot);
         }
         //updateList(liste_mots,mot,combinaison);
         updateListV2(liste_mots,mot,combinaison);
+		free(combinaison);
         if (strcmp(liste_mots->premier->mot,"")!=0)
         {
             list_print(liste_mots);
@@ -111,12 +113,12 @@ int main()
             printf("%s\n",mot);
             //printf("Score premier mot %lf\n",liste_mots->premier->freqScore);
             combinaison = getResult(taille_mot);
-            printf("%s,%s,%d\n",combinaison,win,strcmp(combinaison,win));
-            if (strcmp(combinaison,win)==0) 
-            {
-                //printf("Victoire du solveur en %d coups ! \n",nb_coups);
-                end = 1;
-            }
+            //printf("%s,%s,%d\n",combinaison,win,strcmp(combinaison,win));
+			
+            // if (strcmp(combinaison,win)==0) 
+            // {
+            //     printf("Victoire du solveur en %d coups ! \n",nb_coups);
+            // }
         } 
         else
         {
@@ -125,8 +127,10 @@ int main()
             printf("\n");
         }
     }
-    printf("Victoire du solveur en %d coups ! \n",nb_coups);
-
+    //printf("Victoire du solveur en %d coups ! \n",nb_coups);
+	free(combinaison);
+	list_destroy(liste_mots);
+	
     //Gestionnaire de temps
     clock_t endClock = clock();
     time_spent = (double)(endClock - begin) / CLOCKS_PER_SEC;
