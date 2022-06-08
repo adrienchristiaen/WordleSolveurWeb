@@ -333,15 +333,15 @@ void supprimeTousMotsAvec(list_t *oneList, char* caractereAVerifier, char *combi
     printf("Caractères à supprimer: %s\n", caractereAVerifier);
     //Taille du mot
     unsigned int taille_mot = strlen(oneList->premier->mot);
-    
-    element_t *currentElement = oneList->premier;
-    element_t *beforeElement = NULL;
-    element_t *nextElement = NULL;
 
     //Pour chaque caractère à vérifier
     int j = 0;
     while (caractereAVerifier[j] != '0' && caractereAVerifier[j] != '\0')
     {
+        element_t *currentElement = oneList->premier;
+        element_t *beforeElement = NULL;
+        element_t *nextElement = NULL;
+        
         printf("Caractère à vérifier: %c\n", caractereAVerifier[j]);
         //Pour chaque mot
         while (currentElement != NULL)
